@@ -1,14 +1,10 @@
 import React, { FC } from 'react'
 import Topic from './components/Topic'
-import { TreeNode } from './types/xmind'
 import hierarchy, { Options } from '@antv/hierarchy'
 import { CANVAS_WIDTH, CANVAS_HEIGHT, TOPIC_FONT_SIZE } from './constant'
-import { useStoreDispatch } from './store'
-import { setTheme } from './store/editor/action'
 
 export interface XminderProps {
   theme: string
-  // data: TreeNode
 }
 
 const root = {
@@ -44,10 +40,7 @@ const hierarchyOption: Options<typeof root> = {
   }
 }
 
-const Xminder: FC<XminderProps> = (props: XminderProps) => {
-  const { theme } = props
-  const dispatch = useStoreDispatch()
-  dispatch(setTheme(theme))
+const Xminder: FC<XminderProps> = () => {
   const rootWithCoords = hierarchy.mindmap(root, hierarchyOption)
   rootWithCoords.translate(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2)
   let topics: React.ReactElement[] = []

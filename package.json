@@ -24,7 +24,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "tsdx lint"
+      "pre-commit": ""
     }
   },
   "prettier": {
@@ -59,6 +59,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "relax-ts": "0.0.1"
+    "@antv/hierarchy": "^0.6.3",
+    "rxjs-hooks": "^0.6.2"
   }
 }
