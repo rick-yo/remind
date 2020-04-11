@@ -1,58 +1,47 @@
-import React, { FC } from 'react'
-import Topic from './components/Topic'
-import hierarchy, { Options } from '@antv/hierarchy'
-import { CANVAS_WIDTH, CANVAS_HEIGHT, TOPIC_FONT_SIZE } from './constant'
+import React, { FC } from 'react';
+import Topic from './components/Topic';
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from './constant';
+import mindmap from './layout/mindmap';
+import { TreeNode } from 'types/xmind';
+import { HierachyNode } from '@antv/hierarchy';
+import Link from './components/Link';
+import { ThemeContext, defaultTheme } from './theme';
 
 export interface XminderProps {
-  theme: string
+  theme?: any;
+  root: TreeNode;
 }
 
-const root = {
-  isRoot: true,
-  id: 'Root',
-  children: [
-    {
-      id: 'SubTreeNode1',
-      children: [
-        {
-          id: 'SubTreeNode1.1'
-        },
-        {
-          id: 'SubTreeNode1.2'
-        }
-      ]
-    },
-    {
-      id: 'SubTreeNode2'
-    }
-  ]
-}
+const Xminder: FC<XminderProps> = ({ root, theme = defaultTheme }) => {
+  const rootWithCoords = mindmap(root);
+  rootWithCoords.translate(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
+  const topics: React.ReactElement[] = [];
+  const links: React.ReactElement[] = [];
 
-const hierarchyOption: Options<typeof root> = {
-  getSubTreeSep(d) {
-    if (!d.children || !d.children.length) {
-      return 0
-    }
-    return 100
-  },
-  getWidth(d) {
-    return TOPIC_FONT_SIZE * d.id.length
-  }
-}
+  rootWithCoords.eachNode((node: HierachyNode<TreeNode>) => {
+    const { data, x, y, id } = node;
+    topics.push(<Topic key={id} title={data.title} x={x} y={y} />);
+  });
 
-const Xminder: FC<XminderProps> = () => {
-  const rootWithCoords = hierarchy.mindmap(root, hierarchyOption)
-  rootWithCoords.translate(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2)
-  let topics: React.ReactElement[] = []
-  rootWithCoords.eachNode((node: any) => {
-    const { data, x, y, id } = node
-    topics.push(<Topic key={id} title={data.id} x={x} y={y} />)
-  })
+  rootWithCoords.eachNode((node: HierachyNode<TreeNode>) => {
+    node.children.forEach(child => {
+      links.push(<Link key={node.id} source={node} target={child} />);
+    });
+  });
+
+  console.log('rootWithCoords :', rootWithCoords);
   return (
-    <svg width={CANVAS_WIDTH} height={CANVAS_HEIGHT} xmlns="http://www.w3.org/2000/svg">
-      {topics}
-    </svg>
-  )
-}
+    <ThemeContext.Provider value={theme}>
+      <svg
+        width={CANVAS_WIDTH}
+        height={CANVAS_HEIGHT}
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {topics}
+        {links}
+      </svg>
+    </ThemeContext.Provider>
+  );
+};
 
-export default Xminder
+export default Xminder;

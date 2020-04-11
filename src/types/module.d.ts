@@ -1,7 +1,7 @@
 declare module '@antv/hierarchy' {
   export function mindmap<Data>(root: Data, option: Options<Data>): HierachyNode<Data>
   
-  export interface HierachyNode<Data> {
+  export interface HierachyNode<Data = Object> {
     depth: number
     height: number
     hgap: number

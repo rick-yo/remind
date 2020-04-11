@@ -1,5 +1,5 @@
 export interface TreeNode {
-  id: string
+  title: string;
+  id?: string
   children?: TreeNode[]
-  collapsed?: boolean
 }

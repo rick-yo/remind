@@ -1,6 +1,6 @@
 import React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Default as Thing } from '../stories/Xminder.stories';
+import { Default as Thing } from '../stories/index.stories';
 
 describe('Thing', () => {
   it('renders without crashing', () => {
