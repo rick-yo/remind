@@ -1,30 +1,57 @@
-import React, { FC, useContext, Fragment } from 'react';
+/** @jsx jsx */
+import { FC, useContext, Fragment } from 'react';
 import { ThemeContext } from '../theme';
+import {
+  MAX_TOPIC_WIDTH,
+  TOPIC_RADIUS,
+  TOPIC_FONT_SIZE,
+  TOPIC_PADDING,
+} from '../constant';
+import { css, jsx } from '@emotion/core';
+import { HierachyNode } from '@antv/hierarchy';
+import { TreeNode } from '../types/xmind';
 
-interface TopicProps {
-  title: string;
-  x: number | string;
-  y: number | string;
-}
-
-const Topic: FC<TopicProps> = (props: TopicProps) => {
-  const { title, x, y } = props;
+const paddings = TOPIC_PADDING * 2;
+const Topic: FC<HierachyNode<TreeNode>> = (props: HierachyNode<TreeNode>) => {
+  const {
+    data: { title, contentWidth, contentHeight },
+    x,
+    y,
+  } = props;
   const topicTheme = useContext(ThemeContext).topic;
+
   return (
     <Fragment>
-      <text x={x} y={y} fill="black">
-        {title}
-      </text>
       <rect
         x={x}
         y={y}
-        rx={topicTheme.rx}
-        ry={topicTheme.ry}
-        width={200}
-        height={200}
+        width={contentWidth + paddings}
+        height={contentHeight + paddings}
+        rx={TOPIC_RADIUS}
+        ry={TOPIC_RADIUS}
         stroke={topicTheme.stroke}
         fill="white"
       ></rect>
+      <foreignObject
+        x={x}
+        y={y}
+        width={contentWidth + paddings}
+        height={contentHeight + paddings}
+      >
+        <div
+          // @ts-ignore
+          xmlns="http://www.w3.org/1999/xhtml"
+          css={css`
+            display: inline-block;
+            max-width: ${MAX_TOPIC_WIDTH}px;
+            padding: ${TOPIC_PADDING}px;
+            overflow-wrap: break-word;
+            font-size: ${TOPIC_FONT_SIZE}px;
+          `}
+        >
+          {title}
+        </div>
+      </foreignObject>
     </Fragment>
   );
 };

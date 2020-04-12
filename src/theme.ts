@@ -2,18 +2,13 @@ import React from 'react';
 
 const defaultTheme = {
   link: {
-    stroke: "#000",
+    stroke: '#000',
   },
   topic: {
-    stroke: "#000",
-    rx: 5,
-    ry: 5,
-  }
+    stroke: '#000',
+  },
 };
 
 const ThemeContext = React.createContext(defaultTheme);
 
-export {
-  ThemeContext,
-  defaultTheme
-};
+export { ThemeContext, defaultTheme };

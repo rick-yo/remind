@@ -1,11 +1,11 @@
 import React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Default as Thing } from '../stories/index.stories';
+import { WithNormalRender } from '../stories/index.stories';
 
-describe('Thing', () => {
+describe('Xmind', () => {
   it('renders without crashing', () => {
     const div = document.createElement('div');
-    ReactDOM.render(<Thing />, div);
+    ReactDOM.render(<WithNormalRender />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 });

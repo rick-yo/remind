@@ -2,8 +2,7 @@ import React, { FC } from 'react';
 import Topic from './components/Topic';
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from './constant';
 import mindmap from './layout/mindmap';
-import { TreeNode } from 'types/xmind';
-import { HierachyNode } from '@antv/hierarchy';
+import { TreeNode } from './types/xmind';
 import Link from './components/Link';
 import { ThemeContext, defaultTheme } from './theme';
 
@@ -14,18 +13,17 @@ export interface XminderProps {
 
 const Xminder: FC<XminderProps> = ({ root, theme = defaultTheme }) => {
   const rootWithCoords = mindmap(root);
-  rootWithCoords.translate(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
+  rootWithCoords.translate(CANVAS_WIDTH / 4, CANVAS_HEIGHT / 3);
   const topics: React.ReactElement[] = [];
   const links: React.ReactElement[] = [];
 
-  rootWithCoords.eachNode((node: HierachyNode<TreeNode>) => {
-    const { data, x, y, id } = node;
-    topics.push(<Topic key={id} title={data.title} x={x} y={y} />);
+  rootWithCoords.eachNode(node => {
+    topics.push(<Topic key={node.id} {...node} />);
   });
 
-  rootWithCoords.eachNode((node: HierachyNode<TreeNode>) => {
+  rootWithCoords.eachNode(node => {
     node.children.forEach(child => {
-      links.push(<Link key={node.id} source={node} target={child} />);
+      links.push(<Link key={child.id} source={node} target={child} />);
     });
   });
 

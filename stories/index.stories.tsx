@@ -7,7 +7,7 @@ export default {
 
 // By passing optional props to this story, you can control the props of the component when
 // you consume the story in a test.
-export const normalRender = () => {
+export const WithNormalRender = () => {
   const root = {
     title: 'Root',
     children: [
@@ -24,9 +24,14 @@ export const normalRender = () => {
       },
       {
         title: 'SubTreeNode2',
+        children: [
+          {
+            title: 'SubTreeNode2.1.MAX_TOPIC_WIDTH_TEST_TITLE'
+          }
+        ]
       },
     ],
   };
-
+  // @ts-ignore
   return <Xminder root={root} />;
 };

@@ -1,5 +1,7 @@
 export interface TreeNode {
   title: string;
-  id?: string
-  children?: TreeNode[]
+  contentWidth: number;
+  contentHeight: number;
+  id?: string;
+  children?: TreeNode[];
 }
