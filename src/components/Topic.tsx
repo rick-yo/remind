@@ -9,10 +9,10 @@ import {
 } from '../constant';
 import { css, jsx } from '@emotion/core';
 import { HierachyNode } from '@antv/hierarchy';
-import { TreeNode } from '../types/xmind';
+import { TopicData } from 'xmind-model/types/models/topic';
 
 const paddings = TOPIC_PADDING * 2;
-const Topic: FC<HierachyNode<TreeNode>> = (props: HierachyNode<TreeNode>) => {
+const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
   const {
     data: { title, contentWidth, contentHeight },
     x,

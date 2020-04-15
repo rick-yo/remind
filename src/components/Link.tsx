@@ -1,11 +1,11 @@
 import React, { FC, useContext } from 'react';
 import { HierachyNode } from '@antv/hierarchy';
 import { ThemeContext } from '../theme';
-import { TreeNode } from 'types/xmind';
+import { TopicData } from 'xmind-model/types/models/topic';
 
 interface LinkProps {
-  source: HierachyNode<TreeNode>;
-  target: HierachyNode<TreeNode>;
+  source: HierachyNode<TopicData>;
+  target: HierachyNode<TopicData>;
 }
 
 const Link: FC<LinkProps> = (props: LinkProps) => {

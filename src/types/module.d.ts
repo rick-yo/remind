@@ -30,5 +30,6 @@ declare module '@antv/hierarchy' {
     getHGap(d: Data): number;
     getVGap(d: Data): number;
     getId(d: Data): string;
+    getChildren(d: Data): Data[];
   }
 }

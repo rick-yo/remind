@@ -4,7 +4,7 @@ const CANVAS_HEIGHT = screen.height;
 
 const TOPIC_FONT_SIZE = 16;
 const TOPIC_PADDING = 8;
-const TOPIC_RADIUS = 8;
+const TOPIC_RADIUS = 5;
 const MAX_TOPIC_WIDTH = 150;
 const MIN_TOPIC_HEIGHT = 15;
 const canvasContext = document

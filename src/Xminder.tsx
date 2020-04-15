@@ -2,17 +2,18 @@ import React, { FC } from 'react';
 import Topic from './components/Topic';
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from './constant';
 import mindmap from './layout/mindmap';
-import { TreeNode } from './types/xmind';
 import Link from './components/Link';
 import { ThemeContext, defaultTheme } from './theme';
+import { TopicData } from 'xmind-model/types/models/topic';
+import { toJSON } from './store';
 
 export interface XminderProps {
   theme?: any;
-  root: TreeNode;
+  root: TopicData;
 }
 
 const Xminder: FC<XminderProps> = ({ root, theme = defaultTheme }) => {
-  const rootWithCoords = mindmap(root);
+  const rootWithCoords = mindmap(root || toJSON());
   rootWithCoords.translate(CANVAS_WIDTH / 4, CANVAS_HEIGHT / 3);
   const topics: React.ReactElement[] = [];
   const links: React.ReactElement[] = [];
@@ -27,7 +28,6 @@ const Xminder: FC<XminderProps> = ({ root, theme = defaultTheme }) => {
     });
   });
 
-  console.log('rootWithCoords :', rootWithCoords);
   return (
     <ThemeContext.Provider value={theme}>
       <svg

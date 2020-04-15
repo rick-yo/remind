@@ -1,4 +1,4 @@
-import { TreeNode } from '../types/xmind';
+import { TopicData } from 'xmind-model/types/models/topic';
 import hierarchy, { Options } from '@antv/hierarchy';
 import {
   MIN_TOPIC_HEIGHT,
@@ -17,7 +17,7 @@ function measureText(text: string, fontSize: number = TOPIC_FONT_SIZE) {
   return measure;
 }
 
-const defaultOptions: Options<TreeNode> = {
+const defaultOptions: Options<TopicData> = {
   getId() {
     return uuidv4();
   },
@@ -49,11 +49,14 @@ const defaultOptions: Options<TreeNode> = {
   getVGap() {
     return TOPIC_PADDING * 2;
   },
+  getChildren(node) {
+    return node.children?.attached || [];
+  }
 };
 
 export default function(
-  root: TreeNode,
-  options: Options<TreeNode> = defaultOptions
+  root: TopicData,
+  options: Options<TopicData> = defaultOptions
 ) {
   const rootNode = hierarchy.mindmap(root, options);
   rootNode.eachNode(node => {
