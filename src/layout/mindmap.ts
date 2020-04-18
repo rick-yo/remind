@@ -7,7 +7,6 @@ import {
   TOPIC_PADDING,
   TOPIC_FONT_SIZE,
 } from '../constant';
-import uuidv4 from 'uuid/v4';
 
 function measureText(text: string, fontSize: number = TOPIC_FONT_SIZE) {
   canvasContext.save();
@@ -18,8 +17,8 @@ function measureText(text: string, fontSize: number = TOPIC_FONT_SIZE) {
 }
 
 const defaultOptions: Options<TopicData> = {
-  getId() {
-    return uuidv4();
+  getId(node) {
+    return node.id;
   },
   getHeight(node) {
     const width = measureText(node.title).width;

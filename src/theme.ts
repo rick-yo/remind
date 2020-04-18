@@ -6,6 +6,7 @@ const defaultTheme = {
   },
   topic: {
     stroke: '#000',
+    borderColor: '#4dc4ff',
   },
 };
 

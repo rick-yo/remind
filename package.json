@@ -63,9 +63,9 @@
   "dependencies": {
     "@antv/hierarchy": "^0.6.3",
     "@emotion/core": "^10.0.28",
-    "rxjs-hooks": "^0.6.2",
+    "hotkeys-js": "^3.7.6",
+    "relax-ts": "0.0.1",
     "uuid": "^7.0.3",
-    "xmind": "^2.0.3",
     "xmind-model": "^1.1.10"
   },
   "jest": {
