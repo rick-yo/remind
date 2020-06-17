@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { FC, useContext, KeyboardEvent } from 'react';
+import { FC, useContext, KeyboardEvent, useState, DragEvent } from 'react';
 import { ThemeContext } from '../theme';
 import {
   MAX_TOPIC_WIDTH,
@@ -7,7 +7,6 @@ import {
   TOPIC_FONT_SIZE,
   TOPIC_PADDING,
   EDITOR_MODE,
-  TOPIC_BORDER,
   KEY_MAPS,
 } from '../constant';
 import { css, jsx } from '@emotion/core';
@@ -15,6 +14,7 @@ import { HierachyNode } from '@antv/hierarchy';
 import { TopicData } from 'xmind-model/types/models/topic';
 import * as rootStore from '../store/root';
 import editorStore from '../store/editor';
+import { debug } from '../utils/debug';
 
 declare module 'xmind-model/types/models/topic' {
   interface TopicData {
@@ -23,10 +23,9 @@ declare module 'xmind-model/types/models/topic' {
   }
 }
 
-const paddings = TOPIC_PADDING * 2;
 const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
   const {
-    data: { title, contentWidth, contentHeight, id },
+    data: { title, id },
     x,
     y,
     depth,
@@ -37,6 +36,7 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
   const { mode, selectedNodeId } = editorState;
   const isSelected = id === selectedNodeId;
   const isEditing = isSelected && mode === EDITOR_MODE.edit;
+  const [isDragEntering, setIsDragEntering] = useState(false);
   const hasBorder = depth <= 1;
 
   function selectNode() {
@@ -61,58 +61,73 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
     }
   }
 
+  function handleDragStart() {
+    editorStore.dispatch('DRAG_NODE', props.data);
+  }
+  function handleDragEnter() {
+    setIsDragEntering(true);
+  }
+  function handleDragLeave() {
+    setIsDragEntering(false);
+  }
+
+  function handleDrop(e: DragEvent<HTMLDivElement>) {
+    debug('handleDrop');
+    rootStore.dispatch('DELETE_NODE', editorState.dragingNode?.id)
+    rootStore.dispatch('APPEND_CHILD', {
+      id,
+      node: editorState.dragingNode,
+    });
+  }
+  
+  function handleDragOver(e: DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+  }
+  const border = hasBorder ? `1px solid ${topicTheme.stroke}` : 'none';
+  const outsideBorder = isSelected
+    ? `2px solid ${topicTheme.borderColor}`
+    : 'none';
   return (
-    <g id="topic" onClick={selectNode} pointerEvents="all">
-      {hasBorder && (
-        <rect
-          x={x}
-          y={y}
-          width={contentWidth + paddings}
-          height={contentHeight + paddings}
-          rx={TOPIC_RADIUS}
-          ry={TOPIC_RADIUS}
-          stroke={topicTheme.stroke}
-          fill="white"
-        ></rect>
-      )}
-      {isSelected && (
-        <rect
-          x={x - TOPIC_BORDER / 2}
-          y={y - TOPIC_BORDER / 2}
-          width={contentWidth + paddings + TOPIC_BORDER}
-          height={contentHeight + paddings + TOPIC_BORDER}
-          rx={TOPIC_RADIUS}
-          ry={TOPIC_RADIUS}
-          stroke={topicTheme.borderColor}
-          fill="transparent"
-        ></rect>
-      )}
-      <foreignObject
-        x={x}
-        y={y}
-        width={contentWidth + paddings}
-        height={contentHeight + paddings}
+    <div
+      id="topic"
+      onClick={selectNode}
+      draggable
+      onDragStart={handleDragStart}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+      css={css`
+        display: inline-block;
+        border: ${outsideBorder};
+        border-radius: ${TOPIC_RADIUS}px;
+        padding: 1px 2px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translate(${x}px, ${y}px);
+      `}
+    >
+      <div
+        id={`topic-content-${id}`}
+        css={css`
+          display: inline-block;
+          max-width: ${MAX_TOPIC_WIDTH}px;
+          padding: ${TOPIC_PADDING}px;
+          overflow-wrap: break-word;
+          font-size: ${TOPIC_FONT_SIZE}px;
+          cursor: default;
+          user-select: none;
+          opacity: ${isDragEntering ? 0.7 : 1};
+          border: ${border};
+          border-radius: ${TOPIC_RADIUS}px;
+        `}
+        contentEditable={isEditing}
+        onKeyUp={exitEditMode}
       >
-        <div
-          // @ts-ignore
-          xmlns="http://www.w3.org/1999/xhtml"
-          id={`topic-content-${id}`}
-          css={css`
-            display: inline-block;
-            max-width: ${MAX_TOPIC_WIDTH}px;
-            padding: ${TOPIC_PADDING}px;
-            overflow-wrap: break-word;
-            font-size: ${TOPIC_FONT_SIZE}px;
-            cursor: default;
-            user-select: none;
-          `}
-          contentEditable={isEditing}
-          onKeyUp={exitEditMode}
-        >
-          {title}
-        </div>
-      </foreignObject>
-    </g>
+        {title}
+      </div>
+    </div>
   );
 };
 

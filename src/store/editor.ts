@@ -1,3 +1,4 @@
+import { TopicData } from 'xmind-model/types/models/topic';
 import {
   findNodeParent,
   findNode,
@@ -12,12 +13,14 @@ type IState = {
   mode: EDITOR_MODE;
   selectedNodeId: string;
   scale: number;
+  dragingNode?: TopicData;
 };
 
 const initialState: IState = {
   mode: EDITOR_MODE.regular,
   selectedNodeId: '',
   scale: 1,
+  dragingNode: undefined
 };
 
 const store = createStore({
@@ -28,6 +31,9 @@ const store = createStore({
     },
     SELECT_NODE(state, payload: string) {
       state.selectedNodeId = payload;
+    },
+    DRAG_NODE(state, payload: TopicData) {
+      state.dragingNode = payload;
     },
     SET_SCALE(state, payload: number) {
       state.scale = payload;

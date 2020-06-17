@@ -1,3 +1,4 @@
+/** @jsx jsx */
 import React, { FC, useEffect } from 'react';
 import Topic from './components/Topic';
 import { CANVAS_WIDTH, CANVAS_HEIGHT, EDITOR_MODE } from './constant';
@@ -10,6 +11,7 @@ import hotkeys from 'hotkeys-js';
 import { createTopic } from './utils/tree';
 import { debug } from './utils/debug';
 import { selectText, onClickOutSide } from './utils/dom';
+import { css, jsx } from '@emotion/core';
 
 export interface SindProps {
   theme?: any;
@@ -59,16 +61,20 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
       rootStore.dispatch('DELETE_NODE', selectedNodeId);
     }
 
-    function moveTop() {
+    function moveTop(e: KeyboardEvent) {
+      e.preventDefault();
       editorStore.dispatch('MOVE_TOP');
     }
-    function moveDown() {
+    function moveDown(e: KeyboardEvent) {
+      e.preventDefault();
       editorStore.dispatch('MOVE_DOWN');
     }
-    function moveLeft() {
+    function moveLeft(e: KeyboardEvent) {
+      e.preventDefault();
       editorStore.dispatch('MOVE_LEFT');
     }
-    function moveRight() {
+    function moveRight(e: KeyboardEvent) {
+      e.preventDefault();
       editorStore.dispatch('MOVE_RIGHT');
     }
     function undo() {
@@ -120,14 +126,30 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
   debug('rootWithCoords', rootWithCoords);
   return (
     <ThemeContext.Provider value={theme}>
-      <svg
-        width={CANVAS_WIDTH}
-        height={CANVAS_HEIGHT}
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {topics}
-        {links}
-      </svg>
+      <div style={{
+        position: 'relative',
+      }}>
+        <svg
+          id="sind-links"
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+          xmlns="http://www.w3.org/2000/svg"
+          css={css`
+            position: absolute;
+            left: 0;
+            top: 0;
+          `}
+        >
+          {links}
+        </svg>
+        <div id="sind-topics" style={{
+          width: `${CANVAS_WIDTH}px`,
+          height: `${CANVAS_HEIGHT}px`,
+          position: 'relative',
+        }}>
+          {topics}
+        </div>
+      </div>
     </ThemeContext.Provider>
   );
 };

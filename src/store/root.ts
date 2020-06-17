@@ -2,6 +2,7 @@ import { TopicData } from 'xmind-model/types/models/topic';
 import { createStore, StateSelector } from 'relax-ts';
 import { findNodeParent, findNode } from '../utils/tree';
 import { ATTACHED_KEY } from '../constant';
+import { debug } from '../utils/debug';
 
 type IState = {
   timeline: TopicData[];
@@ -119,14 +120,15 @@ const getState = (): TopicData => {
 };
 
 const dispatch: Dispatch = async (action, payload) => {
+  debug('dispatch action', action);
   if (action === SAVE_HISTORY) {
     console.warn('Should not dispatch inner action outside store!');
     return;
   }
-  originalDispatch(action, payload);
   if (action !== UNDO_HISTORY && action !== REDO_HISTORY) {
     originalDispatch('SAVE_HISTORY', getState());
   };
+  originalDispatch(action, payload);
 };
 
 const useSelector = <P>(selector: StateSelector<TopicData, P>) => {
@@ -135,21 +137,3 @@ const useSelector = <P>(selector: StateSelector<TopicData, P>) => {
 };
 
 export { getState, dispatch, useSelector };
-
-// setTimeout(() => {
-//   dispatch('APPEND_CHILD', {
-//     id: root.id,
-//     node: {
-//       title: 'APPEND_CHILD_TEST'
-//     }
-//   })
-// }, 1000);
-
-// setTimeout(() => {
-//   dispatch('UPDATE_NODE', {
-//     id: root.id,
-//     node: {
-//       title: 'UPDATE_NODE_TEST'
-//     }
-//   })
-// }, 2000);
