@@ -11,11 +11,11 @@ import { createTopic } from './utils/tree';
 import { debug } from './utils/debug';
 import { selectText, onClickOutSide } from './utils/dom';
 
-export interface XminderProps {
+export interface SindProps {
   theme?: any;
 }
 
-const Xminder: FC<XminderProps> = ({ theme = defaultTheme }) => {
+const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
   const root = rootStore.useSelector(s => s);
   const editorState = editorStore.useSelector(s => s);
   const { mode, selectedNodeId } = editorState;
@@ -51,7 +51,7 @@ const Xminder: FC<XminderProps> = ({ theme = defaultTheme }) => {
       if (!selectedNodeId) return;
       const el = document.querySelector<HTMLDivElement>(id);
       el?.focus();
-      selectText(el);
+      selectText(el as any);
       editorStore.dispatch('SET_MODE', EDITOR_MODE.edit);
     }
 
@@ -132,4 +132,4 @@ const Xminder: FC<XminderProps> = ({ theme = defaultTheme }) => {
   );
 };
 
-export default Xminder;
+export default Sind;

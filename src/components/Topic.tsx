@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { FC, useContext, Fragment, SyntheticEvent, KeyboardEvent } from 'react';
+import { FC, useContext, KeyboardEvent } from 'react';
 import { ThemeContext } from '../theme';
 import {
   MAX_TOPIC_WIDTH,
@@ -16,6 +16,13 @@ import { TopicData } from 'xmind-model/types/models/topic';
 import * as rootStore from '../store/root';
 import editorStore from '../store/editor';
 
+declare module 'xmind-model/types/models/topic' {
+  interface TopicData {
+    contentWidth: number;
+    contentHeight: number;
+  }
+}
+
 const paddings = TOPIC_PADDING * 2;
 const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
   const {
@@ -25,7 +32,7 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
     depth,
   } = props;
   const topicTheme = useContext(ThemeContext).topic;
-  const root = rootStore.useSelector(s => s);
+  // const root = rootStore.useSelector(s => s);
   const editorState = editorStore.useSelector(s => s);
   const { mode, selectedNodeId } = editorState;
   const isSelected = id === selectedNodeId;

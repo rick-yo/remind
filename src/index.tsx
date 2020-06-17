@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import Xminder, { XminderProps } from './Xminder';
+import Sind, { SindProps } from './sind';
 
-const XmindWithStore: FC<XminderProps> = (props: XminderProps) => {
-  return <Xminder {...props} />;
+const SindWithStore: FC<SindProps> = (props: SindProps) => {
+  return <Sind {...props} />;
 };
 
-export default XmindWithStore;
+export default SindWithStore;

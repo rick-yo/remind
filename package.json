@@ -33,9 +33,9 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "xminder",
+  "name": "sind",
   "author": "chuliu",
-  "module": "dist/xminder.esm.js",
+  "module": "dist/sind.esm.js",
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@storybook/addon-actions": "^5.3.17",
