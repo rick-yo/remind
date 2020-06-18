@@ -126,9 +126,11 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
   debug('rootWithCoords', rootWithCoords);
   return (
     <ThemeContext.Provider value={theme}>
-      <div style={{
-        position: 'relative',
-      }}>
+      <div
+        style={{
+          position: 'relative',
+        }}
+      >
         <svg
           id="sind-links"
           width={CANVAS_WIDTH}
@@ -142,11 +144,14 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
         >
           {links}
         </svg>
-        <div id="sind-topics" style={{
-          width: `${CANVAS_WIDTH}px`,
-          height: `${CANVAS_HEIGHT}px`,
-          position: 'relative',
-        }}>
+        <div
+          id="sind-topics"
+          style={{
+            width: `${CANVAS_WIDTH}px`,
+            height: `${CANVAS_HEIGHT}px`,
+            position: 'relative',
+          }}
+        >
           {topics}
         </div>
       </div>

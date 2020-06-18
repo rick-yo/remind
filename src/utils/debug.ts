@@ -5,7 +5,4 @@ function debug(key: string, value?: any) {
   console.log(key, value);
 }
 
-export {
-  isProd,
-  debug,
-}
+export { isProd, debug };

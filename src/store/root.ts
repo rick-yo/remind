@@ -127,7 +127,7 @@ const dispatch: Dispatch = async (action, payload) => {
   }
   if (action !== UNDO_HISTORY && action !== REDO_HISTORY) {
     originalDispatch('SAVE_HISTORY', getState());
-  };
+  }
   originalDispatch(action, payload);
 };
 

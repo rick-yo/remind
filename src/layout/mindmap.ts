@@ -50,7 +50,7 @@ const defaultOptions: Options<TopicData> = {
   },
   getChildren(node) {
     return node.children?.attached || [];
-  }
+  },
 };
 
 export default function(

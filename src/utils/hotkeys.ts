@@ -6,7 +6,7 @@ function useHotKeys(keys: string, callback: () => any, deps: any[] = []) {
   useEffect(() => {
     hotkeys(keys, memoisedCallback);
     return () => {
-      hotkeys.unbind(keys, memoisedCallback)
+      hotkeys.unbind(keys, memoisedCallback);
     };
   }, []);
 }

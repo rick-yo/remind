@@ -73,13 +73,13 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
 
   function handleDrop() {
     debug('handleDrop');
-    rootStore.dispatch('DELETE_NODE', editorState.dragingNode?.id)
+    rootStore.dispatch('DELETE_NODE', editorState.dragingNode?.id);
     rootStore.dispatch('APPEND_CHILD', {
       id,
       node: editorState.dragingNode,
     });
   }
-  
+
   function handleDragOver(e: DragEvent<HTMLDivElement>) {
     e.preventDefault();
   }

@@ -20,7 +20,7 @@ const initialState: IState = {
   mode: EDITOR_MODE.regular,
   selectedNodeId: '',
   scale: 1,
-  dragingNode: undefined
+  dragingNode: undefined,
 };
 
 const store = createStore({

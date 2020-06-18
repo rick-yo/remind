@@ -1,4 +1,3 @@
-
 const screen = window.screen;
 const CANVAS_WIDTH = screen.width;
 const CANVAS_HEIGHT = screen.height;

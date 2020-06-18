@@ -20,7 +20,7 @@ function onClickOutSide(selector: string, callback: Function) {
   function onClickOutSide(e: MouseEvent) {
     // @ts-ignore
     const parent = e.target?.closest(selector);
-    debug('onClickOutSide', parent)
+    debug('onClickOutSide', parent);
     if (!parent) {
       callback(e);
     }
