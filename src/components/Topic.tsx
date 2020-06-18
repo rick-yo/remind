@@ -71,7 +71,7 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
     setIsDragEntering(false);
   }
 
-  function handleDrop(e: DragEvent<HTMLDivElement>) {
+  function handleDrop() {
     debug('handleDrop');
     rootStore.dispatch('DELETE_NODE', editorState.dragingNode?.id)
     rootStore.dispatch('APPEND_CHILD', {
