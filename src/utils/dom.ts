@@ -4,7 +4,7 @@ function selectText(el?: HTMLElement) {
   if (!el) return;
   if (window.getSelection && document.createRange) {
     const selection = window.getSelection();
-    if (selection?.toString() == '') {
+    if (selection?.toString() === '') {
       //no text selection
       setTimeout(function() {
         const range = document.createRange(); //range object

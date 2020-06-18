@@ -1,8 +1,3 @@
-import React, { FC } from 'react';
-import Sind, { SindProps } from './sind';
+import Sind from './sind';
 
-const SindWithStore: FC<SindProps> = (props: SindProps) => {
-  return <Sind {...props} />;
-};
-
-export default SindWithStore;
+export { Sind };

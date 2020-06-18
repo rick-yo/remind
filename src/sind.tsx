@@ -106,7 +106,7 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
       hotkeys.unbind('command+z', undo);
       hotkeys.unbind('command+shift+z', redo);
     };
-  }, [mode, selectedNodeId]);
+  }, [mode, selectedNodeId, id]);
 
   // 编辑模式下
   useEffect(() => {
@@ -121,7 +121,7 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
       });
     });
     return () => clickOutSide();
-  }, [mode, selectedNodeId]);
+  }, [mode, selectedNodeId, id]);
 
   debug('rootWithCoords', rootWithCoords);
   return (

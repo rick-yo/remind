@@ -8,7 +8,7 @@ function useHotKeys(keys: string, callback: () => any, deps: any[] = []) {
     return () => {
       hotkeys.unbind(keys, memoisedCallback);
     };
-  }, []);
+  }, [keys, memoisedCallback]);
 }
 
 export { useHotKeys };

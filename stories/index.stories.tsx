@@ -1,5 +1,5 @@
 import React from 'react';
-import Sind from '../src';
+import { Sind } from '../src';
 
 export default {
   title: 'Welcome',
