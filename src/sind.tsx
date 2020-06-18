@@ -23,7 +23,7 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
   const { mode, selectedNodeId } = editorState;
   const rootWithCoords = mindmap(JSON.parse(JSON.stringify(root)));
   rootWithCoords.translate(CANVAS_WIDTH / 4, CANVAS_HEIGHT / 3);
-  const id = `#topic-content-${selectedNodeId}`;
+  const id = `#topic-${selectedNodeId}`;
   const topics: React.ReactElement[] = [];
   const links: React.ReactElement[] = [];
 
@@ -150,6 +150,7 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
             width: `${CANVAS_WIDTH}px`,
             height: `${CANVAS_HEIGHT}px`,
             position: 'relative',
+            zIndex: 1,
           }}
         >
           {topics}

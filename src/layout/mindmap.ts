@@ -25,7 +25,7 @@ const defaultOptions: Options<TopicData> = {
     const lines = Math.ceil(width / MAX_TOPIC_WIDTH);
     const contentHeight = Math.max(
       MIN_TOPIC_HEIGHT,
-      TOPIC_FONT_SIZE * 1.4 * lines
+      TOPIC_FONT_SIZE * lines * 1.2
     );
     node.contentHeight = contentHeight;
     return contentHeight;

@@ -45,8 +45,6 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
 
   // 编辑模式下
   function exitEditMode(e: KeyboardEvent<HTMLDivElement>) {
-    e.persist();
-
     if (
       [KEY_MAPS.Enter, KEY_MAPS.Escape].includes(e.key) &&
       mode === EDITOR_MODE.edit
@@ -80,17 +78,30 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
     });
   }
 
+  // We need to prevent the default behavior
+  // of this event, in order for the onDrop
+  // event to fire.
+  // It may sound weird, but the default is
+  // to cancel out the drop.
   function handleDragOver(e: DragEvent<HTMLDivElement>) {
     e.preventDefault();
   }
   const border = hasBorder ? `1px solid ${topicTheme.stroke}` : 'none';
-  const outsideBorder = isSelected
-    ? `2px solid ${topicTheme.borderColor}`
-    : 'none';
+  const outline = isSelected ? `2px solid ${topicTheme.borderColor}` : 'none';
+
+  // preventDefault to prevent enter keyboard event create new html element
+  function handleKeyDown(e: KeyboardEvent<HTMLDivElement>) {
+    if ([KEY_MAPS.Enter].includes(e.key) && mode === EDITOR_MODE.edit) {
+      e.preventDefault();
+    }
+  }
   return (
     <div
-      id="topic"
+      id={`topic-${id}`}
+      contentEditable={isEditing}
       onClick={selectNode}
+      onKeyUp={exitEditMode}
+      onKeyDown={handleKeyDown}
       draggable
       onDragStart={handleDragStart}
       onDragEnter={handleDragEnter}
@@ -99,31 +110,29 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
       onDragOver={handleDragOver}
       css={css`
         display: inline-block;
-        border: ${outsideBorder};
         border-radius: ${TOPIC_RADIUS}px;
-        padding: 1px 2px;
         position: absolute;
         top: 0;
         left: 0;
         transform: translate(${x}px, ${y}px);
+        background: #fff;
+        max-width: ${MAX_TOPIC_WIDTH}px;
+        padding: ${TOPIC_PADDING}px;
+        font-size: ${TOPIC_FONT_SIZE}px;
+        cursor: default;
+        opacity: ${isDragEntering ? 0.7 : 1};
+        border: ${border};
+        border-radius: ${TOPIC_RADIUS}px;
+        outline: ${outline};
       `}
     >
       <div
-        id={`topic-content-${id}`}
         css={css`
           display: inline-block;
-          max-width: ${MAX_TOPIC_WIDTH}px;
-          padding: ${TOPIC_PADDING}px;
           overflow-wrap: break-word;
-          font-size: ${TOPIC_FONT_SIZE}px;
-          cursor: default;
+          word-break: break-all;
           user-select: none;
-          opacity: ${isDragEntering ? 0.7 : 1};
-          border: ${border};
-          border-radius: ${TOPIC_RADIUS}px;
         `}
-        contentEditable={isEditing}
-        onKeyUp={exitEditMode}
       >
         {title}
       </div>
