@@ -1,6 +1,6 @@
 import { TopicData } from 'xmind-model/types/models/topic';
 import { createStore, StateSelector } from 'relax-ts';
-import { findNodeParent, findNode } from '../utils/tree';
+import { topicWalker } from '../utils/tree';
 import { ATTACHED_KEY } from '../constant';
 import { debug } from '../utils/debug';
 
@@ -60,7 +60,7 @@ const store = createStore({
     APPEND_CHILD(state, payload: Payload) {
       const root = state.timeline[state.current];
       if (!payload.id || !payload.node) return;
-      const parentNode = findNode(root, payload.id);
+      const parentNode = topicWalker.getNode(root, payload.id);
       if (!parentNode) return;
       parentNode.children = parentNode.children || {
         [ATTACHED_KEY]: [],
@@ -72,7 +72,7 @@ const store = createStore({
     DELETE_NODE(state, id: string) {
       if (!id) return;
       const root = state.timeline[state.current];
-      const parentNode = findNodeParent(root, id);
+      const parentNode = topicWalker.getParentNode(root, id);
       if (parentNode && parentNode.children) {
         const previouseIndex = parentNode.children[ATTACHED_KEY].findIndex(
           item => item.id === id
@@ -83,7 +83,7 @@ const store = createStore({
     UPDATE_NODE(state, payload) {
       if (!payload.id) return;
       const root = state.timeline[state.current];
-      const currentNode = findNode(root, payload.id);
+      const currentNode = topicWalker.getNode(root, payload.id);
       currentNode && Object.assign(currentNode, payload.node);
     },
     [UNDO_HISTORY](state) {

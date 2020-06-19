@@ -21,7 +21,7 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
   const root = rootStore.useSelector(s => s);
   const editorState = editorStore.useSelector(s => s);
   const { mode, selectedNodeId } = editorState;
-  const rootWithCoords = mindmap(JSON.parse(JSON.stringify(root)));
+  const rootWithCoords = mindmap(root);
   rootWithCoords.translate(CANVAS_WIDTH / 4, CANVAS_HEIGHT / 3);
   const id = `#topic-${selectedNodeId}`;
   const topics: React.ReactElement[] = [];
@@ -63,19 +63,19 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
 
     function moveTop(e: KeyboardEvent) {
       e.preventDefault();
-      editorStore.dispatch('MOVE_TOP');
+      editorStore.dispatch('MOVE_TOP', rootWithCoords);
     }
     function moveDown(e: KeyboardEvent) {
       e.preventDefault();
-      editorStore.dispatch('MOVE_DOWN');
+      editorStore.dispatch('MOVE_DOWN', rootWithCoords);
     }
     function moveLeft(e: KeyboardEvent) {
       e.preventDefault();
-      editorStore.dispatch('MOVE_LEFT');
+      editorStore.dispatch('MOVE_LEFT', rootWithCoords);
     }
     function moveRight(e: KeyboardEvent) {
       e.preventDefault();
-      editorStore.dispatch('MOVE_RIGHT');
+      editorStore.dispatch('MOVE_RIGHT', rootWithCoords);
     }
     function undo() {
       rootStore.dispatch('UNDO_HISTORY');
@@ -90,7 +90,7 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
       hotkeys('backspace', deleteNode);
       hotkeys('left', moveLeft);
       hotkeys('right', moveRight);
-      hotkeys('top', moveTop);
+      hotkeys('up,top', moveTop);
       hotkeys('down', moveDown);
       hotkeys('command+z', undo);
       hotkeys('command+shift+z', redo);
@@ -101,12 +101,12 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
       hotkeys.unbind('backspace', deleteNode);
       hotkeys.unbind('left', moveLeft);
       hotkeys.unbind('right', moveRight);
-      hotkeys.unbind('top', moveTop);
+      hotkeys.unbind('up,top', moveTop);
       hotkeys.unbind('down', moveDown);
       hotkeys.unbind('command+z', undo);
       hotkeys.unbind('command+shift+z', redo);
     };
-  }, [mode, selectedNodeId, id]);
+  }, [mode, selectedNodeId, id, rootWithCoords]);
 
   // 编辑模式下
   useEffect(() => {
