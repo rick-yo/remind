@@ -110,6 +110,7 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
 
   // 编辑模式下
   useEffect(() => {
+    if (mode !== EDITOR_MODE.edit) return;
     const clickOutSide = onClickOutSide(id, () => {
       editorStore.dispatch('SET_MODE', EDITOR_MODE.regular);
       const el = document.querySelector<HTMLDivElement>(id);

@@ -72,8 +72,6 @@ export function eachBefore(
 
 export function createTopic(title: string, options: Partial<TopicData> = {}) {
   const topic: TopicData = {
-    contentWidth: 0,
-    contentHeight: 0,
     ...options,
     id: uuidv4(),
     title,

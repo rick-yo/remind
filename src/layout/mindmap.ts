@@ -27,13 +27,11 @@ const defaultOptions: Options<TopicData> = {
       MIN_TOPIC_HEIGHT,
       TOPIC_FONT_SIZE * lines * 1.2
     );
-    node.contentHeight = contentHeight;
     return contentHeight;
   },
   getWidth(node) {
     const measure = measureText(node.title);
     const contentWidth = Math.min(measure.width, MAX_TOPIC_WIDTH);
-    node.contentWidth = contentWidth;
     return contentWidth;
   },
   getSubTreeSep(d) {

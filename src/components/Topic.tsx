@@ -16,13 +16,6 @@ import * as rootStore from '../store/root';
 import editorStore from '../store/editor';
 import { debug } from '../utils/debug';
 
-declare module 'xmind-model/types/models/topic' {
-  interface TopicData {
-    contentWidth: number;
-    contentHeight: number;
-  }
-}
-
 const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
   const {
     data: { title, id },
@@ -88,6 +81,7 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
   }
   const border = hasBorder ? `1px solid ${topicTheme.stroke}` : 'none';
   const outline = isSelected ? `2px solid ${topicTheme.borderColor}` : 'none';
+  const background = hasBorder ? '#fff' : 'transparent';
 
   // preventDefault to prevent enter keyboard event create new html element
   function handleKeyDown(e: KeyboardEvent<HTMLDivElement>) {
@@ -95,6 +89,7 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
       e.preventDefault();
     }
   }
+
   return (
     <div
       id={`topic-${id}`}
@@ -115,7 +110,7 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
         top: 0;
         left: 0;
         transform: translate(${x}px, ${y}px);
-        background: #fff;
+        background: ${background};
         max-width: ${MAX_TOPIC_WIDTH}px;
         padding: ${TOPIC_PADDING}px;
         font-size: ${TOPIC_FONT_SIZE}px;
