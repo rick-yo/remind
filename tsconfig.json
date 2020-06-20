@@ -26,6 +26,7 @@
     },
     "jsx": "react",
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "suppressImplicitAnyIndexErrors": true
   }
 }

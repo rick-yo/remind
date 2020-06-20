@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react';
 import { HierachyNode } from '@antv/hierarchy';
-import { ThemeContext } from '../theme';
+import { ThemeContext } from '../context/theme';
 import { TopicData } from 'xmind-model/types/models/topic';
 
 interface LinkProps {

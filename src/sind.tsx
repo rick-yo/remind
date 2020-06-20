@@ -4,7 +4,7 @@ import Topic from './components/Topic';
 import { CANVAS_WIDTH, CANVAS_HEIGHT, EDITOR_MODE } from './constant';
 import mindmap from './layout/mindmap';
 import Link from './components/Link';
-import { ThemeContext, defaultTheme } from './theme';
+import { ThemeContext, defaultTheme } from './context/theme';
 import * as rootStore from './store/root';
 import editorStore from './store/editor';
 import hotkeys from 'hotkeys-js';
@@ -12,6 +12,8 @@ import { createTopic } from './utils/tree';
 import { debug } from './utils/debug';
 import { selectText, onClickOutSide } from './utils/dom';
 import { css, jsx } from '@emotion/core';
+import { LocaleContext, defaultLocale } from './context/locale';
+import Header from './components/Header';
 
 export interface SindProps {
   theme?: any;
@@ -127,36 +129,42 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
   debug('rootWithCoords', rootWithCoords);
   return (
     <ThemeContext.Provider value={theme}>
-      <div
-        style={{
-          position: 'relative',
-        }}
-      >
-        <svg
-          id="sind-links"
-          width={CANVAS_WIDTH}
-          height={CANVAS_HEIGHT}
-          xmlns="http://www.w3.org/2000/svg"
-          css={css`
-            position: absolute;
-            left: 0;
-            top: 0;
-          `}
-        >
-          {links}
-        </svg>
-        <div
-          id="sind-topics"
-          style={{
-            width: `${CANVAS_WIDTH}px`,
-            height: `${CANVAS_HEIGHT}px`,
-            position: 'relative',
-            zIndex: 1,
-          }}
-        >
-          {topics}
+      <LocaleContext.Provider value={defaultLocale}>
+        <div id="editor">
+          <Header />
+          <div
+            id="core-editor"
+            style={{
+              position: 'relative',
+            }}
+          >
+            <svg
+              id="sind-links"
+              width={CANVAS_WIDTH}
+              height={CANVAS_HEIGHT}
+              xmlns="http://www.w3.org/2000/svg"
+              css={css`
+                position: absolute;
+                left: 0;
+                top: 0;
+              `}
+            >
+              {links}
+            </svg>
+            <div
+              id="sind-topics"
+              style={{
+                width: `${CANVAS_WIDTH}px`,
+                height: `${CANVAS_HEIGHT}px`,
+                position: 'relative',
+                zIndex: 1,
+              }}
+            >
+              {topics}
+            </div>
+          </div>
         </div>
-      </div>
+      </LocaleContext.Provider>
     </ThemeContext.Provider>
   );
 };

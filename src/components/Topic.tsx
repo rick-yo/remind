@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { FC, useContext, KeyboardEvent, useState, DragEvent } from 'react';
-import { ThemeContext } from '../theme';
+import { ThemeContext } from '../context/theme';
 import {
   MAX_TOPIC_WIDTH,
   TOPIC_RADIUS,
