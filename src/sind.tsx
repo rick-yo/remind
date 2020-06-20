@@ -12,14 +12,18 @@ import { createTopic } from './utils/tree';
 import { debug } from './utils/debug';
 import { selectText, onClickOutSide } from './utils/dom';
 import { css, jsx } from '@emotion/core';
-import { LocaleContext, defaultLocale } from './context/locale';
+import { LocaleContext, defaultLocale, Locale } from './context/locale';
 import Header from './components/Header';
 
 export interface SindProps {
   theme?: any;
+  locale: Locale['locale'];
 }
 
-const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
+const Sind: FC<SindProps> = ({
+  theme = defaultTheme,
+  locale = defaultLocale.locale,
+}) => {
   const root = rootStore.useSelector(s => s);
   const editorState = editorStore.useSelector(s => s);
   const { mode, selectedNodeId } = editorState;
@@ -129,7 +133,7 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
   debug('rootWithCoords', rootWithCoords);
   return (
     <ThemeContext.Provider value={theme}>
-      <LocaleContext.Provider value={defaultLocale}>
+      <LocaleContext.Provider value={{ locale }}>
         <div id="editor">
           <Header />
           <div

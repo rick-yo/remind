@@ -16,4 +16,4 @@ function useLocale(): IntlResult {
   return Intl[locale];
 }
 
-export { LocaleContext, defaultLocale, useLocale };
+export { LocaleContext, defaultLocale, useLocale, Locale };
