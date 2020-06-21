@@ -75,7 +75,7 @@ const store = createStore({
       const parentNode = topicWalker.getParentNode(root, id);
       if (parentNode && parentNode.children) {
         const previouseIndex = parentNode.children[ATTACHED_KEY].findIndex(
-          item => item.id === id
+          (item: TopicData) => item.id === id
         );
         parentNode.children[ATTACHED_KEY].splice(previouseIndex, 1);
       }

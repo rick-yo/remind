@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { Intl, IntlResult } from '../utils/Intl';
+import { Intl, IntlValue, IntlKey } from '../utils/Intl';
 
 interface Locale {
-  locale: 'en' | 'cn' | 'jp';
+  locale: IntlKey;
 }
 
 const defaultLocale: Locale = {
@@ -11,7 +11,7 @@ const defaultLocale: Locale = {
 
 const LocaleContext = React.createContext(defaultLocale);
 
-function useLocale(): IntlResult {
+function useLocale(): IntlValue {
   const locale = useContext(LocaleContext).locale;
   return Intl[locale];
 }

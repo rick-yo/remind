@@ -1,4 +1,6 @@
-interface IntlResult {
+type IntlKey = 'en' | 'cn' | 'ja';
+
+interface IntlValue {
   open: string;
   focus: string;
   cancelFocus: string;
@@ -10,7 +12,7 @@ interface IntlResult {
   icon: string;
 }
 
-const Intl = {
+const Intl: Record<IntlKey, IntlValue> = {
   cn: {
     open: '打开文件',
 
@@ -49,4 +51,4 @@ const Intl = {
   },
 };
 
-export { Intl, IntlResult };
+export { Intl, IntlValue, IntlKey };

@@ -2,27 +2,20 @@ import { v4 as uuidv4 } from 'uuid';
 import { TopicData } from 'xmind-model/types/models/topic';
 import { HierachyNode } from '@antv/hierarchy';
 
-interface TopicNode {
-  id: string;
-  children: {
-    attached: TopicNode[];
-  };
-}
-
 export type HierachyNodeWithTopicData = HierachyNode<TopicData>;
-type UnionNode = HierachyNodeWithTopicData | TopicNode;
+type UnionNode = HierachyNodeWithTopicData | TopicData;
 
-interface ChildrenFn<T extends any> {
-  (node: T): T[];
+interface ChildrenFn<T> {
+  (node: T): T[] | undefined;
 }
 
-const defaultChildren: ChildrenFn<any> = node => {
+const defaultChildren = (node: HierachyNodeWithTopicData) => {
   return node.children;
 };
 
 class TreeWalker<T extends UnionNode> {
   children: ChildrenFn<T>;
-  constructor(children: ChildrenFn<T> = defaultChildren) {
+  constructor(children: ChildrenFn<T>) {
     this.children = children;
   }
   getNode(root: T, id: string): T | null {
@@ -37,7 +30,7 @@ class TreeWalker<T extends UnionNode> {
     let target: T | undefined = undefined;
     this.eachBefore(root, node => {
       if (!Array.isArray(this.children(node))) return;
-      if (this.children(node).some(item => item.id === id)) target = node;
+      if (this.children(node)?.some(item => item.id === id)) target = node;
     });
     return target;
   }
@@ -80,9 +73,9 @@ class TreeWalker<T extends UnionNode> {
   }
 }
 
-export const defaultWalker = new TreeWalker<HierachyNodeWithTopicData>();
-//@ts-ignore
-// FIXME fix type error
+export const defaultWalker = new TreeWalker<HierachyNodeWithTopicData>(
+  defaultChildren
+);
 export const topicWalker = new TreeWalker<TopicData>(
   node => node.children?.attached
 );

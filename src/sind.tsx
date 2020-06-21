@@ -12,12 +12,13 @@ import { createTopic } from './utils/tree';
 import { debug } from './utils/debug';
 import { selectText, onClickOutSide } from './utils/dom';
 import { css, jsx } from '@emotion/core';
-import { LocaleContext, defaultLocale, Locale } from './context/locale';
+import { LocaleContext, defaultLocale } from './context/locale';
 import Header from './components/Header';
+import { IntlKey } from './utils/Intl';
 
 export interface SindProps {
-  theme?: any;
-  locale: Locale['locale'];
+  theme?: typeof defaultTheme;
+  locale?: IntlKey;
 }
 
 const Sind: FC<SindProps> = ({
@@ -59,7 +60,7 @@ const Sind: FC<SindProps> = ({
       if (!selectedNodeId) return;
       const el = document.querySelector<HTMLDivElement>(id);
       el?.focus();
-      selectText(el as any);
+      selectText(el as HTMLDivElement);
       editorStore.dispatch('SET_MODE', EDITOR_MODE.edit);
     }
 
