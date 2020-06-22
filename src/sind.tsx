@@ -135,7 +135,12 @@ const Sind: FC<SindProps> = ({
   return (
     <ThemeContext.Provider value={theme}>
       <LocaleContext.Provider value={{ locale }}>
-        <div id="editor">
+        <div
+          id="editor"
+          css={css`
+            font-family: 微软雅黑, -apple-system;
+          `}
+        >
           <Header />
           <div
             id="core-editor"

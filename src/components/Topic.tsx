@@ -5,7 +5,6 @@ import {
   MAX_TOPIC_WIDTH,
   TOPIC_RADIUS,
   TOPIC_FONT_SIZE,
-  TOPIC_PADDING,
   EDITOR_MODE,
   KEY_MAPS,
 } from '../constant';
@@ -22,6 +21,8 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
     x,
     y,
     depth,
+    hgap,
+    vgap,
   } = props;
   const topicTheme = useContext(ThemeContext).topic;
   // const root = rootStore.useSelector(s => s);
@@ -90,6 +91,10 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
     }
   }
 
+  const paddingOffset = depth * 3;
+  const padding = `${vgap - paddingOffset}px ${hgap - paddingOffset}px`;
+  const fontSizeOffset = depth * 4;
+  const fontSize = `${Math.max(16, TOPIC_FONT_SIZE - fontSizeOffset)}px`;
   return (
     <div
       id={`topic-${id}`}
@@ -112,8 +117,8 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
         transform: translate(${x}px, ${y}px);
         background: ${background};
         max-width: ${MAX_TOPIC_WIDTH}px;
-        padding: ${TOPIC_PADDING}px;
-        font-size: ${TOPIC_FONT_SIZE}px;
+        padding: ${padding};
+        font-size: ${fontSize};
         cursor: default;
         opacity: ${isDragEntering ? 0.7 : 1};
         border: ${border};

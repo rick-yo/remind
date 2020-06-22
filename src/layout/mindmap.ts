@@ -40,11 +40,13 @@ const defaultOptions: Options<TopicData> = {
     }
     return TOPIC_PADDING;
   },
+  // 左右间距
   getHGap() {
-    return TOPIC_PADDING;
+    return TOPIC_PADDING * 1.5;
   },
+  // 上下间距
   getVGap() {
-    return TOPIC_PADDING * 2;
+    return TOPIC_PADDING;
   },
   getChildren(node) {
     return node.children?.attached || [];

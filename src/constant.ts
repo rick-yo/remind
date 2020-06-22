@@ -2,12 +2,13 @@ const screen = window.screen;
 const CANVAS_WIDTH = screen.width;
 const CANVAS_HEIGHT = screen.height;
 
-const TOPIC_FONT_SIZE = 16;
-const TOPIC_PADDING = 8;
+const TOPIC_FONT_SIZE = 22;
+const TOPIC_PADDING = 10;
 const TOPIC_RADIUS = 5;
 const TOPIC_BORDER = 5;
 const MAX_TOPIC_WIDTH = 150;
 const MIN_TOPIC_HEIGHT = 15;
+
 const canvasContext = document
   .createElement('canvas')
   .getContext('2d') as CanvasRenderingContext2D;
