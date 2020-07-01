@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import { TopicData } from 'xmind-model/types/models/topic';
-import { HierachyNode } from '@antv/hierarchy';
+import { HierarchyPointNode } from 'd3-hierarchy';
 
-export type HierachyNodeWithTopicData = HierachyNode<TopicData>;
+export type HierachyNodeWithTopicData = HierarchyPointNode<TopicData>;
 type UnionNode = HierachyNodeWithTopicData | TopicData;
 
 interface ChildrenFn<T> {

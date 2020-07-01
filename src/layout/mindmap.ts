@@ -1,11 +1,11 @@
 import { TopicData } from 'xmind-model/types/models/topic';
-import hierarchy, { Options } from '@antv/hierarchy';
+import { hierarchy, tree } from 'd3-hierarchy';
 import {
-  MIN_TOPIC_HEIGHT,
   canvasContext,
-  MAX_TOPIC_WIDTH,
-  TOPIC_PADDING,
   TOPIC_FONT_SIZE,
+  TOPIC_PADDING,
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
 } from '../constant';
 
 function measureText(text: string, fontSize: number = TOPIC_FONT_SIZE) {
@@ -16,51 +16,32 @@ function measureText(text: string, fontSize: number = TOPIC_FONT_SIZE) {
   return measure;
 }
 
-const defaultOptions: Options<TopicData> = {
-  getId(node) {
-    return node.id;
-  },
-  getHeight(node) {
-    const width = measureText(node.title).width;
-    const lines = Math.ceil(width / MAX_TOPIC_WIDTH);
-    const contentHeight = Math.max(
-      MIN_TOPIC_HEIGHT,
-      TOPIC_FONT_SIZE * lines * 1.2
-    );
-    return contentHeight;
-  },
-  getWidth(node) {
-    const measure = measureText(node.title);
-    const contentWidth = Math.min(measure.width, MAX_TOPIC_WIDTH);
-    return contentWidth;
-  },
-  getSubTreeSep(d) {
-    if (!d.children || !d.children.length) {
-      return 0;
-    }
-    return TOPIC_PADDING;
-  },
-  // 左右间距
-  getHGap() {
-    return TOPIC_PADDING * 1.5;
-  },
-  // 上下间距
-  getVGap() {
-    return TOPIC_PADDING;
-  },
-  getChildren(node) {
-    return node.children?.attached || [];
-  },
-};
-
-export default function(
-  root: TopicData,
-  options: Options<TopicData> = defaultOptions
-) {
-  const rootNode = hierarchy.mindmap(root, options);
-  rootNode.eachNode(node => {
-    if (!node.parent) return;
-    node.x += 70 * node.depth;
+export default function(root: TopicData) {
+  const rootNode = hierarchy(root, node => node.children?.attached);
+  const treeLayout = tree<TopicData>();
+  treeLayout.nodeSize([50, 200]);
+  // calculate vertical margin between neighboring nodes
+  treeLayout.separation((a, b) => {
+    return a.parent == b.parent ? 1 : 2;
   });
-  return rootNode;
+  const mindmap = treeLayout(rootNode);
+  // swap node.x, node.y
+  mindmap.each(node => {
+    // @ts-ignore
+    node.id = node.data.id;
+    const tempx = node.x;
+    node.x = node.y;
+    node.y = tempx;
+  });
+
+  // calculate horizontal margin between neighboring nodes
+  mindmap.each(node => {
+    node.x += node.depth * TOPIC_PADDING * 4;
+  });
+  // move mindmap to canvas center
+  mindmap.each(node => {
+    node.x += CANVAS_WIDTH / 2;
+    node.y += CANVAS_HEIGHT / 2;
+  });
+  return mindmap;
 }

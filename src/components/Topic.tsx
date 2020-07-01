@@ -9,20 +9,18 @@ import {
   KEY_MAPS,
 } from '../constant';
 import { css, jsx } from '@emotion/core';
-import { HierachyNode } from '@antv/hierarchy';
 import { TopicData } from 'xmind-model/types/models/topic';
 import * as rootStore from '../store/root';
 import editorStore from '../store/editor';
 import { debug } from '../utils/debug';
+import { HierarchyPointNode } from 'd3-hierarchy';
 
-const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
+const Topic = (props: HierarchyPointNode<TopicData>) => {
   const {
     data: { title, id },
     x,
     y,
     depth,
-    hgap,
-    vgap,
   } = props;
   const topicTheme = useContext(ThemeContext).topic;
   // const root = rootStore.useSelector(s => s);
@@ -92,7 +90,7 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
   }
 
   const paddingOffset = depth * 3;
-  const padding = `${vgap - paddingOffset}px ${hgap - paddingOffset}px`;
+  const padding = `${10 - paddingOffset}px ${20 - paddingOffset}px`;
   const fontSizeOffset = depth * 4;
   const fontSize = `${Math.max(16, TOPIC_FONT_SIZE - fontSizeOffset)}px`;
   return (

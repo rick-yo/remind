@@ -41,25 +41,25 @@ const store = createStore({
     MOVE_LEFT(state, rootWithCoords: HierachyNodeWithTopicData) {
       const target = getLeftNode(rootWithCoords, state.selectedNodeId);
       if (target) {
-        state.selectedNodeId = target.id;
+        state.selectedNodeId = target.data.id;
       }
     },
     MOVE_RIGHT(state, rootWithCoords: HierachyNodeWithTopicData) {
       const target = getRighttNode(rootWithCoords, state.selectedNodeId);
       if (target) {
-        state.selectedNodeId = target.id;
+        state.selectedNodeId = target.data.id;
       }
     },
     MOVE_TOP(state, rootWithCoords: HierachyNodeWithTopicData) {
       const target = getTopNode(rootWithCoords, state.selectedNodeId);
       if (target) {
-        state.selectedNodeId = target.id;
+        state.selectedNodeId = target.data.id;
       }
     },
     MOVE_DOWN(state, rootWithCoords: HierachyNodeWithTopicData) {
       const target = getBottomNode(rootWithCoords, state.selectedNodeId);
       if (target) {
-        state.selectedNodeId = target.id;
+        state.selectedNodeId = target.data.id;
       }
     },
   },

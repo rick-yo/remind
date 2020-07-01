@@ -1,11 +1,11 @@
 import React, { FC, useContext } from 'react';
-import { HierachyNode } from '@antv/hierarchy';
 import { ThemeContext } from '../context/theme';
 import { TopicData } from 'xmind-model/types/models/topic';
+import { HierarchyPointNode } from 'd3-hierarchy';
 
 interface LinkProps {
-  source: HierachyNode<TopicData>;
-  target: HierachyNode<TopicData>;
+  source: HierarchyPointNode<TopicData>;
+  target: HierarchyPointNode<TopicData>;
 }
 
 const Link: FC<LinkProps> = (props: LinkProps) => {
@@ -16,7 +16,7 @@ const Link: FC<LinkProps> = (props: LinkProps) => {
 
   return (
     <line
-      x1={x1 + source.width}
+      // x1={x1 + source.width}
       y1={y1 + source.height / 2}
       x2={x2}
       y2={y2 + target.height / 2}

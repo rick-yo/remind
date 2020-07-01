@@ -29,18 +29,18 @@ const Sind: FC<SindProps> = ({
   const editorState = editorStore.useSelector(s => s);
   const { mode, selectedNodeId } = editorState;
   const rootWithCoords = mindmap(root);
-  rootWithCoords.translate(CANVAS_WIDTH / 4, CANVAS_HEIGHT / 3);
+
   const id = `#topic-${selectedNodeId}`;
   const topics: React.ReactElement[] = [];
   const links: React.ReactElement[] = [];
 
-  rootWithCoords.eachNode(node => {
-    topics.push(<Topic key={node.id} {...node} />);
+  rootWithCoords.each(node => {
+    topics.push(<Topic key={node.data.id} {...node} />);
   });
 
-  rootWithCoords.eachNode(node => {
-    node.children.forEach(child => {
-      links.push(<Link key={child.id} source={node} target={child} />);
+  rootWithCoords.each(node => {
+    node.children?.forEach(child => {
+      links.push(<Link key={child.data.id} source={node} target={child} />);
     });
   });
 
