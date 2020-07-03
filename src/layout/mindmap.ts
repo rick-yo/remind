@@ -22,7 +22,7 @@ export default function(root: TopicData) {
   treeLayout.nodeSize([50, 200]);
   // calculate vertical margin between neighboring nodes
   treeLayout.separation((a, b) => {
-    return a.parent == b.parent ? 1 : 2;
+    return a.parent == b.parent ? 1.5 : 1;
   });
   const mindmap = treeLayout(rootNode);
   // swap node.x, node.y
@@ -39,9 +39,12 @@ export default function(root: TopicData) {
     node.x += node.depth * TOPIC_PADDING * 4;
   });
   // move mindmap to canvas center
+  const descendants = mindmap.descendants();
+  const right = Math.max(...descendants.map(node => node.x));
+  const bottom = Math.max(...descendants.map(node => node.y));
   mindmap.each(node => {
-    node.x += CANVAS_WIDTH / 2;
-    node.y += CANVAS_HEIGHT / 2;
+    node.x += CANVAS_WIDTH / 2 - right / 2;
+    node.y += CANVAS_HEIGHT / 2 - bottom / 2;
   });
   return mindmap;
 }

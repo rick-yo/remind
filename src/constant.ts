@@ -1,6 +1,5 @@
-const screen = window.screen;
-const CANVAS_WIDTH = screen.width;
-const CANVAS_HEIGHT = screen.height;
+const CANVAS_WIDTH = window.innerWidth;
+const CANVAS_HEIGHT = window.innerHeight;
 
 const TOPIC_FONT_SIZE = 22;
 const TOPIC_PADDING = 10;

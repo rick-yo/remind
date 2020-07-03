@@ -139,6 +139,7 @@ const Sind: FC<SindProps> = ({
           id="editor"
           css={css`
             font-family: 微软雅黑, -apple-system;
+            background: #eef8fa;
           `}
         >
           <Header />

@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { FC, useContext, KeyboardEvent, useState, DragEvent } from 'react';
+import { useContext, KeyboardEvent, useState, DragEvent } from 'react';
 import { ThemeContext } from '../context/theme';
 import {
   MAX_TOPIC_WIDTH,
@@ -119,10 +119,9 @@ const Topic = (props: HierarchyPointNode<TopicData>) => {
         font-size: ${fontSize};
         cursor: default;
         opacity: ${isDragEntering ? 0.7 : 1};
-        border: ${border};
-        border-radius: ${TOPIC_RADIUS}px;
         outline: ${outline};
       `}
+      suppressContentEditableWarning
     >
       <div
         css={css`

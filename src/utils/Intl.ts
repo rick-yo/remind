@@ -2,6 +2,7 @@ type IntlKey = 'en' | 'cn' | 'ja';
 
 interface IntlValue {
   open: string;
+  subTopic: string;
   focus: string;
   cancelFocus: string;
   link: string;
@@ -15,6 +16,7 @@ interface IntlValue {
 const Intl: Record<IntlKey, IntlValue> = {
   cn: {
     open: '打开文件',
+    subTopic: '子主题',
 
     focus: '专注',
     cancelFocus: '取消专注',
@@ -27,6 +29,7 @@ const Intl: Record<IntlKey, IntlValue> = {
   },
   en: {
     open: 'Open File',
+    subTopic: 'Sub Topic',
 
     focus: 'Focus Mode',
     cancelFocus: 'Cancel Focus Mode',
@@ -39,6 +42,7 @@ const Intl: Record<IntlKey, IntlValue> = {
   },
   ja: {
     open: '開いたファイル',
+    subTopic: 'サブテーマ',
 
     focus: '集中',
     cancelFocus: '集中解除',
