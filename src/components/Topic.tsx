@@ -13,14 +13,16 @@ import { TopicData } from 'xmind-model/types/models/topic';
 import * as rootStore from '../store/root';
 import editorStore from '../store/editor';
 import { debug } from '../utils/debug';
-import { HierarchyPointNode } from 'd3-hierarchy';
+import { HierachyNode } from '@antv/hierarchy';
 
-const Topic = (props: HierarchyPointNode<TopicData>) => {
+const Topic = (props: HierachyNode<TopicData>) => {
   const {
     data: { title, id },
     x,
     y,
     depth,
+    hgap,
+    vgap,
   } = props;
   const topicTheme = useContext(ThemeContext).topic;
   // const root = rootStore.useSelector(s => s);
@@ -78,7 +80,6 @@ const Topic = (props: HierarchyPointNode<TopicData>) => {
   function handleDragOver(e: DragEvent<HTMLDivElement>) {
     e.preventDefault();
   }
-  const border = hasBorder ? `1px solid ${topicTheme.stroke}` : 'none';
   const outline = isSelected ? `2px solid ${topicTheme.borderColor}` : 'none';
   const background = hasBorder ? '#fff' : 'transparent';
 
@@ -89,8 +90,7 @@ const Topic = (props: HierarchyPointNode<TopicData>) => {
     }
   }
 
-  const paddingOffset = depth * 3;
-  const padding = `${10 - paddingOffset}px ${20 - paddingOffset}px`;
+  const padding = `${vgap}px ${hgap}px`;
   const fontSizeOffset = depth * 4;
   const fontSize = `${Math.max(16, TOPIC_FONT_SIZE - fontSizeOffset)}px`;
   return (
@@ -120,19 +120,13 @@ const Topic = (props: HierarchyPointNode<TopicData>) => {
         cursor: default;
         opacity: ${isDragEntering ? 0.7 : 1};
         outline: ${outline};
+        overflow-wrap: break-word;
+        word-break: break-all;
+        user-select: none;
       `}
       suppressContentEditableWarning
     >
-      <div
-        css={css`
-          display: inline-block;
-          overflow-wrap: break-word;
-          word-break: break-all;
-          user-select: none;
-        `}
-      >
-        {title}
-      </div>
+      {title}
     </div>
   );
 };

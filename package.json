@@ -44,7 +44,6 @@
     "@storybook/addon-links": "^5.3.17",
     "@storybook/addons": "^5.3.17",
     "@storybook/react": "^5.3.17",
-    "@types/d3-hierarchy": "^1.1.6",
     "@types/jest": "^25.1.4",
     "@types/jszip": "^3.4.1",
     "@types/react": "^16.9.26",
@@ -60,12 +59,12 @@
     "ts-loader": "^6.2.2",
     "tsdx": "^0.13.0",
     "tslib": "^1.11.1",
-    "xmind-model": "^1.1.10",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "xmind-model": "^1.1.10"
   },
   "dependencies": {
+    "@antv/hierarchy": "^0.6.4",
     "@emotion/core": "^10.0.28",
-    "d3-hierarchy": "^1.1.9",
     "hotkeys-js": "^3.7.6",
     "relax-ts": "0.0.1",
     "uuid": "^7.0.3",

@@ -2,7 +2,6 @@ const CANVAS_WIDTH = window.innerWidth;
 const CANVAS_HEIGHT = window.innerHeight;
 
 const TOPIC_FONT_SIZE = 22;
-const TOPIC_PADDING = 10;
 const TOPIC_RADIUS = 5;
 const TOPIC_BORDER = 5;
 const MAX_TOPIC_WIDTH = 150;
@@ -36,7 +35,6 @@ export {
   CANVAS_HEIGHT,
   CANVAS_WIDTH,
   TOPIC_FONT_SIZE,
-  TOPIC_PADDING,
   MAX_TOPIC_WIDTH,
   TOPIC_RADIUS,
   canvasContext,

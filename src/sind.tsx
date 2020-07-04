@@ -34,11 +34,11 @@ const Sind: FC<SindProps> = ({
   const topics: React.ReactElement[] = [];
   const links: React.ReactElement[] = [];
 
-  rootWithCoords.each(node => {
+  rootWithCoords.eachNode(node => {
     topics.push(<Topic key={node.data.id} {...node} />);
   });
 
-  rootWithCoords.each(node => {
+  rootWithCoords.eachNode(node => {
     node.children?.forEach(child => {
       links.push(<Link key={child.data.id} source={node} target={child} />);
     });

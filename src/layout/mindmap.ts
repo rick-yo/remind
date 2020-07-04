@@ -1,13 +1,15 @@
 import { TopicData } from 'xmind-model/types/models/topic';
-import { hierarchy, tree } from 'd3-hierarchy';
+import hierarchy, { Options, HierachyNode } from '@antv/hierarchy';
 import {
+  MIN_TOPIC_HEIGHT,
   canvasContext,
+  MAX_TOPIC_WIDTH,
   TOPIC_FONT_SIZE,
-  TOPIC_PADDING,
   CANVAS_WIDTH,
   CANVAS_HEIGHT,
 } from '../constant';
 
+// FIXME fontSize is diffrent between topic, should fix this to get correct topic width and height
 function measureText(text: string, fontSize: number = TOPIC_FONT_SIZE) {
   canvasContext.save();
   canvasContext.font = `${fontSize}px System`;
@@ -16,35 +18,61 @@ function measureText(text: string, fontSize: number = TOPIC_FONT_SIZE) {
   return measure;
 }
 
-export default function(root: TopicData) {
-  const rootNode = hierarchy(root, node => node.children?.attached);
-  const treeLayout = tree<TopicData>();
-  treeLayout.nodeSize([50, 200]);
-  // calculate vertical margin between neighboring nodes
-  treeLayout.separation((a, b) => {
-    return a.parent == b.parent ? 1.5 : 1;
-  });
-  const mindmap = treeLayout(rootNode);
-  // swap node.x, node.y
-  mindmap.each(node => {
-    // @ts-ignore
-    node.id = node.data.id;
-    const tempx = node.x;
-    node.x = node.y;
-    node.y = tempx;
-  });
+const defaultOptions: Options<TopicData> = {
+  getId(node) {
+    return node.id;
+  },
+  getHeight(node) {
+    const width = measureText(node.title).width;
+    const lines = Math.ceil(width / MAX_TOPIC_WIDTH);
+    const contentHeight = Math.max(
+      MIN_TOPIC_HEIGHT,
+      TOPIC_FONT_SIZE * lines * 1.2
+    );
+    return contentHeight;
+  },
+  getWidth(node) {
+    const measure = measureText(node.title);
+    const contentWidth = Math.min(measure.width, MAX_TOPIC_WIDTH);
+    console.log(node.title, contentWidth);
+    return contentWidth;
+  },
+  getSubTreeSep(d) {
+    if (!d.children || !d.children.length) {
+      return 0;
+    }
+    return 20;
+  },
+  // 左右间距
+  getHGap() {
+    return 18;
+  },
+  // 上下间距
+  getVGap() {
+    return 10;
+  },
+  getChildren(node) {
+    return node.children?.attached || [];
+  },
+};
 
-  // calculate horizontal margin between neighboring nodes
-  mindmap.each(node => {
-    node.x += node.depth * TOPIC_PADDING * 4;
+export default function(
+  root: TopicData,
+  options: Options<TopicData> = defaultOptions
+) {
+  const rootNode = hierarchy.mindmap(root, options);
+  rootNode.eachNode(node => {
+    if (!node.parent) return;
+    node.x += 70 * node.depth;
   });
   // move mindmap to canvas center
-  const descendants = mindmap.descendants();
+  const descendants: HierachyNode<TopicData>[] = [];
+  rootNode.eachNode(node => descendants.push(node));
   const right = Math.max(...descendants.map(node => node.x));
   const bottom = Math.max(...descendants.map(node => node.y));
-  mindmap.each(node => {
+  rootNode.eachNode(node => {
     node.x += CANVAS_WIDTH / 2 - right / 2;
     node.y += CANVAS_HEIGHT / 2 - bottom / 2;
   });
-  return mindmap;
+  return rootNode;
 }
