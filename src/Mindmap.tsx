@@ -1,10 +1,15 @@
 /** @jsx jsx */
 import React, { FC, useEffect } from 'react';
 import Topic from './components/Topic';
-import { CANVAS_WIDTH, CANVAS_HEIGHT, EDITOR_MODE } from './constant';
+import {
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+  EDITOR_MODE,
+  EDITOR_ID_SELECTOR,
+} from './constant';
 import mindmap from './layout/mindmap';
-import Link from './components/Link';
-import { ThemeContext, defaultTheme } from './theme';
+import Links from './components/Links';
+import { ThemeContext, defaultTheme } from './context/theme';
 import * as rootStore from './store/root';
 import editorStore from './store/editor';
 import hotkeys from 'hotkeys-js';
@@ -12,29 +17,31 @@ import { createTopic } from './utils/tree';
 import { debug } from './utils/debug';
 import { selectText, onClickOutSide } from './utils/dom';
 import { css, jsx } from '@emotion/core';
+import { LocaleContext } from './context/locale';
+import Header from './components/Header';
+import { IntlKey } from './utils/Intl';
+import { TopicData } from 'xmind-model/types/models/topic';
+import './mindmap.css';
+import Toolbar from './components/Toolbar';
 
-export interface SindProps {
-  theme?: any;
+export interface MindmapProps {
+  theme?: typeof defaultTheme;
+  locale?: IntlKey;
+  data?: TopicData;
+  readonly?: boolean;
 }
 
-const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
+const Sind: FC<Required<MindmapProps>> = ({ theme, locale }) => {
   const root = rootStore.useSelector(s => s);
   const editorState = editorStore.useSelector(s => s);
   const { mode, selectedNodeId } = editorState;
-  const rootWithCoords = mindmap(JSON.parse(JSON.stringify(root)));
-  rootWithCoords.translate(CANVAS_WIDTH / 4, CANVAS_HEIGHT / 3);
+  const mindMap = mindmap(root);
+
   const id = `#topic-${selectedNodeId}`;
   const topics: React.ReactElement[] = [];
-  const links: React.ReactElement[] = [];
 
-  rootWithCoords.eachNode(node => {
-    topics.push(<Topic key={node.id} {...node} />);
-  });
-
-  rootWithCoords.eachNode(node => {
-    node.children.forEach(child => {
-      links.push(<Link key={child.id} source={node} target={child} />);
-    });
+  mindMap.eachNode(node => {
+    topics.push(<Topic key={node.data.id} {...node} />);
   });
 
   // 常规模式下
@@ -53,7 +60,7 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
       if (!selectedNodeId) return;
       const el = document.querySelector<HTMLDivElement>(id);
       el?.focus();
-      selectText(el as any);
+      selectText(el as HTMLDivElement);
       editorStore.dispatch('SET_MODE', EDITOR_MODE.edit);
     }
 
@@ -63,19 +70,19 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
 
     function moveTop(e: KeyboardEvent) {
       e.preventDefault();
-      editorStore.dispatch('MOVE_TOP');
+      editorStore.dispatch('MOVE_TOP', mindMap);
     }
     function moveDown(e: KeyboardEvent) {
       e.preventDefault();
-      editorStore.dispatch('MOVE_DOWN');
+      editorStore.dispatch('MOVE_DOWN', mindMap);
     }
     function moveLeft(e: KeyboardEvent) {
       e.preventDefault();
-      editorStore.dispatch('MOVE_LEFT');
+      editorStore.dispatch('MOVE_LEFT', mindMap);
     }
     function moveRight(e: KeyboardEvent) {
       e.preventDefault();
-      editorStore.dispatch('MOVE_RIGHT');
+      editorStore.dispatch('MOVE_RIGHT', mindMap);
     }
     function undo() {
       rootStore.dispatch('UNDO_HISTORY');
@@ -90,7 +97,7 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
       hotkeys('backspace', deleteNode);
       hotkeys('left', moveLeft);
       hotkeys('right', moveRight);
-      hotkeys('top', moveTop);
+      hotkeys('up,top', moveTop);
       hotkeys('down', moveDown);
       hotkeys('command+z', undo);
       hotkeys('command+shift+z', redo);
@@ -101,15 +108,16 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
       hotkeys.unbind('backspace', deleteNode);
       hotkeys.unbind('left', moveLeft);
       hotkeys.unbind('right', moveRight);
-      hotkeys.unbind('top', moveTop);
+      hotkeys.unbind('up,top', moveTop);
       hotkeys.unbind('down', moveDown);
       hotkeys.unbind('command+z', undo);
       hotkeys.unbind('command+shift+z', redo);
     };
-  }, [mode, selectedNodeId, id]);
+  }, [mode, selectedNodeId, id, mindMap]);
 
   // 编辑模式下
   useEffect(() => {
+    if (mode !== EDITOR_MODE.edit) return;
     const clickOutSide = onClickOutSide(id, () => {
       editorStore.dispatch('SET_MODE', EDITOR_MODE.regular);
       const el = document.querySelector<HTMLDivElement>(id);
@@ -123,39 +131,54 @@ const Sind: FC<SindProps> = ({ theme = defaultTheme }) => {
     return () => clickOutSide();
   }, [mode, selectedNodeId, id]);
 
-  debug('rootWithCoords', rootWithCoords);
+  debug('rootWithCoords', mindMap);
   return (
     <ThemeContext.Provider value={theme}>
-      <div
-        style={{
-          position: 'relative',
-        }}
-      >
-        <svg
-          id="sind-links"
-          width={CANVAS_WIDTH}
-          height={CANVAS_HEIGHT}
-          xmlns="http://www.w3.org/2000/svg"
+      <LocaleContext.Provider value={{ locale }}>
+        <div
+          id={EDITOR_ID_SELECTOR}
           css={css`
-            position: absolute;
-            left: 0;
-            top: 0;
+            font-family: 微软雅黑, -apple-system;
+            background: #eef8fa;
+            position: 'relative';
+            overflow: hidden;
           `}
         >
-          {links}
-        </svg>
-        <div
-          id="sind-topics"
-          style={{
-            width: `${CANVAS_WIDTH}px`,
-            height: `${CANVAS_HEIGHT}px`,
-            position: 'relative',
-            zIndex: 1,
-          }}
-        >
-          {topics}
+          <Header />
+          <div
+            id="core-editor"
+            css={css`
+              position: relative;
+              transform: scale(${(editorState.scale, editorState.scale)});
+            `}
+          >
+            <svg
+              id="sind-links"
+              width={CANVAS_WIDTH}
+              height={CANVAS_HEIGHT}
+              xmlns="http://www.w3.org/2000/svg"
+              css={css`
+                position: absolute;
+                left: 0;
+                top: 0;
+              `}
+            >
+              <Links mindmap={mindMap} />
+            </svg>
+            <div
+              id="sind-topics"
+              style={{
+                width: `${CANVAS_WIDTH}px`,
+                height: `${CANVAS_HEIGHT}px`,
+                position: 'relative',
+              }}
+            >
+              {topics}
+            </div>
+          </div>
+          <Toolbar />
         </div>
-      </div>
+      </LocaleContext.Provider>
     </ThemeContext.Provider>
   );
 };

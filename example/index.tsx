@@ -1,12 +1,12 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Sind } from '../src';
+import { Mindmap } from '../src';
 
 const App = () => {
   return (
     <div>
-      <Sind />
+      <Mindmap />
     </div>
   );
 };

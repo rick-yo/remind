@@ -1,13 +1,15 @@
 import { TopicData } from 'xmind-model/types/models/topic';
-import hierarchy, { Options } from '@antv/hierarchy';
+import hierarchy, { Options, HierachyNode } from '@antv/hierarchy';
 import {
   MIN_TOPIC_HEIGHT,
   canvasContext,
   MAX_TOPIC_WIDTH,
-  TOPIC_PADDING,
   TOPIC_FONT_SIZE,
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
 } from '../constant';
 
+// FIXME fontSize is diffrent between topic, should fix this to get correct topic width and height
 function measureText(text: string, fontSize: number = TOPIC_FONT_SIZE) {
   canvasContext.save();
   canvasContext.font = `${fontSize}px System`;
@@ -27,26 +29,26 @@ const defaultOptions: Options<TopicData> = {
       MIN_TOPIC_HEIGHT,
       TOPIC_FONT_SIZE * lines * 1.2
     );
-    node.contentHeight = contentHeight;
     return contentHeight;
   },
   getWidth(node) {
     const measure = measureText(node.title);
     const contentWidth = Math.min(measure.width, MAX_TOPIC_WIDTH);
-    node.contentWidth = contentWidth;
     return contentWidth;
   },
   getSubTreeSep(d) {
-    if (!d.children || !d.children.length) {
+    if (!this.getChildren(d).length) {
       return 0;
     }
-    return TOPIC_PADDING;
+    return 20;
   },
+  // 左右间距
   getHGap() {
-    return TOPIC_PADDING;
+    return 18;
   },
+  // 上下间距
   getVGap() {
-    return TOPIC_PADDING * 2;
+    return 12;
   },
   getChildren(node) {
     return node.children?.attached || [];
@@ -61,6 +63,15 @@ export default function(
   rootNode.eachNode(node => {
     if (!node.parent) return;
     node.x += 70 * node.depth;
+  });
+  // move mindmap to canvas center
+  const descendants: HierachyNode<TopicData>[] = [];
+  rootNode.eachNode(node => descendants.push(node));
+  const right = Math.max(...descendants.map(node => node.x));
+  const bottom = Math.max(...descendants.map(node => node.y));
+  rootNode.eachNode(node => {
+    node.x += CANVAS_WIDTH / 2 - right / 2;
+    node.y += CANVAS_HEIGHT / 2 - bottom / 2;
   });
   return rootNode;
 }

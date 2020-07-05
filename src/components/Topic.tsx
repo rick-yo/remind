@@ -1,34 +1,28 @@
 /** @jsx jsx */
-import { FC, useContext, KeyboardEvent, useState, DragEvent } from 'react';
-import { ThemeContext } from '../theme';
+import { useContext, KeyboardEvent, useState, DragEvent } from 'react';
+import { ThemeContext } from '../context/theme';
 import {
   MAX_TOPIC_WIDTH,
   TOPIC_RADIUS,
   TOPIC_FONT_SIZE,
-  TOPIC_PADDING,
   EDITOR_MODE,
   KEY_MAPS,
 } from '../constant';
 import { css, jsx } from '@emotion/core';
-import { HierachyNode } from '@antv/hierarchy';
 import { TopicData } from 'xmind-model/types/models/topic';
 import * as rootStore from '../store/root';
 import editorStore from '../store/editor';
 import { debug } from '../utils/debug';
+import { HierachyNode } from '@antv/hierarchy';
 
-declare module 'xmind-model/types/models/topic' {
-  interface TopicData {
-    contentWidth: number;
-    contentHeight: number;
-  }
-}
-
-const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
+const Topic = (props: HierachyNode<TopicData>) => {
   const {
     data: { title, id },
     x,
     y,
     depth,
+    hgap,
+    vgap,
   } = props;
   const topicTheme = useContext(ThemeContext).topic;
   // const root = rootStore.useSelector(s => s);
@@ -86,8 +80,8 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
   function handleDragOver(e: DragEvent<HTMLDivElement>) {
     e.preventDefault();
   }
-  const border = hasBorder ? `1px solid ${topicTheme.stroke}` : 'none';
   const outline = isSelected ? `2px solid ${topicTheme.borderColor}` : 'none';
+  const background = hasBorder ? '#fff' : 'transparent';
 
   // preventDefault to prevent enter keyboard event create new html element
   function handleKeyDown(e: KeyboardEvent<HTMLDivElement>) {
@@ -95,6 +89,11 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
       e.preventDefault();
     }
   }
+
+  const padding = `${vgap * 0.6}px ${hgap}px`;
+  const fontSizeOffset = depth * 4;
+  const fontSize = `${Math.max(16, TOPIC_FONT_SIZE - fontSizeOffset)}px`;
+
   return (
     <div
       id={`topic-${id}`}
@@ -115,27 +114,20 @@ const Topic: FC<HierachyNode<TopicData>> = (props: HierachyNode<TopicData>) => {
         top: 0;
         left: 0;
         transform: translate(${x}px, ${y}px);
-        background: #fff;
+        background: ${background};
         max-width: ${MAX_TOPIC_WIDTH}px;
-        padding: ${TOPIC_PADDING}px;
-        font-size: ${TOPIC_FONT_SIZE}px;
+        padding: ${padding};
+        font-size: ${fontSize};
         cursor: default;
         opacity: ${isDragEntering ? 0.7 : 1};
-        border: ${border};
-        border-radius: ${TOPIC_RADIUS}px;
         outline: ${outline};
+        overflow-wrap: break-word;
+        word-break: break-all;
+        user-select: none;
       `}
+      suppressContentEditableWarning
     >
-      <div
-        css={css`
-          display: inline-block;
-          overflow-wrap: break-word;
-          word-break: break-all;
-          user-select: none;
-        `}
-      >
-        {title}
-      </div>
+      {title}
     </div>
   );
 };
