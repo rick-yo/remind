@@ -34,7 +34,7 @@ const defaultRoot: TopicData = {
   },
 };
 
-const initialState: IState = {
+export const initialState: IState = {
   current: 0,
   timeline: [defaultRoot],
 };

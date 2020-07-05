@@ -14,19 +14,22 @@ type IState = {
   selectedNodeId: string;
   scale: number;
   dragingNode?: TopicData;
+  readonly: boolean;
 };
 
-const initialState: IState = {
+export const initialState: IState = {
   mode: EDITOR_MODE.regular,
   selectedNodeId: '',
   scale: 1,
   dragingNode: undefined,
+  readonly: false,
 };
 
 const store = createStore({
   state: initialState,
   reducers: {
     SET_MODE(state, payload: EDITOR_MODE) {
+      if (state.readonly) return;
       state.mode = payload;
     },
     SELECT_NODE(state, payload: string) {

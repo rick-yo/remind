@@ -12,7 +12,7 @@ import { createTopic } from './utils/tree';
 import { debug } from './utils/debug';
 import { selectText, onClickOutSide } from './utils/dom';
 import { css, jsx } from '@emotion/core';
-import { LocaleContext, defaultLocale } from './context/locale';
+import { LocaleContext } from './context/locale';
 import Header from './components/Header';
 import { IntlKey } from './utils/Intl';
 import { TopicData } from 'xmind-model/types/models/topic';
@@ -21,12 +21,10 @@ export interface MindmapProps {
   theme?: typeof defaultTheme;
   locale?: IntlKey;
   data?: TopicData;
+  readonly?: boolean;
 }
 
-const Sind: FC<MindmapProps> = ({
-  theme = defaultTheme,
-  locale = defaultLocale.locale,
-}) => {
+const Sind: FC<Required<MindmapProps>> = ({ theme, locale }) => {
   const root = rootStore.useSelector(s => s);
   const editorState = editorStore.useSelector(s => s);
   const { mode, selectedNodeId } = editorState;

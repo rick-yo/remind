@@ -1,18 +1,35 @@
 import React from 'react';
 import Mindmap, { MindmapProps } from './Mindmap';
 import { Provider, defaultRoot } from './store/root';
-import EditorStore from './store/editor';
+import EditorStore, { initialState } from './store/editor';
+import { defaultTheme } from './context/theme';
+import { defaultLocale } from './context/locale';
 
-function EnhancedMindMap(props: MindmapProps) {
+function EnhancedMindMap({
+  readonly = false,
+  data = defaultRoot,
+  theme = defaultTheme,
+  locale = defaultLocale.locale,
+}: MindmapProps) {
   return (
-    <EditorStore.Provider>
+    <EditorStore.Provider
+      initialState={{
+        ...initialState,
+        readonly: readonly,
+      }}
+    >
       <Provider
         initialState={{
           current: 0,
-          timeline: [props.data || defaultRoot],
+          timeline: [data],
         }}
       >
-        <Mindmap {...props}></Mindmap>
+        <Mindmap
+          theme={theme}
+          locale={locale}
+          data={data}
+          readonly={readonly}
+        ></Mindmap>
       </Provider>
     </EditorStore.Provider>
   );

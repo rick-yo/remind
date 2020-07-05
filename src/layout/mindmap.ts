@@ -34,7 +34,6 @@ const defaultOptions: Options<TopicData> = {
   getWidth(node) {
     const measure = measureText(node.title);
     const contentWidth = Math.min(measure.width, MAX_TOPIC_WIDTH);
-    console.log(node.title, contentWidth);
     return contentWidth;
   },
   getSubTreeSep(d) {
