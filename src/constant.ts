@@ -31,6 +31,8 @@ const KEY_MAPS: Record<string, string> = {
   ArrowDown: 'ArrowDown',
 };
 
+const EDITOR_ID_SELECTOR = 'mind-editor';
+
 export {
   CANVAS_HEIGHT,
   CANVAS_WIDTH,
@@ -43,4 +45,5 @@ export {
   EDITOR_MODE,
   KEY_MAPS,
   TOPIC_BORDER,
+  EDITOR_ID_SELECTOR,
 };

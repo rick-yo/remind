@@ -1,7 +1,12 @@
 /** @jsx jsx */
 import React, { FC, useEffect } from 'react';
 import Topic from './components/Topic';
-import { CANVAS_WIDTH, CANVAS_HEIGHT, EDITOR_MODE } from './constant';
+import {
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+  EDITOR_MODE,
+  EDITOR_ID_SELECTOR,
+} from './constant';
 import mindmap from './layout/mindmap';
 import Links from './components/Links';
 import { ThemeContext, defaultTheme } from './context/theme';
@@ -16,6 +21,8 @@ import { LocaleContext } from './context/locale';
 import Header from './components/Header';
 import { IntlKey } from './utils/Intl';
 import { TopicData } from 'xmind-model/types/models/topic';
+import './mindmap.css';
+import Toolbar from './components/Toolbar';
 
 export interface MindmapProps {
   theme?: typeof defaultTheme;
@@ -129,18 +136,20 @@ const Sind: FC<Required<MindmapProps>> = ({ theme, locale }) => {
     <ThemeContext.Provider value={theme}>
       <LocaleContext.Provider value={{ locale }}>
         <div
-          id="editor"
+          id={EDITOR_ID_SELECTOR}
           css={css`
             font-family: 微软雅黑, -apple-system;
             background: #eef8fa;
+            position: 'relative';
           `}
         >
           <Header />
           <div
             id="core-editor"
-            style={{
-              position: 'relative',
-            }}
+            css={css`
+              position: relative;
+              transform: scale(${(editorState.scale, editorState.scale)});
+            `}
           >
             <svg
               id="sind-links"
@@ -161,12 +170,12 @@ const Sind: FC<Required<MindmapProps>> = ({ theme, locale }) => {
                 width: `${CANVAS_WIDTH}px`,
                 height: `${CANVAS_HEIGHT}px`,
                 position: 'relative',
-                zIndex: 1,
               }}
             >
               {topics}
             </div>
           </div>
+          <Toolbar />
         </div>
       </LocaleContext.Provider>
     </ThemeContext.Provider>

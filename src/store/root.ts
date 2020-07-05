@@ -3,6 +3,7 @@ import { createStore, StateSelector } from 'relax-ts';
 import { topicWalker } from '../utils/tree';
 import { ATTACHED_KEY } from '../constant';
 import { debug } from '../utils/debug';
+import editorStore from './editor';
 
 type IState = {
   timeline: TopicData[];
@@ -62,7 +63,15 @@ const store = createStore({
         const previouseIndex = parentNode.children[ATTACHED_KEY].findIndex(
           (item: TopicData) => item.id === id
         );
-        parentNode.children[ATTACHED_KEY].splice(previouseIndex, 1);
+        const children = parentNode.children[ATTACHED_KEY];
+        children.splice(previouseIndex, 1);
+        // when deleted a node, select deleted node's sibing or parent
+        const sibling =
+          children[previouseIndex] ||
+          children[previouseIndex - 1] ||
+          children[previouseIndex + 1];
+        const selectedNode = sibling || parentNode;
+        editorStore.dispatch('SELECT_NODE', selectedNode.id);
       }
     },
     UPDATE_NODE(state, payload) {
