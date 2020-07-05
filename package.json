@@ -33,9 +33,9 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "sind",
+  "name": "mindx",
   "author": "chuliu",
-  "module": "dist/sind.esm.js",
+  "module": "dist/mindx.esm.js",
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@storybook/addon-actions": "^5.3.17",

@@ -31,7 +31,7 @@ export interface MindmapProps {
   readonly?: boolean;
 }
 
-const Sind: FC<Required<MindmapProps>> = ({ theme, locale }) => {
+const Mindmap: FC<Required<MindmapProps>> = ({ theme, locale }) => {
   const root = rootStore.useSelector(s => s);
   const editorState = editorStore.useSelector(s => s);
   const { mode, selectedNodeId } = editorState;
@@ -153,7 +153,6 @@ const Sind: FC<Required<MindmapProps>> = ({ theme, locale }) => {
             `}
           >
             <svg
-              id="sind-links"
               width={CANVAS_WIDTH}
               height={CANVAS_HEIGHT}
               xmlns="http://www.w3.org/2000/svg"
@@ -166,7 +165,6 @@ const Sind: FC<Required<MindmapProps>> = ({ theme, locale }) => {
               <Links mindmap={mindMap} />
             </svg>
             <div
-              id="sind-topics"
               style={{
                 width: `${CANVAS_WIDTH}px`,
                 height: `${CANVAS_HEIGHT}px`,
@@ -183,4 +181,4 @@ const Sind: FC<Required<MindmapProps>> = ({ theme, locale }) => {
   );
 };
 
-export default Sind;
+export default Mindmap;
