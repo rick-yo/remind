@@ -1,5 +1,5 @@
 const CANVAS_WIDTH = window.innerWidth;
-const CANVAS_HEIGHT = window.innerHeight;
+const CANVAS_HEIGHT = window.innerHeight - 60;
 
 const TOPIC_FONT_SIZE = 22;
 const TOPIC_RADIUS = 5;
