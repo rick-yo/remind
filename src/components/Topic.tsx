@@ -90,9 +90,10 @@ const Topic = (props: HierachyNode<TopicData>) => {
     }
   }
 
-  const padding = `${vgap}px ${hgap}px`;
+  const padding = `${vgap * 0.6}px ${hgap}px`;
   const fontSizeOffset = depth * 4;
   const fontSize = `${Math.max(16, TOPIC_FONT_SIZE - fontSizeOffset)}px`;
+
   return (
     <div
       id={`topic-${id}`}

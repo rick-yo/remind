@@ -38,7 +38,7 @@ const defaultOptions: Options<TopicData> = {
     return contentWidth;
   },
   getSubTreeSep(d) {
-    if (!d.children || !d.children.length) {
+    if (!this.getChildren(d).length) {
       return 0;
     }
     return 20;
@@ -49,7 +49,7 @@ const defaultOptions: Options<TopicData> = {
   },
   // 上下间距
   getVGap() {
-    return 10;
+    return 12;
   },
   getChildren(node) {
     return node.children?.attached || [];

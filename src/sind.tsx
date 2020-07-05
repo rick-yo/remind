@@ -3,7 +3,7 @@ import React, { FC, useEffect } from 'react';
 import Topic from './components/Topic';
 import { CANVAS_WIDTH, CANVAS_HEIGHT, EDITOR_MODE } from './constant';
 import mindmap from './layout/mindmap';
-import Link from './components/Link';
+import Links from './components/Links';
 import { ThemeContext, defaultTheme } from './context/theme';
 import * as rootStore from './store/root';
 import editorStore from './store/editor';
@@ -28,20 +28,13 @@ const Sind: FC<SindProps> = ({
   const root = rootStore.useSelector(s => s);
   const editorState = editorStore.useSelector(s => s);
   const { mode, selectedNodeId } = editorState;
-  const rootWithCoords = mindmap(root);
+  const mindMap = mindmap(root);
 
   const id = `#topic-${selectedNodeId}`;
   const topics: React.ReactElement[] = [];
-  const links: React.ReactElement[] = [];
 
-  rootWithCoords.eachNode(node => {
+  mindMap.eachNode(node => {
     topics.push(<Topic key={node.data.id} {...node} />);
-  });
-
-  rootWithCoords.eachNode(node => {
-    node.children?.forEach(child => {
-      links.push(<Link key={child.data.id} source={node} target={child} />);
-    });
   });
 
   // 常规模式下
@@ -70,19 +63,19 @@ const Sind: FC<SindProps> = ({
 
     function moveTop(e: KeyboardEvent) {
       e.preventDefault();
-      editorStore.dispatch('MOVE_TOP', rootWithCoords);
+      editorStore.dispatch('MOVE_TOP', mindMap);
     }
     function moveDown(e: KeyboardEvent) {
       e.preventDefault();
-      editorStore.dispatch('MOVE_DOWN', rootWithCoords);
+      editorStore.dispatch('MOVE_DOWN', mindMap);
     }
     function moveLeft(e: KeyboardEvent) {
       e.preventDefault();
-      editorStore.dispatch('MOVE_LEFT', rootWithCoords);
+      editorStore.dispatch('MOVE_LEFT', mindMap);
     }
     function moveRight(e: KeyboardEvent) {
       e.preventDefault();
-      editorStore.dispatch('MOVE_RIGHT', rootWithCoords);
+      editorStore.dispatch('MOVE_RIGHT', mindMap);
     }
     function undo() {
       rootStore.dispatch('UNDO_HISTORY');
@@ -113,7 +106,7 @@ const Sind: FC<SindProps> = ({
       hotkeys.unbind('command+z', undo);
       hotkeys.unbind('command+shift+z', redo);
     };
-  }, [mode, selectedNodeId, id, rootWithCoords]);
+  }, [mode, selectedNodeId, id, mindMap]);
 
   // 编辑模式下
   useEffect(() => {
@@ -131,7 +124,7 @@ const Sind: FC<SindProps> = ({
     return () => clickOutSide();
   }, [mode, selectedNodeId, id]);
 
-  debug('rootWithCoords', rootWithCoords);
+  debug('rootWithCoords', mindMap);
   return (
     <ThemeContext.Provider value={theme}>
       <LocaleContext.Provider value={{ locale }}>
@@ -160,7 +153,7 @@ const Sind: FC<SindProps> = ({
                 top: 0;
               `}
             >
-              {links}
+              <Links mindmap={mindMap} />
             </svg>
             <div
               id="sind-topics"
