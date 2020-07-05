@@ -15,10 +15,12 @@ import { css, jsx } from '@emotion/core';
 import { LocaleContext, defaultLocale } from './context/locale';
 import Header from './components/Header';
 import { IntlKey } from './utils/Intl';
+import { TopicData } from 'xmind-model/types/models/topic';
 
 export interface MindmapProps {
   theme?: typeof defaultTheme;
   locale?: IntlKey;
+  data?: TopicData;
 }
 
 const Sind: FC<MindmapProps> = ({

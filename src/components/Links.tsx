@@ -39,6 +39,7 @@ const Links = (props: LinksProps) => {
       {links.map(link => {
         return (
           <polyline
+            key={link}
             points={link}
             fill="transparent"
             stroke={linkTheme.stroke}
