@@ -141,6 +141,7 @@ const Sind: FC<Required<MindmapProps>> = ({ theme, locale }) => {
             font-family: 微软雅黑, -apple-system;
             background: #eef8fa;
             position: 'relative';
+            overflow: hidden;
           `}
         >
           <Header />
