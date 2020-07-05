@@ -1,3 +1,3 @@
-import Sind from './sind';
+import Mindmap from './Mindmap';
 
-export { Sind };
+export { Mindmap };

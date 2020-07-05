@@ -16,12 +16,12 @@ import { LocaleContext, defaultLocale } from './context/locale';
 import Header from './components/Header';
 import { IntlKey } from './utils/Intl';
 
-export interface SindProps {
+export interface MindmapProps {
   theme?: typeof defaultTheme;
   locale?: IntlKey;
 }
 
-const Sind: FC<SindProps> = ({
+const Sind: FC<MindmapProps> = ({
   theme = defaultTheme,
   locale = defaultLocale.locale,
 }) => {
