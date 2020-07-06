@@ -9,6 +9,12 @@ import {
   CANVAS_HEIGHT,
 } from '../constant';
 
+declare module 'xmind-model/types/models/topic' {
+  interface TopicData {
+    side?: 'left' | 'right';
+  }
+}
+
 // FIXME fontSize is diffrent between topic, should fix this to get correct topic width and height
 function measureText(text: string, fontSize: number = TOPIC_FONT_SIZE) {
   canvasContext.save();
@@ -19,6 +25,12 @@ function measureText(text: string, fontSize: number = TOPIC_FONT_SIZE) {
 }
 
 const defaultOptions: Options<TopicData> = {
+  direction: 'H',
+  getSide(node) {
+    // FIXME fix type
+    // @ts-ignore
+    return node.data.side || 'right';
+  },
   getId(node) {
     return node.id;
   },
@@ -44,11 +56,11 @@ const defaultOptions: Options<TopicData> = {
   },
   // 左右间距
   getHGap() {
-    return 18;
+    return 30;
   },
   // 上下间距
   getVGap() {
-    return 12;
+    return 20;
   },
   getChildren(node) {
     return node.children?.attached || [];
@@ -60,11 +72,7 @@ export default function(
   options: Options<TopicData> = defaultOptions
 ) {
   const rootNode = hierarchy.mindmap(root, options);
-  rootNode.eachNode(node => {
-    if (!node.parent) return;
-    node.x += 70 * node.depth;
-  });
-  // move mindmap to canvas center
+  // // move mindmap to canvas center
   const descendants: HierachyNode<TopicData>[] = [];
   rootNode.eachNode(node => descendants.push(node));
   const right = Math.max(...descendants.map(node => node.x));

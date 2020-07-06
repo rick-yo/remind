@@ -3,7 +3,6 @@ const CANVAS_HEIGHT = window.innerHeight - 60;
 
 const TOPIC_FONT_SIZE = 22;
 const TOPIC_RADIUS = 5;
-const TOPIC_BORDER = 5;
 const MAX_TOPIC_WIDTH = 150;
 const MIN_TOPIC_HEIGHT = 15;
 
@@ -44,6 +43,5 @@ export {
   ATTACHED_KEY,
   EDITOR_MODE,
   KEY_MAPS,
-  TOPIC_BORDER,
   EDITOR_ID_SELECTOR,
 };

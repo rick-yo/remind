@@ -25,7 +25,6 @@ const Topic = (props: HierachyNode<TopicData>) => {
     vgap,
   } = props;
   const topicTheme = useContext(ThemeContext).topic;
-  // const root = rootStore.useSelector(s => s);
   const editorState = editorStore.useSelector(s => s);
   const { mode, selectedNodeId } = editorState;
   const isSelected = id === selectedNodeId;
@@ -90,7 +89,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
     }
   }
 
-  const padding = `${vgap * 0.6}px ${hgap}px`;
+  const padding = `${vgap * 0.6}px ${hgap * 0.6}px`;
   const fontSizeOffset = depth * 4;
   const fontSize = `${Math.max(16, TOPIC_FONT_SIZE - fontSizeOffset)}px`;
 

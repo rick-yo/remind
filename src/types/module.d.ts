@@ -24,6 +24,7 @@ declare module '@antv/hierarchy' {
   }
 
   export interface Options<Data> {
+    direction?: 'H' | 'V' | 'LR' | 'RL' | 'TB' | 'BT';
     getSubTreeSep(d: Data): number;
     getWidth(d: Data): number;
     getHeight(d: Data): number;
@@ -31,5 +32,6 @@ declare module '@antv/hierarchy' {
     getVGap(d: Data): number;
     getId(d: Data): string;
     getChildren(d: Data): Data[];
+    getSide?(d: Data): 'left' | 'right';
   }
 }
