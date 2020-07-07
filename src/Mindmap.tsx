@@ -6,6 +6,7 @@ import {
   CANVAS_HEIGHT,
   EDITOR_MODE,
   EDITOR_ID_SELECTOR,
+  TOPIC_FONT_FAMILY,
 } from './constant';
 import mindmap from './layout/mindmap';
 import Links from './components/Links';
@@ -138,9 +139,9 @@ const Mindmap: FC<Required<MindmapProps>> = ({ theme, locale }) => {
         <div
           id={EDITOR_ID_SELECTOR}
           css={css`
-            font-family: 微软雅黑, -apple-system;
+            font-family: ${TOPIC_FONT_FAMILY};
             background: #eef8fa;
-            position: 'relative';
+            position: relative;
             overflow: hidden;
           `}
         >

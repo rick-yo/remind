@@ -7,19 +7,31 @@ import {
   TOPIC_FONT_SIZE,
   CANVAS_WIDTH,
   CANVAS_HEIGHT,
+  TOPIC_HORIZENTAL_MARGIN,
+  TOPIC_FONT_FAMILY,
 } from '../constant';
+import produce from 'immer';
 
 declare module 'xmind-model/types/models/topic' {
   interface TopicData {
     side?: 'left' | 'right';
+    depth?: number;
+    parent?: TopicData;
   }
 }
 
+export function getTopicFontsize(node: TopicData) {
+  const fontSizeOffset = node.depth || 0 * 5;
+  const fontSize = `${Math.max(16, TOPIC_FONT_SIZE - fontSizeOffset)}`;
+  return fontSize;
+}
+
 // FIXME fontSize is diffrent between topic, should fix this to get correct topic width and height
-function measureText(text: string, fontSize: number = TOPIC_FONT_SIZE) {
+function measureText(node: TopicData) {
+  const fontSize = getTopicFontsize(node);
   canvasContext.save();
-  canvasContext.font = `${fontSize}px System`;
-  const measure = canvasContext.measureText(text);
+  canvasContext.font = `${fontSize}px ${TOPIC_FONT_FAMILY}`;
+  const measure = canvasContext.measureText(node.title);
   canvasContext.restore();
   return measure;
 }
@@ -35,7 +47,7 @@ const defaultOptions: Options<TopicData> = {
     return node.id;
   },
   getHeight(node) {
-    const width = measureText(node.title).width;
+    const width = measureText(node).width;
     const lines = Math.ceil(width / MAX_TOPIC_WIDTH);
     const contentHeight = Math.max(
       MIN_TOPIC_HEIGHT,
@@ -44,7 +56,7 @@ const defaultOptions: Options<TopicData> = {
     return contentHeight;
   },
   getWidth(node) {
-    const measure = measureText(node.title);
+    const measure = measureText(node);
     const contentWidth = Math.min(measure.width, MAX_TOPIC_WIDTH);
     return contentWidth;
   },
@@ -54,13 +66,13 @@ const defaultOptions: Options<TopicData> = {
     }
     return 20;
   },
-  // 左右间距
+  // left right padding
   getHGap() {
-    return 30;
-  },
-  // 上下间距
-  getVGap() {
     return 20;
+  },
+  // top bottom padding
+  getVGap() {
+    return 12;
   },
   getChildren(node) {
     return node.children?.attached || [];
@@ -71,7 +83,16 @@ export default function(
   root: TopicData,
   options: Options<TopicData> = defaultOptions
 ) {
-  const rootNode = hierarchy.mindmap(root, options);
+  const rootWithDepth = setNodeDepth(root);
+  const rootNode = hierarchy.mindmap(rootWithDepth, options);
+  // add left right margin
+  rootNode.eachNode(node => {
+    node.x +=
+      node.depth *
+      (node.side === 'right'
+        ? TOPIC_HORIZENTAL_MARGIN
+        : -TOPIC_HORIZENTAL_MARGIN);
+  });
   // // move mindmap to canvas center
   const descendants: HierachyNode<TopicData>[] = [];
   rootNode.eachNode(node => descendants.push(node));
@@ -82,4 +103,19 @@ export default function(
     node.y += CANVAS_HEIGHT / 2 - bottom / 2;
   });
   return rootNode;
+}
+
+function setNodeDepth(root: TopicData) {
+  return produce(root, draft => {
+    draft.depth = 0;
+    const nodes = [draft];
+    while (nodes.length) {
+      const current = nodes.shift();
+      current?.children?.attached.forEach(node => {
+        node.parent = current;
+        node.depth = (current.depth as number) + 1;
+        nodes.push(node);
+      });
+    }
+  });
 }

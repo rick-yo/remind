@@ -18,6 +18,8 @@ declare module '@antv/hierarchy' {
     y: number;
     data: Data;
     children: HierachyNode<Data>[];
+    // FIXME inherit from TopicData
+    side: 'left' | 'right';
     // prototype
     translate(x: number, y: number): void;
     eachNode(cb: (node: HierachyNode<Data>) => void): void;

@@ -14,6 +14,7 @@ import * as rootStore from '../store/root';
 import editorStore from '../store/editor';
 import { debug } from '../utils/debug';
 import { HierachyNode } from '@antv/hierarchy';
+import { getTopicFontsize } from '../layout/mindmap';
 
 const Topic = (props: HierachyNode<TopicData>) => {
   const {
@@ -89,9 +90,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
     }
   }
 
-  const padding = `${vgap * 0.6}px ${hgap * 0.6}px`;
-  const fontSizeOffset = depth * 4;
-  const fontSize = `${Math.max(16, TOPIC_FONT_SIZE - fontSizeOffset)}px`;
+  const padding = `${vgap}px ${hgap}px`;
 
   return (
     <div
@@ -116,7 +115,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
         background: ${background};
         max-width: ${MAX_TOPIC_WIDTH}px;
         padding: ${padding};
-        font-size: ${fontSize};
+        font-size: ${getTopicFontsize(props.data)}px;
         cursor: default;
         opacity: ${isDragEntering ? 0.7 : 1};
         outline: ${outline};

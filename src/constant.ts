@@ -2,7 +2,9 @@ const CANVAS_WIDTH = window.innerWidth;
 const CANVAS_HEIGHT = window.innerHeight - 60;
 
 const TOPIC_FONT_SIZE = 22;
+const TOPIC_FONT_FAMILY = '微软雅黑,-apple-system';
 const TOPIC_RADIUS = 5;
+const TOPIC_HORIZENTAL_MARGIN = 50;
 const MAX_TOPIC_WIDTH = 150;
 const MIN_TOPIC_HEIGHT = 15;
 
@@ -44,4 +46,6 @@ export {
   EDITOR_MODE,
   KEY_MAPS,
   EDITOR_ID_SELECTOR,
+  TOPIC_HORIZENTAL_MARGIN,
+  TOPIC_FONT_FAMILY,
 };
