@@ -4,6 +4,8 @@ import { Provider, defaultRoot } from './store/root';
 import EditorStore, { initialState } from './store/editor';
 import { defaultTheme } from './context/theme';
 import { defaultLocale } from './context/locale';
+import { normalizeTopicSide } from './utils/tree';
+import produce from 'immer';
 
 function EnhancedMindMap({
   readonly = false,
@@ -11,6 +13,7 @@ function EnhancedMindMap({
   theme = defaultTheme,
   locale = defaultLocale.locale,
 }: MindmapProps) {
+  const rootWithSide = produce(data, normalizeTopicSide);
   return (
     <EditorStore.Provider
       initialState={{
@@ -21,13 +24,13 @@ function EnhancedMindMap({
       <Provider
         initialState={{
           current: 0,
-          timeline: [data],
+          timeline: [rootWithSide],
         }}
       >
         <Mindmap
           theme={theme}
           locale={locale}
-          data={data}
+          data={rootWithSide}
           readonly={readonly}
         ></Mindmap>
       </Provider>

@@ -11,6 +11,7 @@ import {
   TOPIC_FONT_FAMILY,
 } from '../constant';
 import produce from 'immer';
+import { normalizeTopicDepth } from '../utils/tree';
 
 declare module 'xmind-model/types/models/topic' {
   interface TopicData {
@@ -60,11 +61,8 @@ const defaultOptions: Options<TopicData> = {
     const contentWidth = Math.min(measure.width, MAX_TOPIC_WIDTH);
     return contentWidth;
   },
-  getSubTreeSep(d) {
-    if (!this.getChildren(d).length) {
-      return 0;
-    }
-    return 20;
+  getSubTreeSep() {
+    return 10;
   },
   // left right padding
   getHGap() {
@@ -83,7 +81,7 @@ export default function(
   root: TopicData,
   options: Options<TopicData> = defaultOptions
 ) {
-  const rootWithDepth = setNodeDepth(root);
+  const rootWithDepth = produce(root, normalizeTopicDepth);
   const rootNode = hierarchy.mindmap(rootWithDepth, options);
   // add left right margin
   rootNode.eachNode(node => {
@@ -103,19 +101,4 @@ export default function(
     node.y += CANVAS_HEIGHT / 2 - bottom / 2;
   });
   return rootNode;
-}
-
-function setNodeDepth(root: TopicData) {
-  return produce(root, draft => {
-    draft.depth = 0;
-    const nodes = [draft];
-    while (nodes.length) {
-      const current = nodes.shift();
-      current?.children?.attached.forEach(node => {
-        node.parent = current;
-        node.depth = (current.depth as number) + 1;
-        nodes.push(node);
-      });
-    }
-  });
 }

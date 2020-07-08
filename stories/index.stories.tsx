@@ -32,7 +32,6 @@ export const NormalRender = () => {
         },
         {
           title: 'main topic 3',
-          side: 'left',
           id: 'd5b93d9e-4a3b-49fe-83a0-f4cb6139024d',
           children: {
             attached: [
@@ -45,7 +44,6 @@ export const NormalRender = () => {
         },
         {
           title: 'main topic 4',
-          side: 'left',
           id: 'd5b93d9e-4a3b-49fe-83a0-f4cb6139724d',
         },
       ],

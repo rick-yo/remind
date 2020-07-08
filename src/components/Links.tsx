@@ -11,7 +11,7 @@ function getMainTopicLinkPosition(
   root: HierachyNodeWithTopicData,
   child: HierachyNodeWithTopicData
 ) {
-  const x1Offset = child.side === 'right' ? root.width * 0.7 : root.width * 0.2;
+  const x1Offset = child.side === 'right' ? root.width - 50 : 50;
   const x3Offset = child.side === 'right' ? 0 : child.width;
   const x1 = root.x + x1Offset;
   const y1 = root.y + root.height / 2;

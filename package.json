@@ -17,14 +17,15 @@
     "lint": "tsdx lint",
     "prepare": "tsdx build",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "pre-commit": "tsdx lint --fix && npm run build"
   },
   "peerDependencies": {
     "react": ">=16"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint && npm run build"
+      "pre-commit": "npm run pre-commit"
     }
   },
   "prettier": {
@@ -62,7 +63,7 @@
     "ts-loader": "^6.2.2",
     "tsdx": "^0.13.0",
     "tslib": "^1.11.1",
-    "typescript": "^3.8.3",
+    "typescript": "^3.9.6",
     "xmind-model": "^1.1.10"
   },
   "dependencies": {
