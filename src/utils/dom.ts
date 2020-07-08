@@ -1,5 +1,6 @@
 import { debug } from './debug';
 import { WATER_MARK, TOPIC_FONT_FAMILY } from '../constant';
+import html2canvas from 'html2canvas';
 
 function selectText(el?: HTMLElement) {
   if (!el) return;
@@ -32,18 +33,16 @@ function onClickOutSide(selector: string, callback: Function) {
   };
 }
 
-function htmlToCanvas(el: HTMLElement) {
-  return import('html2canvas').then(async html2canvas => {
-    const canvas = await html2canvas.default(el);
-    const context = canvas.getContext('2d');
-    if (!context) return;
-    context.save();
-    context.font = `20px ${TOPIC_FONT_FAMILY}`;
-    context.fillStyle = '#000';
-    context.fillText(WATER_MARK, canvas.width - 300, canvas.height);
-    context.restore();
-    return canvas.toDataURL();
-  });
+async function htmlToCanvas(el: HTMLElement) {
+  const canvas = await html2canvas(el);
+  const context = canvas.getContext('2d');
+  if (!context) return;
+  context.save();
+  context.font = `20px ${TOPIC_FONT_FAMILY}`;
+  context.fillStyle = '#000';
+  context.fillText(WATER_MARK, canvas.width - 300, canvas.height);
+  context.restore();
+  return canvas.toDataURL();
 }
 
 export { selectText, onClickOutSide, htmlToCanvas };
