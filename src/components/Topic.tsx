@@ -4,7 +4,6 @@ import { ThemeContext } from '../context/theme';
 import {
   MAX_TOPIC_WIDTH,
   TOPIC_RADIUS,
-  TOPIC_FONT_SIZE,
   EDITOR_MODE,
   KEY_MAPS,
 } from '../constant';
