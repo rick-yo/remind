@@ -7,6 +7,7 @@ import {
   EDITOR_MODE,
   EDITOR_ID_SELECTOR,
   TOPIC_FONT_FAMILY,
+  CORE_EDITOR_ID_SELECTOR,
 } from './constant';
 import mindmap from './layout/mindmap';
 import Links from './components/Links';
@@ -147,10 +148,11 @@ const Mindmap: FC<Required<MindmapProps>> = ({ theme, locale }) => {
         >
           <Header />
           <div
-            id="core-editor"
+            id={CORE_EDITOR_ID_SELECTOR}
             css={css`
               position: relative;
               transform: scale(${(editorState.scale, editorState.scale)});
+              background: #eef8fa;
             `}
           >
             <svg
@@ -166,11 +168,11 @@ const Mindmap: FC<Required<MindmapProps>> = ({ theme, locale }) => {
               <Links mindmap={mindMap} />
             </svg>
             <div
-              style={{
-                width: `${CANVAS_WIDTH}px`,
-                height: `${CANVAS_HEIGHT}px`,
-                position: 'relative',
-              }}
+              css={css`
+                width: ${CANVAS_WIDTH}px;
+                height: ${CANVAS_HEIGHT}px;
+                position: relative;
+              `}
             >
               {topics}
             </div>
