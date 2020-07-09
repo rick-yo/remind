@@ -1,6 +1,7 @@
 import { debug } from './debug';
 import { WATER_MARK, TOPIC_FONT_FAMILY } from '../constant';
 import html2canvas from 'html2canvas';
+import { useEffect } from 'react';
 
 function selectText(el?: HTMLElement) {
   if (!el) return;
@@ -45,4 +46,17 @@ async function htmlToCanvas(el: HTMLElement) {
   return canvas.toDataURL();
 }
 
-export { selectText, onClickOutSide, htmlToCanvas };
+function useIconFont() {
+  const href = 'https://at.alicdn.com/t/font_1924427_4b37bvd5e4o.css';
+  useEffect(() => {
+    const linkElement = document.createElement('link');
+    linkElement.setAttribute('rel', 'stylesheet');
+    linkElement.setAttribute('href', href);
+    document.getElementsByTagName('head')[0]?.appendChild(linkElement);
+    return () => {
+      linkElement.remove();
+    };
+  }, []);
+}
+
+export { selectText, onClickOutSide, htmlToCanvas, useIconFont };

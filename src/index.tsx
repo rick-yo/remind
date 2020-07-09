@@ -1,11 +1,21 @@
 import React from 'react';
-import Mindmap, { MindmapProps } from './Mindmap';
+import Mindmap from './Mindmap';
 import { Provider, defaultRoot } from './store/root';
 import EditorStore, { initialState } from './store/editor';
-import { defaultTheme } from './context/theme';
+import { ThemeContext, defaultTheme } from './context/theme';
 import { defaultLocale } from './context/locale';
 import { normalizeTopicSide } from './utils/tree';
 import produce from 'immer';
+import { LocaleContext } from './context/locale';
+import { IntlKey } from './utils/Intl';
+import { TopicData } from 'xmind-model/types/models/topic';
+
+interface MindmapProps {
+  theme?: typeof defaultTheme;
+  locale?: IntlKey;
+  data?: TopicData;
+  readonly?: boolean;
+}
 
 function EnhancedMindMap({
   readonly = false,
@@ -27,12 +37,11 @@ function EnhancedMindMap({
           timeline: [rootWithSide],
         }}
       >
-        <Mindmap
-          theme={theme}
-          locale={locale}
-          data={rootWithSide}
-          readonly={readonly}
-        ></Mindmap>
+        <ThemeContext.Provider value={theme}>
+          <LocaleContext.Provider value={{ locale }}>
+            <Mindmap></Mindmap>
+          </LocaleContext.Provider>
+        </ThemeContext.Provider>
       </Provider>
     </EditorStore.Provider>
   );

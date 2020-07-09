@@ -8,7 +8,7 @@ export default {
 
 // By passing optional props to this story, you can control the props of the component when
 // you consume the story in a test.
-export const NormalRender = () => {
+export const WithCustomData = () => {
   const data : TopicData = {
     id: '545be2df-3fe3-43d8-8038-7bf8fd567273',
     title: 'Central Topic',
@@ -50,6 +50,10 @@ export const NormalRender = () => {
     },
   }
   return <Mindmap data={data} />;
+};
+
+export const WithoutData = () => {
+  return <Mindmap />;
 };
 
 export const ReadOnly = () => {
