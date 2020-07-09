@@ -28,7 +28,7 @@ const Mindmap = () => {
   const { mode, selectedNodeId } = editorState;
   const mindMap = mindmap(root);
   const locale = useLocale();
-  useIconFont()
+  useIconFont();
 
   const id = `#topic-${selectedNodeId}`;
   const topics: ReactElement[] = [];

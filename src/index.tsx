@@ -10,11 +10,12 @@ import { LocaleContext } from './context/locale';
 import { IntlKey } from './utils/Intl';
 import { TopicData } from 'xmind-model/types/models/topic';
 
-interface MindmapProps {
+export interface MindmapProps {
   theme?: typeof defaultTheme;
   locale?: IntlKey;
   data?: TopicData;
   readonly?: boolean;
+  onChange?: (data: TopicData) => void;
 }
 
 function EnhancedMindMap({
@@ -22,6 +23,7 @@ function EnhancedMindMap({
   data = defaultRoot,
   theme = defaultTheme,
   locale = defaultLocale.locale,
+  onChange = () => {},
 }: MindmapProps) {
   const rootWithSide = produce(data, normalizeTopicSide);
   return (
@@ -35,6 +37,7 @@ function EnhancedMindMap({
         initialState={{
           current: 0,
           timeline: [rootWithSide],
+          onChange,
         }}
       >
         <ThemeContext.Provider value={theme}>

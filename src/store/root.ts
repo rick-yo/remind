@@ -5,11 +5,14 @@ import { ATTACHED_KEY } from '../constant';
 import { debug } from '../utils/debug';
 import editorStore from './editor';
 import produce from 'immer';
+import { MindmapProps } from '../index';
 
 type IState = {
   timeline: TopicData[];
   current: number;
+  onChange: MindmapProps['onChange'];
 };
+
 type Payload = {
   id: string;
   node: TopicData;
@@ -42,6 +45,7 @@ const defaultRoot: TopicData = produce(
 export const initialState: IState = {
   current: 0,
   timeline: [defaultRoot],
+  onChange: () => {},
 };
 
 const store = createStore({
@@ -130,6 +134,7 @@ const dispatch: Dispatch = async (action, payload) => {
     originalDispatch('SAVE_HISTORY', getState());
   }
   originalDispatch(action, payload);
+  store.getState().onChange?.(getState());
 };
 
 const useSelector = <P>(selector: StateSelector<TopicData, P>) => {
