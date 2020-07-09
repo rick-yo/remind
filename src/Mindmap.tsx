@@ -1,44 +1,37 @@
 /** @jsx jsx */
-import React, { FC, useEffect } from 'react';
+import { useEffect, ReactElement } from 'react';
 import Topic from './components/Topic';
 import {
   CANVAS_WIDTH,
   CANVAS_HEIGHT,
   EDITOR_MODE,
   EDITOR_ID_SELECTOR,
+  TOPIC_FONT_FAMILY,
+  CORE_EDITOR_ID_SELECTOR,
 } from './constant';
 import mindmap from './layout/mindmap';
 import Links from './components/Links';
-import { ThemeContext, defaultTheme } from './context/theme';
 import * as rootStore from './store/root';
 import editorStore from './store/editor';
 import hotkeys from 'hotkeys-js';
 import { createTopic } from './utils/tree';
 import { debug } from './utils/debug';
-import { selectText, onClickOutSide } from './utils/dom';
+import { selectText, onClickOutSide, useIconFont } from './utils/dom';
 import { css, jsx } from '@emotion/core';
-import { LocaleContext } from './context/locale';
 import Header from './components/Header';
-import { IntlKey } from './utils/Intl';
-import { TopicData } from 'xmind-model/types/models/topic';
-import './mindmap.css';
 import Toolbar from './components/Toolbar';
+import { useLocale } from './context/locale';
 
-export interface MindmapProps {
-  theme?: typeof defaultTheme;
-  locale?: IntlKey;
-  data?: TopicData;
-  readonly?: boolean;
-}
-
-const Sind: FC<Required<MindmapProps>> = ({ theme, locale }) => {
+const Mindmap = () => {
   const root = rootStore.useSelector(s => s);
   const editorState = editorStore.useSelector(s => s);
   const { mode, selectedNodeId } = editorState;
   const mindMap = mindmap(root);
+  const locale = useLocale();
+  useIconFont();
 
   const id = `#topic-${selectedNodeId}`;
-  const topics: React.ReactElement[] = [];
+  const topics: ReactElement[] = [];
 
   mindMap.eachNode(node => {
     topics.push(<Topic key={node.data.id} {...node} />);
@@ -51,7 +44,7 @@ const Sind: FC<Required<MindmapProps>> = ({ theme, locale }) => {
       if (!selectedNodeId) return;
       rootStore.dispatch('APPEND_CHILD', {
         id: selectedNodeId,
-        node: createTopic('子主题'),
+        node: createTopic(locale.subTopic),
       });
     }
 
@@ -113,7 +106,7 @@ const Sind: FC<Required<MindmapProps>> = ({ theme, locale }) => {
       hotkeys.unbind('command+z', undo);
       hotkeys.unbind('command+shift+z', redo);
     };
-  }, [mode, selectedNodeId, id, mindMap]);
+  }, [mode, selectedNodeId, id, mindMap, locale.subTopic]);
 
   // 编辑模式下
   useEffect(() => {
@@ -133,54 +126,49 @@ const Sind: FC<Required<MindmapProps>> = ({ theme, locale }) => {
 
   debug('rootWithCoords', mindMap);
   return (
-    <ThemeContext.Provider value={theme}>
-      <LocaleContext.Provider value={{ locale }}>
-        <div
-          id={EDITOR_ID_SELECTOR}
+    <div
+      id={EDITOR_ID_SELECTOR}
+      css={css`
+        font-family: ${TOPIC_FONT_FAMILY};
+        background: #eef8fa;
+        position: relative;
+        overflow: hidden;
+      `}
+    >
+      <Header />
+      <div
+        id={CORE_EDITOR_ID_SELECTOR}
+        css={css`
+          position: relative;
+          transform: scale(${(editorState.scale, editorState.scale)});
+          background: #eef8fa;
+        `}
+      >
+        <svg
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+          xmlns="http://www.w3.org/2000/svg"
           css={css`
-            font-family: 微软雅黑, -apple-system;
-            background: #eef8fa;
-            position: 'relative';
-            overflow: hidden;
+            position: absolute;
+            left: 0;
+            top: 0;
           `}
         >
-          <Header />
-          <div
-            id="core-editor"
-            css={css`
-              position: relative;
-              transform: scale(${(editorState.scale, editorState.scale)});
-            `}
-          >
-            <svg
-              id="sind-links"
-              width={CANVAS_WIDTH}
-              height={CANVAS_HEIGHT}
-              xmlns="http://www.w3.org/2000/svg"
-              css={css`
-                position: absolute;
-                left: 0;
-                top: 0;
-              `}
-            >
-              <Links mindmap={mindMap} />
-            </svg>
-            <div
-              id="sind-topics"
-              style={{
-                width: `${CANVAS_WIDTH}px`,
-                height: `${CANVAS_HEIGHT}px`,
-                position: 'relative',
-              }}
-            >
-              {topics}
-            </div>
-          </div>
-          <Toolbar />
+          <Links mindmap={mindMap} />
+        </svg>
+        <div
+          css={css`
+            width: ${CANVAS_WIDTH}px;
+            height: ${CANVAS_HEIGHT}px;
+            position: relative;
+          `}
+        >
+          {topics}
         </div>
-      </LocaleContext.Provider>
-    </ThemeContext.Provider>
+      </div>
+      <Toolbar />
+    </div>
   );
 };
 
-export default Sind;
+export default Mindmap;

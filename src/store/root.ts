@@ -1,14 +1,18 @@
 import { TopicData } from 'xmind-model/types/models/topic';
 import { createStore, StateSelector } from 'relax-ts';
-import { topicWalker } from '../utils/tree';
+import { topicWalker, normalizeTopicSide } from '../utils/tree';
 import { ATTACHED_KEY } from '../constant';
 import { debug } from '../utils/debug';
 import editorStore from './editor';
+import produce from 'immer';
+import { MindmapProps } from '../index';
 
 type IState = {
   timeline: TopicData[];
   current: number;
+  onChange: MindmapProps['onChange'];
 };
+
 type Payload = {
   id: string;
   node: TopicData;
@@ -18,26 +22,30 @@ const UNDO_HISTORY = 'UNDO_HISTORY';
 const REDO_HISTORY = 'REDO_HISTORY';
 const SAVE_HISTORY = 'SAVE_HISTORY';
 
-const defaultRoot: TopicData = {
-  id: '545be2df-3fe3-43d8-8038-7bf8fd567273',
-  title: 'Central Topic',
-  children: {
-    attached: [
-      {
-        title: 'main topic 2',
-        id: 'd5b93d9e-4a3b-49fe-83a0-f4cb61397246',
-      },
-      {
-        title: 'main topic 1',
-        id: '7312ed2e-b90f-44a8-b0bd-fa4df6c9708c',
-      },
-    ],
+const defaultRoot: TopicData = produce(
+  {
+    id: '545be2df-3fe3-43d8-8038-7bf8fd567273',
+    title: 'Central Topic',
+    children: {
+      attached: [
+        {
+          title: 'main topic 2',
+          id: 'd5b93d9e-4a3b-49fe-83a0-f4cb61397246',
+        },
+        {
+          title: 'main topic 1',
+          id: '7312ed2e-b90f-44a8-b0bd-fa4df6c9708c',
+        },
+      ],
+    },
   },
-};
+  normalizeTopicSide
+);
 
 export const initialState: IState = {
   current: 0,
   timeline: [defaultRoot],
+  onChange: () => {},
 };
 
 const store = createStore({
@@ -51,6 +59,16 @@ const store = createStore({
       parentNode.children = parentNode.children || {
         [ATTACHED_KEY]: [],
       };
+      if (parentNode === root) {
+        const leftNodes = parentNode.children[ATTACHED_KEY].filter(
+          node => node.side === 'left'
+        );
+        if (parentNode.children[ATTACHED_KEY].length / 2 > leftNodes.length) {
+          payload.node.side = 'left';
+        } else {
+          payload.node.side = 'right';
+        }
+      }
       parentNode.children[ATTACHED_KEY] =
         parentNode.children[ATTACHED_KEY] || [];
       parentNode.children[ATTACHED_KEY].push(payload.node);
@@ -116,6 +134,7 @@ const dispatch: Dispatch = async (action, payload) => {
     originalDispatch('SAVE_HISTORY', getState());
   }
   originalDispatch(action, payload);
+  store.getState().onChange?.(getState());
 };
 
 const useSelector = <P>(selector: StateSelector<TopicData, P>) => {

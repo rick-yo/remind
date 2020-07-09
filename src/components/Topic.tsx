@@ -4,7 +4,6 @@ import { ThemeContext } from '../context/theme';
 import {
   MAX_TOPIC_WIDTH,
   TOPIC_RADIUS,
-  TOPIC_FONT_SIZE,
   EDITOR_MODE,
   KEY_MAPS,
 } from '../constant';
@@ -14,6 +13,7 @@ import * as rootStore from '../store/root';
 import editorStore from '../store/editor';
 import { debug } from '../utils/debug';
 import { HierachyNode } from '@antv/hierarchy';
+import { getTopicFontsize } from '../layout/mindmap';
 
 const Topic = (props: HierachyNode<TopicData>) => {
   const {
@@ -25,7 +25,6 @@ const Topic = (props: HierachyNode<TopicData>) => {
     vgap,
   } = props;
   const topicTheme = useContext(ThemeContext).topic;
-  // const root = rootStore.useSelector(s => s);
   const editorState = editorStore.useSelector(s => s);
   const { mode, selectedNodeId } = editorState;
   const isSelected = id === selectedNodeId;
@@ -90,9 +89,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
     }
   }
 
-  const padding = `${vgap * 0.6}px ${hgap}px`;
-  const fontSizeOffset = depth * 4;
-  const fontSize = `${Math.max(16, TOPIC_FONT_SIZE - fontSizeOffset)}px`;
+  const padding = `${vgap}px ${hgap}px`;
 
   return (
     <div
@@ -117,7 +114,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
         background: ${background};
         max-width: ${MAX_TOPIC_WIDTH}px;
         padding: ${padding};
-        font-size: ${fontSize};
+        font-size: ${getTopicFontsize(props.data)}px;
         cursor: default;
         opacity: ${isDragEntering ? 0.7 : 1};
         outline: ${outline};

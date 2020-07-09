@@ -18,12 +18,15 @@ declare module '@antv/hierarchy' {
     y: number;
     data: Data;
     children: HierachyNode<Data>[];
+    // FIXME inherit from TopicData
+    side: 'left' | 'right';
     // prototype
     translate(x: number, y: number): void;
     eachNode(cb: (node: HierachyNode<Data>) => void): void;
   }
 
   export interface Options<Data> {
+    direction?: 'H' | 'V' | 'LR' | 'RL' | 'TB' | 'BT';
     getSubTreeSep(d: Data): number;
     getWidth(d: Data): number;
     getHeight(d: Data): number;
@@ -31,5 +34,6 @@ declare module '@antv/hierarchy' {
     getVGap(d: Data): number;
     getId(d: Data): string;
     getChildren(d: Data): Data[];
+    getSide?(d: Data): 'left' | 'right';
   }
 }

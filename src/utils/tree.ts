@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { TopicData } from 'xmind-model/types/models/topic';
 import { HierachyNode } from '@antv/hierarchy';
+import { ATTACHED_KEY } from '../constant';
 
 export type HierachyNodeWithTopicData = HierachyNode<TopicData>;
 type UnionNode = HierachyNodeWithTopicData | TopicData;
@@ -166,4 +167,28 @@ export function createTopic(title: string, options: Partial<TopicData> = {}) {
     title,
   };
   return topic;
+}
+
+// add side to TopicData
+export function normalizeTopicSide(root: TopicData) {
+  if (!root?.children?.attached.length) return;
+  if (root.children.attached.length < 4) return;
+  const mid = Math.ceil(root.children.attached.length / 2);
+  root.children[ATTACHED_KEY].slice(mid).forEach(node => {
+    node.side = node.side || 'left';
+  });
+}
+
+export function normalizeTopicDepth(root: TopicData) {
+  // add depth and parent to TopicData
+  root.depth = 0;
+  const nodes = [root];
+  while (nodes.length) {
+    const current = nodes.shift();
+    current?.children?.attached.forEach(node => {
+      node.parent = current;
+      node.depth = (current.depth as number) + 1;
+      nodes.push(node);
+    });
+  }
 }

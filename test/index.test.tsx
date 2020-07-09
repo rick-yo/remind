@@ -1,18 +1,27 @@
 import React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Mindmap } from '../src';
-import { ReadOnly } from '../stories/index.stories';
+import {
+  ReadOnly,
+  WithoutData,
+  WithCustomData,
+} from '../stories/index.stories';
 
 describe('Mindmap', () => {
-  it('renders without crashing', () => {
+  it('renders mindmap without data', () => {
     const div = document.createElement('div');
-    ReactDOM.render(<Mindmap />, div);
+    ReactDOM.render(<WithoutData />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 
-  it('renders readonly Mindmap', () => {
+  it('renders readonly mindmap', () => {
     const div = document.createElement('div');
     ReactDOM.render(<ReadOnly />, div);
+    ReactDOM.unmountComponentAtNode(div);
+  });
+
+  it('renders mindmap with custom data', () => {
+    const div = document.createElement('div');
+    ReactDOM.render(<WithCustomData />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 });

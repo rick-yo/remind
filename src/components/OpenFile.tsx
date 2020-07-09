@@ -1,13 +1,13 @@
 /** @jsx jsx */
-import { FC, useRef } from 'react';
+import { FC, useRef, Fragment } from 'react';
 import { css, jsx } from '@emotion/core';
-import { useLocale } from '../context/locale';
+// import { useLocale } from '../context/locale';
 // import JSZip from 'jszip';
 // FIXME support import xmind file
 // import { loadFromXMind } from 'xmind-viewer/src';
 
 const OpenFile: FC = () => {
-  const locale = useLocale();
+  // const locale = useLocale();
   const fileRef = useRef<HTMLInputElement>(null);
   function handleOpen() {
     fileRef.current?.click();
@@ -39,11 +39,7 @@ const OpenFile: FC = () => {
   //   reader.readAsArrayBuffer(file);
   // }
   return (
-    <div
-      css={css`
-        position: relative;
-      `}
-    >
+    <Fragment>
       <input
         ref={fileRef}
         type="file"
@@ -52,25 +48,14 @@ const OpenFile: FC = () => {
         }}
         // onInput={handleFile}
       />
-      <button
+      <i
+        className="iconfont icon-open"
         css={css`
-          background-color: #fff;
-          color: white;
-          padding: 8px 15px;
-          text-align: center;
-          text-decoration: none;
-          color: #007bff;
-          border: 1px solid #007bff;
-          display: inline-block;
-          font-size: 16px;
-          border-radius: 5px;
-          transition: all 0.1s;
+          font-size: 24px;
         `}
         onClick={handleOpen}
-      >
-        {locale.open}
-      </button>
-    </div>
+      ></i>
+    </Fragment>
   );
 };
 
