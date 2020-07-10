@@ -1,5 +1,5 @@
 const CANVAS_WIDTH = window.innerWidth;
-const CANVAS_HEIGHT = window.innerHeight - 42;
+const CANVAS_HEIGHT = window.innerHeight;
 
 const TOPIC_FONT_SIZE = 22;
 const TOPIC_FONT_FAMILY = '微软雅黑,-apple-system';

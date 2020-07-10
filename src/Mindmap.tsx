@@ -129,10 +129,9 @@ const Mindmap = () => {
     <div
       id={EDITOR_ID_SELECTOR}
       css={css`
+        position: relative;
         font-family: ${TOPIC_FONT_FAMILY};
         background: #eef8fa;
-        position: relative;
-        overflow: hidden;
       `}
     >
       <Header />
@@ -140,6 +139,9 @@ const Mindmap = () => {
         id={CORE_EDITOR_ID_SELECTOR}
         css={css`
           position: relative;
+          width: ${CANVAS_WIDTH}px;
+          height: ${CANVAS_HEIGHT}px;
+          overflow: hidden;
           transform: scale(${(editorState.scale, editorState.scale)});
           background: #eef8fa;
         `}
@@ -156,15 +158,7 @@ const Mindmap = () => {
         >
           <Links mindmap={mindMap} />
         </svg>
-        <div
-          css={css`
-            width: ${CANVAS_WIDTH}px;
-            height: ${CANVAS_HEIGHT}px;
-            position: relative;
-          `}
-        >
-          {topics}
-        </div>
+        {topics}
       </div>
       <Toolbar />
     </div>
