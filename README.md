@@ -1,5 +1,5 @@
 # Mindx
 
-![CI](https://github.com/unhandledrejection/mindx/workflows/CI/badge.svg) &nbsp; [![Netlify Status](https://api.netlify.com/api/v1/badges/150ae42d-87d0-46af-9c7c-c53677eb87d8/deploy-status)](https://app.netlify.com/sites/mindx/deploys)
+![CI](https://github.com/unhandledrejection/mindx/workflows/CI/badge.svg) &nbsp; ![Azure Static Web Apps CI/CD](https://github.com/unhandledrejection/mindx/workflows/Azure%20Static%20Web%20Apps%20CI/CD/badge.svg)
 
 Bring mindmap to browser !

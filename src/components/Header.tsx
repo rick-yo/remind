@@ -1,16 +1,17 @@
 /** @jsx jsx */
-import { FC } from 'react';
 import OpenFile from './OpenFile';
 import { css, jsx } from '@emotion/core';
 import Export from './Export';
 
-interface HeaderProps {}
-
-const Header: FC<HeaderProps> = () => {
+const Header = () => {
   return (
     <header
       css={css`
         padding: 12px 24px;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        z-index: 1;
         & > * {
           margin-right: 10px;
         }

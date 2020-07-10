@@ -11,6 +11,7 @@ type IState = {
   timeline: TopicData[];
   current: number;
   onChange: MindmapProps['onChange'];
+  readonly: boolean;
 };
 
 type Payload = {
@@ -46,6 +47,7 @@ export const initialState: IState = {
   current: 0,
   timeline: [defaultRoot],
   onChange: () => {},
+  readonly: false,
 };
 
 const store = createStore({
@@ -125,6 +127,7 @@ const getState = (): TopicData => {
 };
 
 const dispatch: Dispatch = async (action, payload) => {
+  if (store.getState().readonly) return;
   debug('dispatch action', action);
   if (action === SAVE_HISTORY) {
     console.warn('Should not dispatch inner action outside store!');
