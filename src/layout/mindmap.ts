@@ -94,11 +94,9 @@ export default function(
   // // move mindmap to canvas center
   const descendants: HierachyNode<TopicData>[] = [];
   rootNode.eachNode(node => descendants.push(node));
-  const right = Math.max(...descendants.map(node => node.x));
-  const bottom = Math.max(...descendants.map(node => node.y));
   rootNode.eachNode(node => {
-    node.x += CANVAS_WIDTH / 2 - right / 2;
-    node.y += CANVAS_HEIGHT / 2 - bottom / 2;
+    node.x += CANVAS_WIDTH / 2;
+    node.y += CANVAS_HEIGHT / 2;
   });
   return rootNode;
 }
