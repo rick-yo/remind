@@ -47,7 +47,7 @@ export const initialState: IState = {
   current: 0,
   timeline: [defaultRoot],
   onChange: () => {},
-  readonly: false
+  readonly: false,
 };
 
 const store = createStore({

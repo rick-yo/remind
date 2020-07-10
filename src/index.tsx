@@ -38,7 +38,7 @@ function EnhancedMindMap({
           current: 0,
           timeline: [rootWithSide],
           onChange,
-          readonly
+          readonly,
         }}
       >
         <ThemeContext.Provider value={theme}>

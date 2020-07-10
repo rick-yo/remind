@@ -18,7 +18,7 @@
     "prepare": "tsdx build",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "pre-commit": "tsdx lint --fix && npm run build"
+    "pre-commit": "npm run lint && npm run test && npm run build"
   },
   "peerDependencies": {
     "react": ">=16"
@@ -54,6 +54,7 @@
     "babel-loader": "^8.1.0",
     "husky": "^4.2.3",
     "jest-canvas-mock": "^2.2.0",
+    "parcel-plugin-bundle-visualiser": "^1.2.0",
     "react": "^16.13.1",
     "react-docgen-typescript-loader": "^3.7.1",
     "react-dom": "^16.13.1",
