@@ -35,7 +35,7 @@
     "trailingComma": "es5"
   },
   "name": "mindx",
-  "author": "chuliu",
+  "author": "unhandledrejection",
   "module": "dist/mindx.esm.js",
   "devDependencies": {
     "@babel/core": "^7.9.0",
