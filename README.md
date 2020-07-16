@@ -4,7 +4,9 @@
 ![Azure Static Web Apps CI/CD](https://github.com/unhandledrejection/mindx/workflows/Azure%20Static%20Web%20Apps%20CI/CD/badge.svg) 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=unhandledrejection_mindx&metric=alert_status)](https://sonarcloud.io/dashboard?id=unhandledrejection_mindx) 
 
-Bring mindmap to browser !
+Mindx is a free, open source mindmap editor based on React.
+
+![](./demo.jpg)
 
 Try it on https://mindx.applet.ink
 

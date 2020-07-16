@@ -95,7 +95,7 @@ export default function(
   const descendants: HierachyNode<TopicData>[] = [];
   rootNode.eachNode(node => descendants.push(node));
   rootNode.eachNode(node => {
-    node.x += CANVAS_WIDTH / 2;
+    node.x += CANVAS_WIDTH / 2 - TOPIC_HORIZENTAL_MARGIN;
     node.y += CANVAS_HEIGHT / 2;
   });
   return rootNode;

@@ -118,8 +118,6 @@ const Topic = (props: HierachyNode<TopicData>) => {
         cursor: default;
         opacity: ${isDragEntering ? 0.7 : 1};
         outline: ${outline};
-        overflow-wrap: break-word;
-        word-break: break-all;
         user-select: none;
       `}
       suppressContentEditableWarning

@@ -1,6 +1,6 @@
 import { TopicData } from 'xmind-model/types/models/topic';
 import { createStore, StateSelector } from 'relax-ts';
-import { topicWalker, normalizeTopicSide } from '../utils/tree';
+import { topicWalker, normalizeTopicSide, createTopic } from '../utils/tree';
 import { ATTACHED_KEY } from '../constant';
 import { debug } from '../utils/debug';
 import editorStore from './editor';
@@ -25,17 +25,48 @@ const SAVE_HISTORY = 'SAVE_HISTORY';
 
 const defaultRoot: TopicData = produce(
   {
-    id: '545be2df-3fe3-43d8-8038-7bf8fd567273',
-    title: 'Central Topic',
+    ...createTopic('How to use Mindx'),
     children: {
       attached: [
         {
-          title: 'main topic 2',
-          id: 'd5b93d9e-4a3b-49fe-83a0-f4cb61397246',
+          ...createTopic('Basic shortcut'),
+          children: {
+            attached: [
+              createTopic('tab - Create a child topic'),
+              createTopic('del - Remove a topic'),
+              createTopic('space - Edit a topic'),
+              createTopic('Enter - Save edited topic'),
+            ],
+          },
         },
         {
-          title: 'main topic 1',
-          id: '7312ed2e-b90f-44a8-b0bd-fa4df6c9708c',
+          ...createTopic('Advanced shortcut'),
+          children: {
+            attached: [
+              createTopic('command+z - Undo'),
+              createTopic('command+shift+z - Redo'),
+              createTopic('up, down, left, right - navigate between topics'),
+            ],
+          },
+        },
+        {
+          ...createTopic('Bottom menu'),
+          children: {
+            attached: [
+              createTopic('Full screen'),
+              createTopic('Return to Center'),
+              createTopic('Zoom in'),
+              createTopic('Zoom out'),
+            ],
+          },
+        },
+        {
+          ...createTopic('Draggable'),
+          children: {
+            attached: [
+              createTopic('Drag a node to target one and append to it'),
+            ],
+          },
         },
       ],
     },
