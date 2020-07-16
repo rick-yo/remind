@@ -35,8 +35,6 @@ const KEY_MAPS: Record<string, string> = {
 const EDITOR_ID_SELECTOR = 'mind-editor';
 const CORE_EDITOR_ID_SELECTOR = 'core-editor';
 
-const WATER_MARK = 'Gnerated by mindx.applet.ink';
-
 export {
   CANVAS_HEIGHT,
   CANVAS_WIDTH,
@@ -52,5 +50,4 @@ export {
   TOPIC_HORIZENTAL_MARGIN,
   TOPIC_FONT_FAMILY,
   CORE_EDITOR_ID_SELECTOR,
-  WATER_MARK,
 };

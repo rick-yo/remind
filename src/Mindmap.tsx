@@ -18,7 +18,6 @@ import { createTopic } from './utils/tree';
 import { debug } from './utils/debug';
 import { selectText, onClickOutSide, useIconFont } from './utils/dom';
 import { css, jsx } from '@emotion/core';
-import Header from './components/Header';
 import Toolbar from './components/Toolbar';
 import { useLocale } from './context/locale';
 
@@ -134,7 +133,6 @@ const Mindmap = () => {
         background: #eef8fa;
       `}
     >
-      <Header />
       <div
         id={CORE_EDITOR_ID_SELECTOR}
         css={css`
