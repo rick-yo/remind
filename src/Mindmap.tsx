@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useEffect, ReactElement } from 'react';
+import { useEffect, ReactElement, useRef } from 'react';
 import Topic from './components/Topic';
 import {
   CANVAS_WIDTH,
@@ -9,6 +9,7 @@ import {
   TOPIC_FONT_FAMILY,
   CORE_EDITOR_ID,
   TOPIC_CLASS,
+  HOTKEYS,
 } from './constant';
 import mindmap from './layout/mindmap';
 import Links from './components/Links';
@@ -29,6 +30,10 @@ const Mindmap = () => {
   const { mode, selectedNodeId } = editorState;
   const mindMap = mindmap(root);
   const locale = useLocale();
+  const editorRef = useRef<HTMLDivElement | null>(null);
+  const hotkeyOptions = {
+    element: editorRef.current,
+  };
   useIconFont();
 
   const id = `#topic-${selectedNodeId}`;
@@ -62,6 +67,20 @@ const Mindmap = () => {
       rootStore.dispatch('DELETE_NODE', selectedNodeId);
     }
 
+    if (mode === EDITOR_MODE.regular) {
+      hotkeys(HOTKEYS.tab, hotkeyOptions, appendChild);
+      hotkeys(HOTKEYS.space, hotkeyOptions, editTopic);
+      hotkeys(HOTKEYS.backspace, hotkeyOptions, deleteNode);
+    }
+    return () => {
+      hotkeys.unbind(HOTKEYS.tab, appendChild);
+      hotkeys.unbind(HOTKEYS.space, editTopic);
+      hotkeys.unbind(HOTKEYS.backspace, deleteNode);
+    };
+  }, [mode, selectedNodeId, id, locale.subTopic, hotkeyOptions]);
+
+  // regular mode, bind navigate shortcut
+  useEffect(() => {
     function moveTop(e: KeyboardEvent) {
       e.preventDefault();
       editorStore.dispatch('MOVE_TOP', mindMap);
@@ -78,6 +97,22 @@ const Mindmap = () => {
       e.preventDefault();
       editorStore.dispatch('MOVE_RIGHT', mindMap);
     }
+    if (mode === EDITOR_MODE.regular) {
+      hotkeys(HOTKEYS.left, hotkeyOptions, moveLeft);
+      hotkeys(HOTKEYS.right, hotkeyOptions, moveRight);
+      hotkeys(HOTKEYS.up, hotkeyOptions, moveTop);
+      hotkeys(HOTKEYS.down, hotkeyOptions, moveDown);
+    }
+    return () => {
+      hotkeys.unbind(HOTKEYS.left, moveLeft);
+      hotkeys.unbind(HOTKEYS.right, moveRight);
+      hotkeys.unbind(HOTKEYS.up, moveTop);
+      hotkeys.unbind(HOTKEYS.down, moveDown);
+    };
+  }, [mindMap, hotkeyOptions, mode]);
+
+  // regular mode, bind undo redo shortcut
+  useEffect(() => {
     function undo() {
       rootStore.dispatch('UNDO_HISTORY');
     }
@@ -86,28 +121,14 @@ const Mindmap = () => {
       rootStore.dispatch('REDO_HISTORY');
     }
     if (mode === EDITOR_MODE.regular) {
-      hotkeys('tab', appendChild);
-      hotkeys('space', editTopic);
-      hotkeys('backspace', deleteNode);
-      hotkeys('left', moveLeft);
-      hotkeys('right', moveRight);
-      hotkeys('up,top', moveTop);
-      hotkeys('down', moveDown);
-      hotkeys('command+z', undo);
-      hotkeys('command+shift+z', redo);
+      hotkeys(HOTKEYS.undo, hotkeyOptions, undo);
+      hotkeys(HOTKEYS.redo, hotkeyOptions, redo);
     }
     return () => {
-      hotkeys.unbind('tab', appendChild);
-      hotkeys.unbind('space', editTopic);
-      hotkeys.unbind('backspace', deleteNode);
-      hotkeys.unbind('left', moveLeft);
-      hotkeys.unbind('right', moveRight);
-      hotkeys.unbind('up,top', moveTop);
-      hotkeys.unbind('down', moveDown);
-      hotkeys.unbind('command+z', undo);
-      hotkeys.unbind('command+shift+z', redo);
+      hotkeys.unbind(HOTKEYS.undo, undo);
+      hotkeys.unbind(HOTKEYS.redo, redo);
     };
-  }, [mode, selectedNodeId, id, mindMap, locale.subTopic]);
+  }, [hotkeyOptions, mode]);
 
   // edit mode
   useClickOutSide(
@@ -142,6 +163,7 @@ const Mindmap = () => {
   debug('rootWithCoords', mindMap);
   return (
     <div
+      ref={editorRef}
       id={EDITOR_ID}
       css={css`
         position: relative;

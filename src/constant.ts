@@ -32,6 +32,18 @@ const KEY_MAPS: Record<string, string> = {
   ArrowDown: 'ArrowDown',
 };
 
+const HOTKEYS = {
+  tab: 'tab',
+  space: 'space',
+  backspace: 'backspace',
+  left: 'left',
+  right: 'right',
+  up: 'up,top',
+  down: 'down',
+  undo: 'command+z,ctrl+z',
+  redo: 'command+shift+z,ctrl+shift+z',
+};
+
 const EDITOR_ID = 'mindx-editor';
 const CORE_EDITOR_ID = 'mindx-core-editor';
 const TOPIC_CLASS = 'mindx-topic';
@@ -52,4 +64,5 @@ export {
   TOPIC_FONT_FAMILY,
   CORE_EDITOR_ID,
   TOPIC_CLASS,
+  HOTKEYS,
 };
