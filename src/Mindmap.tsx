@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useEffect, ReactElement, useRef } from 'react';
+import { useEffect, ReactElement, useRef, useCallback, useMemo } from 'react';
 import Topic from './components/Topic';
 import {
   CANVAS_WIDTH,
@@ -42,11 +42,13 @@ const Mindmap = () => {
   useIconFont();
 
   const id = `#topic-${selectedNodeId}`;
-  const topics: ReactElement[] = [];
-
-  mindMap.eachNode(node => {
-    topics.push(<Topic key={node.data.id} {...node} />);
-  });
+  const topics: ReactElement[] = useMemo(() => {
+    const nodes: ReactElement[] = [];
+    mindMap.eachNode(node => {
+      nodes.push(<Topic key={node.data.id} {...node} />);
+    });
+    return nodes;
+  }, [mindMap]);
 
   // regular mode
   useEffect(() => {
@@ -165,16 +167,19 @@ const Mindmap = () => {
     [selectedNodeId]
   );
 
-  function handleWheel(e: WheelEvent) {
-    e.stopPropagation();
-    e.preventDefault();
-    editorStore.dispatch('SET_TRANSLATE', [
-      translate[0] - e.deltaX,
-      translate[1] - e.deltaY,
-    ]);
-  }
+  const handleWheel = useCallback(
+    throttle((e: WheelEvent) => {
+      e.stopPropagation();
+      e.preventDefault();
+      editorStore.dispatch('SET_TRANSLATE', [
+        translate[0] - e.deltaX,
+        translate[1] - e.deltaY,
+      ]);
+    }, 30),
+    [translate]
+  );
 
-  usePassiveWheelEvent(editorRef, throttle(handleWheel, 25));
+  usePassiveWheelEvent(editorRef, handleWheel);
 
   debug('rootWithCoords', mindMap);
   return (

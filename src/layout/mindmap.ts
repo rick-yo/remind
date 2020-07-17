@@ -81,6 +81,7 @@ export default function(
   root: TopicData,
   options: Options<TopicData> = defaultOptions
 ) {
+  // console.time('mindmap layout')
   const rootWithDepth = produce(root, normalizeTopicDepth);
   const rootNode = hierarchy.mindmap(rootWithDepth, options);
   // add left right margin
@@ -98,5 +99,6 @@ export default function(
     node.x += CANVAS_WIDTH / 2 - TOPIC_HORIZENTAL_MARGIN;
     node.y += CANVAS_HEIGHT / 2;
   });
+  // console.timeEnd('mindmap layout')
   return rootNode;
 }
