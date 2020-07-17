@@ -43,6 +43,9 @@ const store = createStore({
     SET_SCALE(state, payload: number) {
       state.scale = payload;
     },
+    SET_TRANSLATE(state, payload: [number, number]) {
+      state.translate = payload;
+    },
     MOVE_LEFT(state, rootWithCoords: HierachyNodeWithTopicData) {
       const target = getLeftNode(rootWithCoords, state.selectedNodeId);
       if (target) {

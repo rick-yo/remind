@@ -27,15 +27,18 @@ const Toolbar = () => {
       <i className="iconfont icon-full-screen" onClick={requestFullScreen}></i>
       <i
         className="iconfont icon-location"
-        onClick={() => editorStore.dispatch('SET_SCALE', 1)}
-      ></i>
-      <i
-        className="iconfont icon-plus"
-        onClick={() => editorStore.dispatch('SET_SCALE', scale * 1.2)}
+        onClick={() => {
+          editorStore.dispatch('SET_SCALE', 1);
+          editorStore.dispatch('SET_TRANSLATE', [0, 0]);
+        }}
       ></i>
       <i
         className="iconfont icon-subtract"
         onClick={() => editorStore.dispatch('SET_SCALE', scale * 0.8)}
+      ></i>
+      <i
+        className="iconfont icon-plus"
+        onClick={() => editorStore.dispatch('SET_SCALE', scale * 1.2)}
       ></i>
     </div>
   );

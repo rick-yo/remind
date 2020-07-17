@@ -1,5 +1,5 @@
 import { debug } from './debug';
-import { useEffect, DependencyList } from 'react';
+import { useEffect, DependencyList, RefObject } from 'react';
 
 function selectText(el?: HTMLElement) {
   if (!el) return;
@@ -51,4 +51,18 @@ function useIconFont() {
   }, []);
 }
 
-export { selectText, useClickOutSide, useIconFont };
+function usePassiveWheelEvent(
+  ref: RefObject<HTMLElement> | null,
+  callback: (e: WheelEvent) => void
+) {
+  useEffect(() => {
+    ref?.current?.addEventListener('wheel', callback, {
+      passive: false,
+    });
+    return () => {
+      ref?.current?.removeEventListener('wheel', callback);
+    };
+  }, [ref, callback]);
+}
+
+export { selectText, useClickOutSide, useIconFont, usePassiveWheelEvent };

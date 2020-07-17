@@ -18,7 +18,12 @@ import editorStore from './store/editor';
 import hotkeys from 'hotkeys-js';
 import { createTopic } from './utils/tree';
 import { debug } from './utils/debug';
-import { selectText, useIconFont, useClickOutSide } from './utils/dom';
+import {
+  selectText,
+  useIconFont,
+  useClickOutSide,
+  usePassiveWheelEvent,
+} from './utils/dom';
 import { css, jsx } from '@emotion/core';
 import Toolbar from './components/Toolbar';
 import { useLocale } from './context/locale';
@@ -30,7 +35,7 @@ const Mindmap = () => {
   const { mode, selectedNodeId } = editorState;
   const mindMap = mindmap(root);
   const locale = useLocale();
-  const editorRef = useRef<HTMLDivElement | null>(null);
+  const editorRef = useRef<HTMLDivElement>(null);
   const hotkeyOptions = {
     element: editorRef.current,
   };
@@ -160,6 +165,17 @@ const Mindmap = () => {
     [selectedNodeId]
   );
 
+  function handleWheel(e: WheelEvent) {
+    e.stopPropagation();
+    e.preventDefault();
+    editorStore.dispatch('SET_TRANSLATE', [
+      translate[0] - e.deltaX,
+      translate[1] - e.deltaY,
+    ]);
+  }
+
+  usePassiveWheelEvent(editorRef, throttle(handleWheel, 25));
+
   debug('rootWithCoords', mindMap);
   return (
     <div
@@ -179,7 +195,8 @@ const Mindmap = () => {
         css={css`
           position: relative;
           transform: scale(${scale}, ${scale});
-          translate: (${translate[0]}px, ${translate[1]}px);
+          translate: ${translate[0]}px ${translate[1]}px;
+          transition: all 0.2s;
           background: #eef8fa;
         `}
       >
@@ -203,3 +220,17 @@ const Mindmap = () => {
 };
 
 export default Mindmap;
+
+function throttle(fn: Function, wait: number) {
+  let isCalled = false;
+
+  return function(...args: any[]) {
+    if (!isCalled) {
+      fn(...args);
+      isCalled = true;
+      setTimeout(function() {
+        isCalled = false;
+      }, wait);
+    }
+  };
+}
