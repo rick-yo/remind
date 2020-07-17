@@ -6,6 +6,7 @@ import {
   TOPIC_RADIUS,
   EDITOR_MODE,
   KEY_MAPS,
+  TOPIC_CLASS,
 } from '../constant';
 import { css, jsx } from '@emotion/core';
 import { TopicData } from 'xmind-model/types/models/topic';
@@ -94,6 +95,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
   return (
     <div
       id={`topic-${id}`}
+      className={TOPIC_CLASS}
       contentEditable={isEditing}
       onClick={selectNode}
       onKeyUp={exitEditMode}

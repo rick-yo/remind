@@ -5,9 +5,10 @@ import {
   CANVAS_WIDTH,
   CANVAS_HEIGHT,
   EDITOR_MODE,
-  EDITOR_ID_SELECTOR,
+  EDITOR_ID,
   TOPIC_FONT_FAMILY,
-  CORE_EDITOR_ID_SELECTOR,
+  CORE_EDITOR_ID,
+  TOPIC_CLASS,
 } from './constant';
 import mindmap from './layout/mindmap';
 import Links from './components/Links';
@@ -16,7 +17,7 @@ import editorStore from './store/editor';
 import hotkeys from 'hotkeys-js';
 import { createTopic } from './utils/tree';
 import { debug } from './utils/debug';
-import { selectText, onClickOutSide, useIconFont } from './utils/dom';
+import { selectText, useIconFont, useClickOutSide } from './utils/dom';
 import { css, jsx } from '@emotion/core';
 import Toolbar from './components/Toolbar';
 import { useLocale } from './context/locale';
@@ -24,6 +25,7 @@ import { useLocale } from './context/locale';
 const Mindmap = () => {
   const root = rootStore.useSelector(s => s);
   const editorState = editorStore.useSelector(s => s);
+  const { scale, translate } = editorState;
   const { mode, selectedNodeId } = editorState;
   const mindMap = mindmap(root);
   const locale = useLocale();
@@ -36,7 +38,7 @@ const Mindmap = () => {
     topics.push(<Topic key={node.data.id} {...node} />);
   });
 
-  // 常规模式下
+  // regular mode
   useEffect(() => {
     function appendChild(e: KeyboardEvent) {
       e.preventDefault();
@@ -107,10 +109,12 @@ const Mindmap = () => {
     };
   }, [mode, selectedNodeId, id, mindMap, locale.subTopic]);
 
-  // 编辑模式下
-  useEffect(() => {
-    if (mode !== EDITOR_MODE.edit) return;
-    const clickOutSide = onClickOutSide(id, () => {
+  // edit mode
+  useClickOutSide(
+    id,
+    () => {
+      if (mode !== EDITOR_MODE.edit) return;
+      if (!selectedNodeId) return;
       editorStore.dispatch('SET_MODE', EDITOR_MODE.regular);
       const el = document.querySelector<HTMLDivElement>(id);
       rootStore.dispatch('UPDATE_NODE', {
@@ -119,28 +123,41 @@ const Mindmap = () => {
           title: el?.innerText,
         },
       });
-    });
-    return () => clickOutSide();
-  }, [mode, selectedNodeId, id]);
+    },
+    [mode, selectedNodeId]
+  );
+
+  useClickOutSide(
+    id,
+    e => {
+      if (!selectedNodeId) return;
+      // @ts-ignore
+      const isTopic = e.target?.closest(`.${TOPIC_CLASS}`);
+      if (isTopic) return;
+      editorStore.dispatch('SELECT_NODE', '');
+    },
+    [selectedNodeId]
+  );
 
   debug('rootWithCoords', mindMap);
   return (
     <div
-      id={EDITOR_ID_SELECTOR}
+      id={EDITOR_ID}
       css={css`
         position: relative;
         font-family: ${TOPIC_FONT_FAMILY};
         background: #eef8fa;
+        width: ${CANVAS_WIDTH}px;
+        height: ${CANVAS_HEIGHT}px;
+        overflow: hidden;
       `}
     >
       <div
-        id={CORE_EDITOR_ID_SELECTOR}
+        id={CORE_EDITOR_ID}
         css={css`
           position: relative;
-          width: ${CANVAS_WIDTH}px;
-          height: ${CANVAS_HEIGHT}px;
-          overflow: hidden;
-          transform: scale(${(editorState.scale, editorState.scale)});
+          transform: scale(${scale}, ${scale});
+          translate: (${translate[0]}px, ${translate[1]}px);
           background: #eef8fa;
         `}
       >

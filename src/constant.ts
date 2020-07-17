@@ -32,8 +32,9 @@ const KEY_MAPS: Record<string, string> = {
   ArrowDown: 'ArrowDown',
 };
 
-const EDITOR_ID_SELECTOR = 'mind-editor';
-const CORE_EDITOR_ID_SELECTOR = 'core-editor';
+const EDITOR_ID = 'mindx-editor';
+const CORE_EDITOR_ID = 'mindx-core-editor';
+const TOPIC_CLASS = 'mindx-topic';
 
 export {
   CANVAS_HEIGHT,
@@ -46,8 +47,9 @@ export {
   ATTACHED_KEY,
   EDITOR_MODE,
   KEY_MAPS,
-  EDITOR_ID_SELECTOR,
+  EDITOR_ID,
   TOPIC_HORIZENTAL_MARGIN,
   TOPIC_FONT_FAMILY,
-  CORE_EDITOR_ID_SELECTOR,
+  CORE_EDITOR_ID,
+  TOPIC_CLASS,
 };

@@ -1,12 +1,12 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import { EDITOR_ID_SELECTOR } from '../constant';
+import { EDITOR_ID } from '../constant';
 import editorStore from '../store/editor';
 
 const Toolbar = () => {
   const scale = editorStore.useSelector(s => s.scale);
   function requestFullScreen() {
-    document.querySelector(`#${EDITOR_ID_SELECTOR}`)?.requestFullscreen();
+    document.querySelector(`#${EDITOR_ID}`)?.requestFullscreen();
   }
 
   return (

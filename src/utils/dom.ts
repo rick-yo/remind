@@ -1,5 +1,5 @@
 import { debug } from './debug';
-import { useEffect } from 'react';
+import { useEffect, DependencyList } from 'react';
 
 function selectText(el?: HTMLElement) {
   if (!el) return;
@@ -17,19 +17,25 @@ function selectText(el?: HTMLElement) {
   }
 }
 
-function onClickOutSide(selector: string, callback: Function) {
-  function onClickOutSide(e: MouseEvent) {
-    // @ts-ignore
-    const parent = e.target?.closest(selector);
-    debug('onClickOutSide', parent);
-    if (!parent) {
-      callback(e);
+function useClickOutSide(
+  selector: string,
+  callback: (e: MouseEvent) => void,
+  deps: DependencyList
+) {
+  useEffect(() => {
+    function handleDocumentClick(e: MouseEvent) {
+      // @ts-ignore
+      const parent = e.target?.closest(selector);
+      debug('onClickOutSide event fired');
+      if (!parent) {
+        callback(e);
+      }
     }
-  }
-  document.addEventListener('click', onClickOutSide);
-  return () => {
-    document.removeEventListener('click', onClickOutSide);
-  };
+    document.addEventListener('click', handleDocumentClick);
+    return () => {
+      document.removeEventListener('click', handleDocumentClick);
+    };
+  }, [selector, callback, ...deps]);
 }
 
 function useIconFont() {
@@ -38,11 +44,11 @@ function useIconFont() {
     const linkElement = document.createElement('link');
     linkElement.setAttribute('rel', 'stylesheet');
     linkElement.setAttribute('href', href);
-    document.getElementsByTagName('head')[0]?.appendChild(linkElement);
+    document.querySelector('head')?.appendChild(linkElement);
     return () => {
       linkElement.remove();
     };
   }, []);
 }
 
-export { selectText, onClickOutSide, useIconFont };
+export { selectText, useClickOutSide, useIconFont };

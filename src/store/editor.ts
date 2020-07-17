@@ -15,6 +15,7 @@ type IState = {
   scale: number;
   dragingNode?: TopicData;
   readonly: boolean;
+  translate: [number, number];
 };
 
 export const initialState: IState = {
@@ -23,6 +24,7 @@ export const initialState: IState = {
   scale: 1,
   dragingNode: undefined,
   readonly: false,
+  translate: [0, 0],
 };
 
 const store = createStore({
