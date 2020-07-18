@@ -37,6 +37,29 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
+## API
+Mindmap props
+
+| prop     | type                         | description                   | default | optional |
+| -------- | ---------------------------- | ----------------------------- | ------- | -------- |
+| data     | TopicData                    | control mindmap data          | -       | true     |
+| readonly | boolean                      | is mindmap readonly           | false   | true     |
+| onChange | (data: TopicData) => void    | listen to mindmap data change | -       | true     |
+| locale   | 'en' &#124; 'cn' &#124; 'ja' | language localization         | en      | true     |
+| theme    |                              | custom theme                  | -       | true     |
+
+TopicData
+
+```typescript
+interface TopicData {
+  id: string;
+  title: string;
+  children?: {
+      attached: Array<TopicData>;
+  };
+}
+```
+
 ## License
 
 [MIT License](https://github.com/unhandledrejection/mindx/blob/master/LICENSE)
