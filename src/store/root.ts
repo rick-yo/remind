@@ -25,50 +25,9 @@ const SAVE_HISTORY = 'SAVE_HISTORY';
 
 const defaultRoot: TopicData = produce(
   {
-    ...createTopic('How to use Mindx'),
+    ...createTopic('Central Topic'),
     children: {
-      attached: [
-        {
-          ...createTopic('Basic shortcut'),
-          children: {
-            attached: [
-              createTopic('tab - Create a child topic'),
-              createTopic('del - Remove a topic'),
-              createTopic('space - Edit a topic'),
-              createTopic('Enter - Save edited topic'),
-            ],
-          },
-        },
-        {
-          ...createTopic('Advanced shortcut'),
-          children: {
-            attached: [
-              createTopic('command+z - Undo'),
-              createTopic('command+shift+z - Redo'),
-              createTopic('up, down, left, right - navigate between topics'),
-            ],
-          },
-        },
-        {
-          ...createTopic('Bottom menu'),
-          children: {
-            attached: [
-              createTopic('Full screen'),
-              createTopic('Return to Center'),
-              createTopic('Zoom in'),
-              createTopic('Zoom out'),
-            ],
-          },
-        },
-        {
-          ...createTopic('Draggable'),
-          children: {
-            attached: [
-              createTopic('Drag a node to target one and append to it'),
-            ],
-          },
-        },
-      ],
+      attached: [createTopic('main topic 1'), createTopic('main topic 2')],
     },
   },
   normalizeTopicSide
