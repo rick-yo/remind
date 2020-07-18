@@ -4,7 +4,9 @@
 ![Azure Static Web Apps CI/CD](https://github.com/unhandledrejection/mindx/workflows/Azure%20Static%20Web%20Apps%20CI/CD/badge.svg) 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=unhandledrejection_mindx&metric=alert_status)](https://sonarcloud.io/dashboard?id=unhandledrejection_mindx) 
 
-Bring mindmap to browser !
+Mindx is a free, open source mindmap editor based on React.
+
+![](./demo.jpg)
 
 Try it on https://mindx.applet.ink
 
@@ -33,6 +35,29 @@ const App = () => {
 };
 
 ReactDOM.render(<App />, document.getElementById('root'));
+```
+
+## API
+Mindmap props
+
+| prop     | type                         | description                   | default | optional |
+| -------- | ---------------------------- | ----------------------------- | ------- | -------- |
+| data     | TopicData                    | control mindmap data          | -       | true     |
+| readonly | boolean                      | is mindmap readonly           | false   | true     |
+| onChange | (data: TopicData) => void    | listen to mindmap data change | -       | true     |
+| locale   | 'en' &#124; 'cn' &#124; 'ja' | language localization         | en      | true     |
+| theme    |                              | custom theme                  | -       | true     |
+
+TopicData
+
+```typescript
+interface TopicData {
+  id: string;
+  title: string;
+  children?: {
+      attached: Array<TopicData>;
+  };
+}
 ```
 
 ## License

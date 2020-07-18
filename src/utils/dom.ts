@@ -1,7 +1,5 @@
 import { debug } from './debug';
-import { WATER_MARK, TOPIC_FONT_FAMILY } from '../constant';
-import html2canvas from 'html2canvas';
-import { useEffect } from 'react';
+import { useEffect, DependencyList, RefObject } from 'react';
 
 function selectText(el?: HTMLElement) {
   if (!el) return;
@@ -19,31 +17,25 @@ function selectText(el?: HTMLElement) {
   }
 }
 
-function onClickOutSide(selector: string, callback: Function) {
-  function onClickOutSide(e: MouseEvent) {
-    // @ts-ignore
-    const parent = e.target?.closest(selector);
-    debug('onClickOutSide', parent);
-    if (!parent) {
-      callback(e);
+function useClickOutSide(
+  selector: string,
+  callback: (e: MouseEvent) => void,
+  deps: DependencyList
+) {
+  useEffect(() => {
+    function handleDocumentClick(e: MouseEvent) {
+      // @ts-ignore
+      const parent = e.target?.closest(selector);
+      debug('onClickOutSide event fired');
+      if (!parent) {
+        callback(e);
+      }
     }
-  }
-  document.addEventListener('click', onClickOutSide);
-  return () => {
-    document.removeEventListener('click', onClickOutSide);
-  };
-}
-
-async function htmlToCanvas(el: HTMLElement) {
-  const canvas = await html2canvas(el);
-  const context = canvas.getContext('2d');
-  if (!context) return;
-  context.save();
-  context.font = `20px ${TOPIC_FONT_FAMILY}`;
-  context.fillStyle = '#000';
-  context.fillText(WATER_MARK, canvas.width - 300, canvas.height);
-  context.restore();
-  return canvas.toDataURL();
+    document.addEventListener('click', handleDocumentClick);
+    return () => {
+      document.removeEventListener('click', handleDocumentClick);
+    };
+  }, [selector, callback, ...deps]);
 }
 
 function useIconFont() {
@@ -52,11 +44,25 @@ function useIconFont() {
     const linkElement = document.createElement('link');
     linkElement.setAttribute('rel', 'stylesheet');
     linkElement.setAttribute('href', href);
-    document.getElementsByTagName('head')[0]?.appendChild(linkElement);
+    document.querySelector('head')?.appendChild(linkElement);
     return () => {
       linkElement.remove();
     };
   }, []);
 }
 
-export { selectText, onClickOutSide, htmlToCanvas, useIconFont };
+function usePassiveWheelEvent(
+  ref: RefObject<HTMLElement> | null,
+  callback: (e: WheelEvent) => void
+) {
+  useEffect(() => {
+    ref?.current?.addEventListener('wheel', callback, {
+      passive: false,
+    });
+    return () => {
+      ref?.current?.removeEventListener('wheel', callback);
+    };
+  }, [ref, callback]);
+}
+
+export { selectText, useClickOutSide, useIconFont, usePassiveWheelEvent };

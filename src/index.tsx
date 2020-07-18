@@ -1,7 +1,7 @@
 import React from 'react';
 import Mindmap from './Mindmap';
 import { Provider, defaultRoot } from './store/root';
-import EditorStore, { initialState } from './store/editor';
+import EditorStore from './store/editor';
 import { ThemeContext, defaultTheme } from './context/theme';
 import { defaultLocale } from './context/locale';
 import { normalizeTopicSide } from './utils/tree';
@@ -29,7 +29,7 @@ function EnhancedMindMap({
   return (
     <EditorStore.Provider
       initialState={{
-        ...initialState,
+        ...EditorStore.getState(),
         readonly: readonly,
       }}
     >

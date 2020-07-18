@@ -5,7 +5,7 @@ const TOPIC_FONT_SIZE = 22;
 const TOPIC_FONT_FAMILY = '微软雅黑,-apple-system';
 const TOPIC_RADIUS = 5;
 const TOPIC_HORIZENTAL_MARGIN = 50;
-const MAX_TOPIC_WIDTH = 150;
+const MAX_TOPIC_WIDTH = 200;
 const MIN_TOPIC_HEIGHT = 15;
 
 const canvasContext = document
@@ -32,10 +32,21 @@ const KEY_MAPS: Record<string, string> = {
   ArrowDown: 'ArrowDown',
 };
 
-const EDITOR_ID_SELECTOR = 'mind-editor';
-const CORE_EDITOR_ID_SELECTOR = 'core-editor';
+const HOTKEYS = {
+  tab: 'tab',
+  space: 'space',
+  backspace: 'backspace',
+  left: 'left',
+  right: 'right',
+  up: 'up,top',
+  down: 'down',
+  undo: 'command+z,ctrl+z',
+  redo: 'command+shift+z,ctrl+shift+z',
+};
 
-const WATER_MARK = 'Gnerated by mindx.applet.ink';
+const EDITOR_ID = 'mindx-editor';
+const CORE_EDITOR_ID = 'mindx-core-editor';
+const TOPIC_CLASS = 'mindx-topic';
 
 export {
   CANVAS_HEIGHT,
@@ -48,9 +59,10 @@ export {
   ATTACHED_KEY,
   EDITOR_MODE,
   KEY_MAPS,
-  EDITOR_ID_SELECTOR,
+  EDITOR_ID,
   TOPIC_HORIZENTAL_MARGIN,
   TOPIC_FONT_FAMILY,
-  CORE_EDITOR_ID_SELECTOR,
-  WATER_MARK,
+  CORE_EDITOR_ID,
+  TOPIC_CLASS,
+  HOTKEYS,
 };
