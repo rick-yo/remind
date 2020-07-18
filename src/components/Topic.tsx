@@ -37,7 +37,6 @@ const Topic = (props: HierachyNode<TopicData>) => {
     editorStore.dispatch('SELECT_NODE', id);
   }
 
-  // 编辑模式下
   function exitEditMode(e: KeyboardEvent<HTMLDivElement>) {
     if (
       [KEY_MAPS.Enter, KEY_MAPS.Escape].includes(e.key) &&
