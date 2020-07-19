@@ -71,7 +71,7 @@ const App = () => {
   }, []);
   return (
     <div>
-      <Mindmap data={mindState} onChange={onChange} />
+      <Mindmap value={mindState} onChange={onChange} />
     </div>
   );
 };

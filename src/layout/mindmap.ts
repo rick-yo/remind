@@ -5,8 +5,6 @@ import {
   canvasContext,
   MAX_TOPIC_WIDTH,
   TOPIC_FONT_SIZE,
-  CANVAS_WIDTH,
-  CANVAS_HEIGHT,
   TOPIC_HORIZENTAL_MARGIN,
   TOPIC_FONT_FAMILY,
 } from '../constant';
@@ -95,10 +93,6 @@ export default function(
   // // move mindmap to canvas center
   const descendants: HierachyNode<TopicData>[] = [];
   rootNode.eachNode(node => descendants.push(node));
-  rootNode.eachNode(node => {
-    node.x += CANVAS_WIDTH / 2 - TOPIC_HORIZENTAL_MARGIN;
-    node.y += CANVAS_HEIGHT / 2;
-  });
   // console.timeEnd('mindmap layout')
   return rootNode;
 }

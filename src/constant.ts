@@ -1,6 +1,3 @@
-const CANVAS_WIDTH = window.innerWidth;
-const CANVAS_HEIGHT = window.innerHeight;
-
 const TOPIC_FONT_SIZE = 22;
 const TOPIC_FONT_FAMILY = '微软雅黑,-apple-system';
 const TOPIC_RADIUS = 5;
@@ -49,8 +46,6 @@ const CORE_EDITOR_ID = 'mindx-core-editor';
 const TOPIC_CLASS = 'mindx-topic';
 
 export {
-  CANVAS_HEIGHT,
-  CANVAS_WIDTH,
   TOPIC_FONT_SIZE,
   MAX_TOPIC_WIDTH,
   TOPIC_RADIUS,

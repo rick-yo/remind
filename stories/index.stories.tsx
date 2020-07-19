@@ -8,7 +8,7 @@ export default {
 
 // By passing optional props to this story, you can control the props of the component when
 // you consume the story in a test.
-const customData : TopicData = {
+const customData: TopicData = {
   id: '545be2df-3fe3-43d8-8038-7bf8fd567273',
   title: 'Central Topic',
   children: {
@@ -47,18 +47,18 @@ const customData : TopicData = {
       },
     ],
   },
-}
+};
 
 export const WithCustomData = () => {
-  return <Mindmap data={customData} />;
+  return <Mindmap value={customData} />;
 };
 
 export const WithoutData = () => {
   return <Mindmap />;
 };
 
-export const ReadOnly = () => {
-  const data : TopicData = {
+export const WithReadOnly = () => {
+  const root: TopicData = {
     id: '545be2df-3fe3-43d8-8038-7bf8fd567273',
     title: 'ReadOnly Topic',
     children: {
@@ -81,6 +81,17 @@ export const ReadOnly = () => {
         },
       ],
     },
-  }
-  return <Mindmap data={data} readonly={true} />;
+  };
+  return <Mindmap value={root} readonly={true} />;
+};
+
+export const WithCustomTheme = () => {
+  return (
+    <Mindmap
+      theme={{
+        canvasWidth: 800,
+        canvasHeight: 500,
+      }}
+    />
+  );
 };

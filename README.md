@@ -40,13 +40,13 @@ ReactDOM.render(<App />, document.getElementById('root'));
 ## API
 Mindmap props
 
-| prop     | type                         | description                   | default | optional |
-| -------- | ---------------------------- | ----------------------------- | ------- | -------- |
-| data     | TopicData                    | control mindmap data          | -       | true     |
-| readonly | boolean                      | is mindmap readonly           | false   | true     |
-| onChange | (data: TopicData) => void    | listen to mindmap data change | -       | true     |
-| locale   | 'en' &#124; 'cn' &#124; 'ja' | language localization         | en      | true     |
-| theme    |                              | custom theme                  | -       | true     |
+| prop     | type                         | description                    | default | optional |
+| -------- | ---------------------------- | ------------------------------ | ------- | -------- |
+| value    | TopicData                    | control mindmap value          | -       | true     |
+| readonly | boolean                      | is mindmap readonly            | false   | true     |
+| onChange | (value: TopicData) => void   | listen to mindmap value change | -       | true     |
+| locale   | 'en' &#124; 'cn' &#124; 'ja' | language localization          | en      | true     |
+| theme    | Theme                        | custom theme                   | -       | true     |
 
 TopicData
 
@@ -54,9 +54,26 @@ TopicData
 interface TopicData {
   id: string;
   title: string;
+  side?: 'left' | 'right';
   children?: {
       attached: Array<TopicData>;
   };
+}
+```
+
+Theme
+
+```typescript
+interface Theme {
+  link: {
+    stroke: string;
+    strokeWidth: number;
+  };
+  topic: {
+    borderColor: string;
+  };
+  canvasWidth: number;
+  canvasHeight: number;
 }
 ```
 

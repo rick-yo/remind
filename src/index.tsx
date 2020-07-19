@@ -2,7 +2,7 @@ import React from 'react';
 import Mindmap from './Mindmap';
 import { Provider, defaultRoot } from './store/root';
 import EditorStore from './store/editor';
-import { ThemeContext, defaultTheme } from './context/theme';
+import { ThemeContext, defaultTheme, Theme } from './context/theme';
 import { defaultLocale } from './context/locale';
 import { normalizeTopicSide } from './utils/tree';
 import produce from 'immer';
@@ -11,21 +11,21 @@ import { IntlKey } from './utils/Intl';
 import { TopicData } from 'xmind-model/types/models/topic';
 
 export interface MindmapProps {
-  theme?: typeof defaultTheme;
+  theme?: Partial<Theme>;
   locale?: IntlKey;
-  data?: TopicData;
+  value?: TopicData;
   readonly?: boolean;
-  onChange?: (data: TopicData) => void;
+  onChange?: (value: TopicData) => void;
 }
 
 function EnhancedMindMap({
   readonly = false,
-  data = defaultRoot,
+  value = defaultRoot,
   theme = defaultTheme,
   locale = defaultLocale.locale,
   onChange = () => {},
 }: MindmapProps) {
-  const rootWithSide = produce(data, normalizeTopicSide);
+  const rootWithSide = produce(value, normalizeTopicSide);
   return (
     <EditorStore.Provider
       initialState={{
@@ -41,7 +41,12 @@ function EnhancedMindMap({
           readonly,
         }}
       >
-        <ThemeContext.Provider value={theme}>
+        <ThemeContext.Provider
+          value={{
+            ...defaultTheme,
+            ...theme,
+          }}
+        >
           <LocaleContext.Provider value={{ locale }}>
             <Mindmap></Mindmap>
           </LocaleContext.Provider>

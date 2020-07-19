@@ -1,15 +1,21 @@
 /** @jsx jsx */
-import { useEffect, ReactElement, useRef, useCallback, useMemo } from 'react';
+import {
+  useEffect,
+  ReactElement,
+  useRef,
+  useCallback,
+  useMemo,
+  useContext,
+} from 'react';
 import Topic from './components/Topic';
 import {
-  CANVAS_WIDTH,
-  CANVAS_HEIGHT,
   EDITOR_MODE,
   EDITOR_ID,
   TOPIC_FONT_FAMILY,
   CORE_EDITOR_ID,
   TOPIC_CLASS,
   HOTKEYS,
+  TOPIC_HORIZENTAL_MARGIN,
 } from './constant';
 import mindmap from './layout/mindmap';
 import Links from './components/Links';
@@ -27,13 +33,21 @@ import {
 import { css, jsx } from '@emotion/core';
 import Toolbar from './components/Toolbar';
 import { useLocale } from './context/locale';
+import { ThemeContext } from './context/theme';
 
 const Mindmap = () => {
   const root = rootStore.useSelector(s => s);
   const editorState = editorStore.useSelector(s => s);
+  const theme = useContext(ThemeContext);
   const { scale, translate } = editorState;
   const { mode, selectedNodeId } = editorState;
+  const { canvasWidth, canvasHeight } = theme;
   const mindMap = mindmap(root);
+  // move mindmap to canvas central positon
+  mindMap.eachNode(node => {
+    node.x += canvasWidth / 2 - TOPIC_HORIZENTAL_MARGIN;
+    node.y += canvasHeight / 2;
+  });
   const locale = useLocale();
   const editorRef = useRef<HTMLDivElement>(null);
   const hotkeyOptions = {
@@ -190,8 +204,8 @@ const Mindmap = () => {
         position: relative;
         font-family: ${TOPIC_FONT_FAMILY};
         background: #eef8fa;
-        width: ${CANVAS_WIDTH}px;
-        height: ${CANVAS_HEIGHT}px;
+        width: ${canvasWidth}px;
+        height: ${canvasHeight}px;
         overflow: hidden;
       `}
     >
@@ -206,8 +220,8 @@ const Mindmap = () => {
         `}
       >
         <svg
-          width={CANVAS_WIDTH}
-          height={CANVAS_HEIGHT}
+          width={canvasWidth}
+          height={canvasHeight}
           xmlns="http://www.w3.org/2000/svg"
           css={css`
             position: absolute;
