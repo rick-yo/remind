@@ -1,5 +1,11 @@
 /** @jsx jsx */
-import { useContext, KeyboardEvent, useState, DragEvent } from 'react';
+import {
+  useContext,
+  KeyboardEvent,
+  useState,
+  DragEvent,
+  MouseEvent,
+} from 'react';
 import { ThemeContext } from '../context/theme';
 import {
   MAX_TOPIC_WIDTH,
@@ -15,6 +21,7 @@ import editorStore from '../store/editor';
 import { HierachyNode } from '@antv/hierarchy';
 import { getTopicFontsize } from '../layout/mindmap';
 import { topicWalker } from '../utils/tree';
+import { selectText } from '../utils/dom';
 
 const Topic = (props: HierachyNode<TopicData>) => {
   const {
@@ -102,6 +109,13 @@ const Topic = (props: HierachyNode<TopicData>) => {
     }
   }
 
+  function editTopic(e: MouseEvent<HTMLDivElement>) {
+    const el = e.target as HTMLDivElement;
+    el?.focus();
+    selectText(el);
+    editorStore.dispatch('SET_MODE', EDITOR_MODE.edit);
+  }
+
   const padding = `${vgap}px ${hgap}px`;
 
   return (
@@ -110,6 +124,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
       className={TOPIC_CLASS}
       contentEditable={isEditing}
       onClick={selectNode}
+      onDoubleClick={editTopic}
       onKeyUp={exitEditMode}
       onKeyDown={handleKeyDown}
       draggable
@@ -133,6 +148,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
         opacity: ${isDragEntering ? 0.7 : 1};
         outline: ${outline};
         user-select: none;
+        translate: 0 ${isEditing ? '2px' : 0};
       `}
       suppressContentEditableWarning
     >
