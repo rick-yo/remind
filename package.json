@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -18,6 +18,7 @@
     "prepare": "tsdx build",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
+    "release": "release-it",
     "pre-commit": "npm run lint && npm run test && npm run build"
   },
   "peerDependencies": {
@@ -58,6 +59,7 @@
     "react-docgen-typescript-loader": "^3.7.1",
     "react-dom": "^16.13.1",
     "react-is": "^16.13.1",
+    "release-it": "^13.6.5",
     "ts-loader": "^8.0.0",
     "tsdx": "^0.13.0",
     "tslib": "^2.0.0",

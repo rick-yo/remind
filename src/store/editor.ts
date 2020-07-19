@@ -1,4 +1,6 @@
 import { TopicData } from 'xmind-model/types/models/topic';
+import { createStore } from 'relax-ts';
+import produce from 'immer';
 import {
   getLeftNode,
   HierachyNodeWithTopicData,
@@ -6,14 +8,13 @@ import {
   getTopNode,
   getBottomNode,
 } from '../utils/tree';
-import { createStore } from 'relax-ts';
 import { EDITOR_MODE } from '../constant';
 
 type IState = {
   mode: EDITOR_MODE;
   selectedNodeId: string;
   scale: number;
-  dragingNode?: TopicData;
+  dragingNode: TopicData | null;
   readonly: boolean;
   translate: [number, number];
 };
@@ -22,7 +23,7 @@ export const initialState: IState = {
   mode: EDITOR_MODE.regular,
   selectedNodeId: '',
   scale: 1,
-  dragingNode: undefined,
+  dragingNode: null,
   readonly: false,
   translate: [0, 0],
 };
@@ -37,8 +38,13 @@ const store = createStore({
     SELECT_NODE(state, payload: string) {
       state.selectedNodeId = payload;
     },
-    DRAG_NODE(state, payload: TopicData) {
-      state.dragingNode = payload;
+    DRAG_NODE(state, payload: TopicData | null) {
+      // remove TopicData's depth、side
+      const dragingNode = produce(payload, draft => {
+        delete draft?.side;
+        delete draft?.depth;
+      });
+      state.dragingNode = dragingNode;
     },
     SET_SCALE(state, payload: number) {
       state.scale = payload;

@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { TopicData } from 'xmind-model/types/models/topic';
 import { HierachyNode } from '@antv/hierarchy';
 import { ATTACHED_KEY } from '../constant';
+import { debug } from './debug';
 
 export type HierachyNodeWithTopicData = HierachyNode<TopicData>;
 type UnionNode = HierachyNodeWithTopicData | TopicData;
@@ -26,7 +27,16 @@ class TreeWalker<T extends UnionNode> {
     });
     return target;
   }
-
+  /**
+   * get node's descendants, exclude this node
+   */
+  getDescendants(root: T): T[] {
+    const nodes: T[] = [];
+    this.eachBefore(root, node => {
+      nodes.push(node);
+    });
+    return nodes.filter(node => node !== root);
+  }
   getParentNode(root: T, id: string): T | undefined {
     let target: T | undefined = undefined;
     this.eachBefore(root, node => {
@@ -107,30 +117,40 @@ export function getLeftNode(
   root: HierachyNodeWithTopicData,
   currentId: string
 ) {
-  const array: HierachyNodeWithTopicData[] = [];
+  if (root.id === currentId) {
+    return getClosedNode(
+      defaultWalker.getDescendants(root).filter(node => node.x < root.x),
+      root
+    );
+  }
   const currentNode = defaultWalker.getNode(root, currentId);
-  if (!currentNode) return undefined;
-  defaultWalker.eachBefore(root, node => {
-    if (node.x < currentNode.x) {
-      array.push(node);
-    }
-  });
-  return getClosedNode(array, currentNode);
+  if (!currentNode) return;
+  const left =
+    currentNode.side === 'right'
+      ? defaultWalker.getParentNode(root, currentNode.id)
+      : getClosedNode(defaultWalker.getDescendants(currentNode), currentNode);
+  debug('getLeftNode', left);
+  return left;
 }
 
 export function getRighttNode(
   root: HierachyNodeWithTopicData,
   currentId: string
 ) {
-  const array: HierachyNodeWithTopicData[] = [];
+  if (root.id === currentId) {
+    return getClosedNode(
+      defaultWalker.getDescendants(root).filter(node => node.x > root.x),
+      root
+    );
+  }
   const currentNode = defaultWalker.getNode(root, currentId);
-  if (!currentNode) return undefined;
-  defaultWalker.eachBefore(root, node => {
-    if (node.x > currentNode.x) {
-      array.push(node);
-    }
-  });
-  return getClosedNode(array, currentNode);
+  if (!currentNode) return;
+  const right =
+    currentNode.side === 'right'
+      ? getClosedNode(defaultWalker.getDescendants(currentNode), currentNode)
+      : defaultWalker.getParentNode(root, currentNode.id);
+  debug('getRighttNode', right);
+  return right;
 }
 
 export function getTopNode(root: HierachyNodeWithTopicData, currentId: string) {
@@ -169,7 +189,9 @@ export function createTopic(title: string, options: Partial<TopicData> = {}) {
   return topic;
 }
 
-// add side to TopicData
+/**
+ * Add side to TopicData, this will mutate TopicData and can be serialize to localStorage or database
+ */
 export function normalizeTopicSide(root: TopicData) {
   if (!root?.children?.attached.length) return;
   if (root.children.attached.length < 4) return;
@@ -179,8 +201,10 @@ export function normalizeTopicSide(root: TopicData) {
   });
 }
 
+/**
+ * Add depth to TopicData, this is used for local state, should not affect TopicData
+ */
 export function normalizeTopicDepth(root: TopicData) {
-  // add depth and parent to TopicData
   root.depth = 0;
   const nodes = [root];
   while (nodes.length) {
@@ -191,4 +215,7 @@ export function normalizeTopicDepth(root: TopicData) {
       nodes.push(node);
     });
   }
+  topicWalker.eachBefore(root, node => {
+    delete node.parent;
+  });
 }

@@ -1,5 +1,11 @@
 /** @jsx jsx */
-import { useContext, KeyboardEvent, useState, DragEvent } from 'react';
+import {
+  useContext,
+  KeyboardEvent,
+  useState,
+  DragEvent,
+  MouseEvent,
+} from 'react';
 import { ThemeContext } from '../context/theme';
 import {
   MAX_TOPIC_WIDTH,
@@ -12,9 +18,10 @@ import { css, jsx } from '@emotion/core';
 import { TopicData } from 'xmind-model/types/models/topic';
 import * as rootStore from '../store/root';
 import editorStore from '../store/editor';
-import { debug } from '../utils/debug';
 import { HierachyNode } from '@antv/hierarchy';
 import { getTopicFontsize } from '../layout/mindmap';
+import { topicWalker } from '../utils/tree';
+import { selectText } from '../utils/dom';
 
 const Topic = (props: HierachyNode<TopicData>) => {
   const {
@@ -37,7 +44,6 @@ const Topic = (props: HierachyNode<TopicData>) => {
     editorStore.dispatch('SELECT_NODE', id);
   }
 
-  // 编辑模式下
   function exitEditMode(e: KeyboardEvent<HTMLDivElement>) {
     if (
       [KEY_MAPS.Enter, KEY_MAPS.Escape].includes(e.key) &&
@@ -53,7 +59,14 @@ const Topic = (props: HierachyNode<TopicData>) => {
     }
   }
 
-  function handleDragStart() {
+  function handleDragStart(e: DragEvent) {
+    // root node is not draggable
+    if (id === rootStore.getState().id) {
+      e.preventDefault();
+      return;
+    }
+    // setData dataTransfer to make drag and drop work in firefox
+    e.dataTransfer.setData('text/plain', '');
     editorStore.dispatch('DRAG_NODE', props.data);
   }
   function handleDragEnter() {
@@ -64,12 +77,18 @@ const Topic = (props: HierachyNode<TopicData>) => {
   }
 
   function handleDrop() {
-    debug('handleDrop');
+    if (!editorState.dragingNode) return;
+    // should not drop topic to it's descendants
+    const descendants = topicWalker.getDescendants(editorState.dragingNode);
+    if (descendants.some(node => node.id === id)) {
+      return;
+    }
     rootStore.dispatch('DELETE_NODE', editorState.dragingNode?.id);
     rootStore.dispatch('APPEND_CHILD', {
       id,
       node: editorState.dragingNode,
     });
+    handleDragLeave();
   }
 
   // We need to prevent the default behavior
@@ -90,6 +109,13 @@ const Topic = (props: HierachyNode<TopicData>) => {
     }
   }
 
+  function editTopic(e: MouseEvent<HTMLDivElement>) {
+    const el = e.target as HTMLDivElement;
+    el?.focus();
+    selectText(el);
+    editorStore.dispatch('SET_MODE', EDITOR_MODE.edit);
+  }
+
   const padding = `${vgap}px ${hgap}px`;
 
   return (
@@ -98,6 +124,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
       className={TOPIC_CLASS}
       contentEditable={isEditing}
       onClick={selectNode}
+      onDoubleClick={editTopic}
       onKeyUp={exitEditMode}
       onKeyDown={handleKeyDown}
       draggable
@@ -121,6 +148,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
         opacity: ${isDragEntering ? 0.7 : 1};
         outline: ${outline};
         user-select: none;
+        translate: 0 ${isEditing ? '2px' : 0};
       `}
       suppressContentEditableWarning
     >
