@@ -26,7 +26,13 @@ class TreeWalker<T extends UnionNode> {
     });
     return target;
   }
-
+  getDescendants(root: T): T[] {
+    const nodes: T[] = [];
+    this.eachBefore(root, node => {
+      nodes.push(node);
+    });
+    return nodes;
+  }
   getParentNode(root: T, id: string): T | undefined {
     let target: T | undefined = undefined;
     this.eachBefore(root, node => {
@@ -182,7 +188,7 @@ export function normalizeTopicSide(root: TopicData) {
 }
 
 /**
- * Add depth and parent to TopicData, this is used for local state, should not affect TopicData
+ * Add depth to TopicData, this is used for local state, should not affect TopicData
  */
 export function normalizeTopicDepth(root: TopicData) {
   root.depth = 0;
@@ -195,4 +201,7 @@ export function normalizeTopicDepth(root: TopicData) {
       nodes.push(node);
     });
   }
+  topicWalker.eachBefore(root, node => {
+    delete node.parent;
+  });
 }

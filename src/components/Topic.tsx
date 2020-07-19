@@ -12,9 +12,9 @@ import { css, jsx } from '@emotion/core';
 import { TopicData } from 'xmind-model/types/models/topic';
 import * as rootStore from '../store/root';
 import editorStore from '../store/editor';
-import { debug } from '../utils/debug';
 import { HierachyNode } from '@antv/hierarchy';
 import { getTopicFontsize } from '../layout/mindmap';
+import { topicWalker } from '../utils/tree';
 
 const Topic = (props: HierachyNode<TopicData>) => {
   const {
@@ -52,7 +52,14 @@ const Topic = (props: HierachyNode<TopicData>) => {
     }
   }
 
-  function handleDragStart() {
+  function handleDragStart(e: DragEvent) {
+    // root node is not draggable
+    if (id === rootStore.getState().id) {
+      e.preventDefault();
+      return;
+    }
+    // setData dataTransfer to make drag and drop work in firefox
+    e.dataTransfer.setData('text/plain', '');
     editorStore.dispatch('DRAG_NODE', props.data);
   }
   function handleDragEnter() {
@@ -63,12 +70,18 @@ const Topic = (props: HierachyNode<TopicData>) => {
   }
 
   function handleDrop() {
-    debug('handleDrop');
+    if (!editorState.dragingNode) return;
+    // should not drop topic to it's descendants
+    const descendants = topicWalker.getDescendants(editorState.dragingNode);
+    if (descendants.some(node => node.id === id)) {
+      return;
+    }
     rootStore.dispatch('DELETE_NODE', editorState.dragingNode?.id);
     rootStore.dispatch('APPEND_CHILD', {
       id,
       node: editorState.dragingNode,
     });
+    handleDragLeave();
   }
 
   // We need to prevent the default behavior

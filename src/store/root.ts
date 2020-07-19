@@ -56,9 +56,13 @@ const store = createStore({
           node => node.side === 'left'
         );
         if (parentNode.children[ATTACHED_KEY].length / 2 > leftNodes.length) {
-          payload.node.side = 'left';
+          payload.node = produce(payload.node, draft => {
+            draft.side = 'left';
+          });
         } else {
-          payload.node.side = 'right';
+          payload.node = produce(payload.node, draft => {
+            draft.side = 'right';
+          });
         }
       }
       parentNode.children[ATTACHED_KEY] =
@@ -118,7 +122,7 @@ const getState = (): TopicData => {
 
 const dispatch: Dispatch = async (action, payload) => {
   if (store.getState().readonly) return;
-  debug('dispatch action', action);
+  debug(`dispatch action ${action} with payload `, payload);
   if (action === SAVE_HISTORY) {
     console.warn('Should not dispatch inner action outside store!');
     return;
