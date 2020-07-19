@@ -5,8 +5,8 @@ const TOPIC_FONT_SIZE = 22;
 const TOPIC_FONT_FAMILY = '微软雅黑,-apple-system';
 const TOPIC_RADIUS = 5;
 const TOPIC_HORIZENTAL_MARGIN = 50;
-const MAX_TOPIC_WIDTH = 200;
-const MIN_TOPIC_HEIGHT = 15;
+const MAX_TOPIC_WIDTH = 240;
+const MIN_TOPIC_HEIGHT = 30;
 
 const canvasContext = document
   .createElement('canvas')

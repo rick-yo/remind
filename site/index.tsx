@@ -6,11 +6,11 @@ import { TopicData } from 'xmind-model/types/models/topic';
 import { createTopic } from '../src/utils/tree';
 
 const defaultRoot: TopicData = {
-  ...createTopic('How to use Mindx'),
+  ...createTopic('How to use Mindx 🤔'),
   children: {
     attached: [
       {
-        ...createTopic('Basic shortcut'),
+        ...createTopic('Basic shortcut 🍩'),
         children: {
           attached: [
             createTopic('tab - Create a child topic'),
@@ -21,7 +21,7 @@ const defaultRoot: TopicData = {
         },
       },
       {
-        ...createTopic('Advanced shortcut'),
+        ...createTopic('Advanced shortcut 🏂'),
         children: {
           attached: [
             createTopic('command+z - Undo'),
@@ -31,7 +31,7 @@ const defaultRoot: TopicData = {
         },
       },
       {
-        ...createTopic('Bottom menu'),
+        ...createTopic('Bottom menu 🥙'),
         children: {
           attached: [
             createTopic('Full screen'),
@@ -42,7 +42,7 @@ const defaultRoot: TopicData = {
         },
       },
       {
-        ...createTopic('Draggable'),
+        ...createTopic('Draggable 🏑'),
         children: {
           attached: [createTopic('Drag a node to target one and append to it')],
         },

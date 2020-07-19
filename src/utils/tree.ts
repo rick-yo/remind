@@ -169,7 +169,9 @@ export function createTopic(title: string, options: Partial<TopicData> = {}) {
   return topic;
 }
 
-// add side to TopicData
+/**
+ * Add side to TopicData, this will mutate TopicData and can be serialize to localStorage or database
+ */
 export function normalizeTopicSide(root: TopicData) {
   if (!root?.children?.attached.length) return;
   if (root.children.attached.length < 4) return;
@@ -179,8 +181,10 @@ export function normalizeTopicSide(root: TopicData) {
   });
 }
 
+/**
+ * Add depth and parent to TopicData, this is used for local state, should not affect TopicData
+ */
 export function normalizeTopicDepth(root: TopicData) {
-  // add depth and parent to TopicData
   root.depth = 0;
   const nodes = [root];
   while (nodes.length) {
