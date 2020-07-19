@@ -15,7 +15,7 @@ const defaultRoot: TopicData = {
           attached: [
             createTopic('tab - Create a child topic'),
             createTopic('del - Remove a topic'),
-            createTopic('space - Edit a topic'),
+            createTopic('space or doubleclick - Edit a topic'),
             createTopic('Enter - Save edited topic'),
           ],
         },
