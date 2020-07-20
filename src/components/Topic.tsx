@@ -56,6 +56,8 @@ const Topic = (props: HierachyNode<TopicData>) => {
           title: e.currentTarget.innerText,
         },
       });
+      // fix selection exit after exit edit mode on firefox
+      getSelection()?.removeAllRanges();
     }
   }
 
