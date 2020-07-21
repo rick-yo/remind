@@ -10,6 +10,13 @@ Mindx is a free, open source mindmap editor based on React.
 
 Try it on https://mindx.applet.ink
 
+## Status
+
+ * Basic editor feature have been implemented (undo, redo, navigation, drag, CRUD topic, shortcut support)
+ * Support basic customization
+
+This project is under active development, check it out at [project panel](https://github.com/unhandledrejection/mindx/projects)
+
 ## Installation
 
 ```shell
