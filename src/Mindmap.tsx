@@ -195,6 +195,13 @@ const Mindmap = () => {
 
   usePassiveWheelEvent(editorRef, handleWheel);
 
+  // select root topic after initial render
+  useEffect(() => {
+    setTimeout(() => {
+      editorStore.dispatch('SELECT_NODE', rootStore.getState().id);
+    }, 200);
+  }, []);
+
   debug('rootWithCoords', mindMap);
   return (
     <div
@@ -213,15 +220,15 @@ const Mindmap = () => {
         id={CORE_EDITOR_ID}
         css={css`
           position: relative;
-          transform: scale(${scale}, ${scale});
-          translate: ${translate[0]}px ${translate[1]}px;
+          transform: scale(${scale}, ${scale})
+            translate(${translate[0]}px, ${translate[1]}px);
           transition: all 0.2s;
           background: #eef8fa;
         `}
       >
         <svg
-          width={canvasWidth}
-          height={canvasHeight}
+          width={canvasWidth / scale}
+          height={canvasHeight / scale}
           xmlns="http://www.w3.org/2000/svg"
           css={css`
             position: absolute;

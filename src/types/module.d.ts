@@ -23,6 +23,12 @@ declare module '@antv/hierarchy' {
     // prototype
     translate(x: number, y: number): void;
     eachNode(cb: (node: HierachyNode<Data>) => void): void;
+    getBoundingBox(): {
+      width: number;
+      height: number;
+      left: number;
+      top: number;
+    };
   }
 
   export interface Options<Data> {
