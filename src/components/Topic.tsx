@@ -5,6 +5,7 @@ import {
   useState,
   DragEvent,
   MouseEvent,
+  memo,
 } from 'react';
 import { ThemeContext } from '../context/theme';
 import {
@@ -160,4 +161,4 @@ const Topic = (props: HierachyNode<TopicData>) => {
   );
 };
 
-export default Topic;
+export default memo(Topic);

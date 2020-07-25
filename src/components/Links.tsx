@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, memo } from 'react';
 import { ThemeContext } from '../context/theme';
 import { HierachyNodeWithTopicData } from '../utils/tree';
 import { TOPIC_HORIZENTAL_MARGIN } from '../constant';
@@ -64,4 +64,4 @@ const Links = (props: LinksProps) => {
   );
 };
 
-export default Links;
+export default memo(Links);
