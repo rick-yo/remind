@@ -5,9 +5,8 @@ interface Theme {
     stroke: string;
     strokeWidth: number;
   };
-  topic: {
-    borderColor: string;
-  };
+  topic: {};
+  mainColor: string;
   canvasWidth: number;
   canvasHeight: number;
 }
@@ -17,9 +16,8 @@ const defaultTheme: Theme = {
     stroke: '#000',
     strokeWidth: 0.5,
   },
-  topic: {
-    borderColor: '#4dc4ff',
-  },
+  topic: {},
+  mainColor: '#4dc4ff',
   canvasWidth: window.innerWidth,
   canvasHeight: window.innerHeight,
 };

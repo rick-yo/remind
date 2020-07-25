@@ -32,7 +32,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
     hgap,
     vgap,
   } = props;
-  const topicTheme = useContext(ThemeContext).topic;
+  const $theme = useContext(ThemeContext);
   const editorState = editorStore.useSelector(s => s);
   const { mode, selectedNodeId } = editorState;
   const isSelected = id === selectedNodeId;
@@ -80,6 +80,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
 
   function handleDrop() {
     if (!editorState.dragingNode) return;
+    if (editorState.dragingNode.id === id) return;
     // should not drop topic to it's descendants
     const descendants = topicWalker.getDescendants(editorState.dragingNode);
     if (descendants.some(node => node.id === id)) {
@@ -101,7 +102,8 @@ const Topic = (props: HierachyNode<TopicData>) => {
   function handleDragOver(e: DragEvent<HTMLDivElement>) {
     e.preventDefault();
   }
-  const outline = isSelected ? `2px solid ${topicTheme.borderColor}` : 'none';
+  const outline =
+    isSelected || isDragEntering ? `2px solid ${$theme.mainColor}` : 'none';
   const background = hasBorder ? '#fff' : 'transparent';
 
   // preventDefault to prevent enter keyboard event create new html element
@@ -147,7 +149,6 @@ const Topic = (props: HierachyNode<TopicData>) => {
         padding: ${padding};
         font-size: ${getTopicFontsize(props.data)}px;
         cursor: default;
-        opacity: ${isDragEntering ? 0.7 : 1};
         outline: ${outline};
         user-select: none;
         translate: 0 ${isEditing ? '2px' : 0};

@@ -76,9 +76,7 @@ interface Theme {
     stroke: string;
     strokeWidth: number;
   };
-  topic: {
-    borderColor: string;
-  };
+  mainColor: string;
   canvasWidth: number;
   canvasHeight: number;
 }
