@@ -2,6 +2,7 @@
 import { css, jsx } from '@emotion/core';
 import { EDITOR_ID } from '../constant';
 import editorStore from '../store/editor';
+import { memo } from 'react';
 
 const Toolbar = () => {
   const scale = editorStore.useSelector(s => s.scale);
@@ -44,4 +45,4 @@ const Toolbar = () => {
   );
 };
 
-export default Toolbar;
+export default memo(Toolbar);

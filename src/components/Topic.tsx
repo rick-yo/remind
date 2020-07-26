@@ -138,6 +138,9 @@ const Topic = (props: HierachyNode<TopicData>) => {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
+      // stopPropagation to prevent invoke Mindmap's event
+      onMouseDown={e => e.stopPropagation()}
+      onTouchStart={e => e.stopPropagation()}
       css={css`
         display: inline-block;
         border-radius: ${TOPIC_RADIUS}px;
