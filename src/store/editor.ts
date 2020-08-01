@@ -1,5 +1,5 @@
 import { TopicData } from 'xmind-model/types/models/topic';
-import { createStore } from 'relax-ts';
+import { createStore } from 'hisoka';
 import produce from 'immer';
 import {
   getLeftNode,
@@ -30,7 +30,7 @@ export const initialState: IState = {
 
 const store = createStore({
   state: initialState,
-  reducers: {
+  actions: {
     SET_MODE(state, payload: EDITOR_MODE) {
       if (state.readonly) return;
       state.mode = payload;
@@ -77,7 +77,6 @@ const store = createStore({
       }
     },
   },
-  effects: {},
 });
 
 export default store;
