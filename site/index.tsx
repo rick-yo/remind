@@ -6,7 +6,7 @@ import { TopicData } from 'xmind-model/types/models/topic';
 import { createTopic } from '../src/utils/tree';
 
 const defaultRoot: TopicData = {
-  ...createTopic('How to use Mindx 🤔'),
+  ...createTopic('How to use Remind 🤔'),
   children: {
     attached: [
       {
@@ -52,7 +52,7 @@ const defaultRoot: TopicData = {
 };
 
 const App = () => {
-  const id = 'mindx-state-storage';
+  const id = 'remind-state-storage';
   const [mindState, setMindState] = React.useState<TopicData | undefined>(
     defaultRoot
   );

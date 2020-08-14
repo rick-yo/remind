@@ -1,10 +1,10 @@
-# Mindx
+# Remind
 
-![CI](https://github.com/unhandledrejection/mindx/workflows/CI/badge.svg) 
-![Azure Static Web Apps CI/CD](https://github.com/unhandledrejection/mindx/workflows/Azure%20Static%20Web%20Apps%20CI/CD/badge.svg) 
+![CI](https://github.com/luvsic3/remind/workflows/CI/badge.svg) 
+![Azure Static Web Apps CI/CD](https://github.com/luvsic3/remind/workflows/Azure%20Static%20Web%20Apps%20CI/CD/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=unhandledrejection_mindx&metric=alert_status)](https://sonarcloud.io/dashboard?id=unhandledrejection_mindx) 
 
-Mindx is a free, open source mindmap editor based on React.
+Remind is a free, open source mindmap editor based on React.
 
 ![](./illustrate.jpg)
 
@@ -15,12 +15,12 @@ Try it on https://mindx.applet.ink
  * Basic editor feature have been implemented (undo, redo, navigation, drag, CRUD topic, shortcut support)
  * Support basic customization
 
-This project is under active development, check it out at [project panel](https://github.com/unhandledrejection/mindx/projects)
+This project is under active development, check it out at [project panel](https://github.com/luvsic3/remind/projects)
 
 ## Installation
 
 ```shell
-npm i mindx
+npm i remindjs
 ```
 
 ## Quick Start
@@ -28,7 +28,7 @@ npm i mindx
 ```JavaScript
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Mindmap } from 'mindx';
+import { Mindmap } from 'remindjs';
 
 const App = () => {
   function onChange(root) {
@@ -84,4 +84,4 @@ interface Theme {
 
 ## License
 
-[MIT License](https://github.com/unhandledrejection/mindx/blob/master/LICENSE)
+[MIT License](https://github.com/luvsic3/remind/blob/master/LICENSE)

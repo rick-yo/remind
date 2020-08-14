@@ -35,9 +35,9 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "mindx",
+  "name": "remind",
   "author": "unhandledrejection",
-  "module": "dist/mindx.esm.js",
+  "module": "dist/remind.esm.js",
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@storybook/addon-actions": "^5.3.17",

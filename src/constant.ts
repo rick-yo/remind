@@ -41,9 +41,9 @@ const HOTKEYS = {
   redo: 'command+shift+z,ctrl+shift+z',
 };
 
-const EDITOR_ID = 'mindx-editor';
-const CORE_EDITOR_ID = 'mindx-core-editor';
-const TOPIC_CLASS = 'mindx-topic';
+const EDITOR_ID = 'remind-editor';
+const CORE_EDITOR_ID = 'remind-core-editor';
+const TOPIC_CLASS = 'remind-topic';
 
 export {
   TOPIC_FONT_SIZE,
