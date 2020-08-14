@@ -35,9 +35,9 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "remind",
-  "author": "unhandledrejection",
-  "module": "dist/remind.esm.js",
+  "name": "remindjs",
+  "author": "luvsic3",
+  "module": "dist/remindjs.esm.js",
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@storybook/addon-actions": "^5.3.17",
