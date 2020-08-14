@@ -1,5 +1,5 @@
 import { TopicData } from 'xmind-model/types/models/topic';
-import { createStore, StateSelector } from 'relax-ts';
+import { createStore, StateSelector } from 'hisoka';
 import { topicWalker, normalizeTopicSide, createTopic } from '../utils/tree';
 import { ATTACHED_KEY } from '../constant';
 import { debug } from '../utils/debug';
@@ -42,7 +42,7 @@ export const initialState: IState = {
 
 const store = createStore({
   state: initialState,
-  reducers: {
+  actions: {
     APPEND_CHILD(state, payload: Payload) {
       const root = state.timeline[state.current];
       if (!payload.id || !payload.node) return;
@@ -107,7 +107,6 @@ const store = createStore({
       state.current = state.timeline.length - 1;
     },
   },
-  effects: {},
 });
 
 const originalDispatch = store.dispatch;

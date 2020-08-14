@@ -6,6 +6,10 @@ import {
   useCallback,
   useMemo,
   useContext,
+  memo,
+  useState,
+  MouseEvent,
+  TouchEvent,
 } from 'react';
 import Topic from './components/Topic';
 import {
@@ -41,21 +45,27 @@ const Mindmap = () => {
   const theme = useContext(ThemeContext);
   const { scale, translate } = editorState;
   const { mode, selectedNodeId } = editorState;
+  const id = `#topic-${selectedNodeId}`;
   const { canvasWidth, canvasHeight } = theme;
-  const mindMap = mindmap(root);
-  // move mindmap to canvas central positon
-  mindMap.eachNode(node => {
-    node.x += canvasWidth / 2 - TOPIC_HORIZENTAL_MARGIN;
-    node.y += canvasHeight / 2;
-  });
+  const mindMap = useMemo(() => {
+    const map = mindmap(root);
+    // move mindmap to canvas central positon
+    map.eachNode(node => {
+      node.x += canvasWidth / 2 - TOPIC_HORIZENTAL_MARGIN;
+      node.y += canvasHeight / 2;
+    });
+    return map;
+  }, [root, canvasWidth, canvasHeight]);
+
   const locale = useLocale();
   const editorRef = useRef<HTMLDivElement>(null);
   const hotkeyOptions = {
     element: editorRef.current,
   };
+  const [isDragging, setIsDragging] = useState(false);
+  const [lastTouchPosition, setLastTouchPosition] = useState([0, 0]);
   useIconFont();
 
-  const id = `#topic-${selectedNodeId}`;
   const topics: ReactElement[] = useMemo(() => {
     const nodes: ReactElement[] = [];
     mindMap.eachNode(node => {
@@ -203,6 +213,46 @@ const Mindmap = () => {
   }, []);
 
   debug('rootWithCoords', mindMap);
+
+  const handleDragStart = useCallback(() => {
+    setLastTouchPosition([0, 0]);
+    setIsDragging(true);
+  }, []);
+
+  const handleDrag = useCallback(
+    (e: MouseEvent) => {
+      if (!isDragging) return;
+      editorStore.dispatch('SET_TRANSLATE', [
+        translate[0] + e.movementX,
+        translate[1] + e.movementY,
+      ]);
+    },
+    [isDragging, translate]
+  );
+
+  const handleTouchDrag = useCallback(
+    (e: TouchEvent) => {
+      if (!isDragging) return;
+      const lastTouch = e.changedTouches[e.changedTouches.length - 1];
+      if (!lastTouchPosition[0] && !lastTouchPosition[1]) {
+        setLastTouchPosition([lastTouch.clientX, lastTouch.clientY]);
+        return;
+      }
+      const deltaX = lastTouch.clientX - lastTouchPosition[0];
+      const deltaY = lastTouch.clientY - lastTouchPosition[1];
+      editorStore.dispatch('SET_TRANSLATE', [
+        translate[0] + deltaX,
+        translate[1] + deltaY,
+      ]);
+      setLastTouchPosition([lastTouch.clientX, lastTouch.clientY]);
+    },
+    [isDragging, lastTouchPosition, translate]
+  );
+
+  const handleDragEnd = useCallback(() => {
+    setIsDragging(false);
+    setLastTouchPosition([0, 0]);
+  }, []);
   return (
     <div
       ref={editorRef}
@@ -215,6 +265,12 @@ const Mindmap = () => {
         height: ${canvasHeight}px;
         overflow: hidden;
       `}
+      onMouseDown={handleDragStart}
+      onTouchStart={handleDragStart}
+      onMouseMove={handleDrag}
+      onTouchMove={handleTouchDrag}
+      onMouseUp={handleDragEnd}
+      onTouchEnd={handleDragEnd}
     >
       <div
         id={CORE_EDITOR_ID}
@@ -245,7 +301,7 @@ const Mindmap = () => {
   );
 };
 
-export default Mindmap;
+export default memo(Mindmap);
 
 function throttle(fn: Function, wait: number) {
   let isCalled = false;
