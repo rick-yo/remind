@@ -1,5 +1,5 @@
 {
-  "version": "0.1.4",
+  "version": "0.2.0",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -35,9 +35,9 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "mindx",
-  "author": "unhandledrejection",
-  "module": "dist/mindx.esm.js",
+  "name": "remindjs",
+  "author": "luvsic3",
+  "module": "dist/remindjs.esm.js",
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@storybook/addon-actions": "^5.3.17",
