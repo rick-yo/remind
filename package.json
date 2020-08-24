@@ -43,7 +43,7 @@
     "@storybook/addon-actions": "^5.3.17",
     "@storybook/addon-docs": "^5.3.17",
     "@storybook/addon-info": "^5.3.17",
-    "@storybook/addon-links": "^5.3.17",
+    "@storybook/addon-links": "^6.0.16",
     "@storybook/addons": "^5.3.17",
     "@storybook/react": "^5.3.17",
     "@types/jest": "^26.0.4",
