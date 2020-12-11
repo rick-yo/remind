@@ -17,12 +17,12 @@ import {
 } from '../constant';
 import { css, jsx } from '@emotion/core';
 import { TopicData } from 'xmind-model/types/models/topic';
-import * as rootStore from '../store/root';
-import editorStore from '../store/editor';
 import { HierachyNode } from '@antv/hierarchy';
 import { getTopicFontsize } from '../layout/mindmap';
 import { topicWalker } from '../utils/tree';
 import { selectText } from '../utils/dom';
+import EditorStore from '../store/editor';
+import { RootStore, useRootSelector } from '../store/root';
 
 const Topic = (props: HierachyNode<TopicData>) => {
   const {
@@ -34,15 +34,17 @@ const Topic = (props: HierachyNode<TopicData>) => {
     vgap,
   } = props;
   const $theme = useContext(ThemeContext);
-  const editorState = editorStore.useSelector(s => s);
-  const { mode, selectedNodeId } = editorState;
+  const editorStore = EditorStore.useContainer();
+  const root = useRootSelector(s => s);
+  const rootStore = RootStore.useContainer();
+  const { mode, selectedNodeId } = editorStore;
   const isSelected = id === selectedNodeId;
   const isEditing = isSelected && mode === EDITOR_MODE.edit;
   const [isDragEntering, setIsDragEntering] = useState(false);
   const hasBorder = depth <= 1;
 
   function selectNode() {
-    editorStore.dispatch('SELECT_NODE', id);
+    editorStore.SELECT_NODE(id);
   }
 
   function exitEditMode(e: KeyboardEvent<HTMLDivElement>) {
@@ -50,8 +52,8 @@ const Topic = (props: HierachyNode<TopicData>) => {
       [KEY_MAPS.Enter, KEY_MAPS.Escape].includes(e.key) &&
       mode === EDITOR_MODE.edit
     ) {
-      editorStore.dispatch('SET_MODE', EDITOR_MODE.regular);
-      rootStore.dispatch('UPDATE_NODE', {
+      editorStore.SET_MODE(EDITOR_MODE.regular);
+      rootStore.UPDATE_NODE({
         id,
         node: {
           title: e.currentTarget.innerText,
@@ -64,13 +66,13 @@ const Topic = (props: HierachyNode<TopicData>) => {
 
   function handleDragStart(e: DragEvent) {
     // root node is not draggable
-    if (id === rootStore.getState().id) {
+    if (id === root.id) {
       e.preventDefault();
       return;
     }
     // setData dataTransfer to make drag and drop work in firefox
     e.dataTransfer.setData('text/plain', '');
-    editorStore.dispatch('DRAG_NODE', props.data);
+    editorStore.DRAG_NODE(props.data);
   }
   function handleDragEnter() {
     setIsDragEntering(true);
@@ -80,17 +82,17 @@ const Topic = (props: HierachyNode<TopicData>) => {
   }
 
   function handleDrop() {
-    if (!editorState.dragingNode) return;
-    if (editorState.dragingNode.id === id) return;
+    if (!editorStore.dragingNode) return;
+    if (editorStore.dragingNode.id === id) return;
     // should not drop topic to it's descendants
-    const descendants = topicWalker.getDescendants(editorState.dragingNode);
+    const descendants = topicWalker.getDescendants(editorStore.dragingNode);
     if (descendants.some(node => node.id === id)) {
       return;
     }
-    rootStore.dispatch('DELETE_NODE', editorState.dragingNode?.id);
-    rootStore.dispatch('APPEND_CHILD', {
+    rootStore.DELETE_NODE(editorStore.dragingNode?.id);
+    rootStore.APPEND_CHILD({
       id,
-      node: editorState.dragingNode,
+      node: editorStore.dragingNode,
     });
     handleDragLeave();
   }
@@ -118,7 +120,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
     const el = e.target as HTMLDivElement;
     el?.focus();
     selectText(el);
-    editorStore.dispatch('SET_MODE', EDITOR_MODE.edit);
+    editorStore.SET_MODE(EDITOR_MODE.edit);
   }
 
   const padding = `${vgap}px ${hgap}px`;

@@ -1,11 +1,11 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import { EDITOR_ID } from '../constant';
-import editorStore from '../store/editor';
 import { memo } from 'react';
+import EditorStore from '../store/editor';
 
 const Toolbar = () => {
-  const scale = editorStore.useSelector(s => s.scale);
+  const { scale, SET_SCALE, SET_TRANSLATE } = EditorStore.useContainer();
   function requestFullScreen() {
     document.querySelector(`#${EDITOR_ID}`)?.requestFullscreen();
   }
@@ -29,17 +29,17 @@ const Toolbar = () => {
       <i
         className="iconfont icon-location"
         onClick={() => {
-          editorStore.dispatch('SET_SCALE', 1);
-          editorStore.dispatch('SET_TRANSLATE', [0, 0]);
+          SET_SCALE(1);
+          SET_TRANSLATE([0, 0]);
         }}
       ></i>
       <i
         className="iconfont icon-subtract"
-        onClick={() => editorStore.dispatch('SET_SCALE', scale * 0.8)}
+        onClick={() => SET_SCALE(scale * 0.8)}
       ></i>
       <i
         className="iconfont icon-plus"
-        onClick={() => editorStore.dispatch('SET_SCALE', scale * 1.2)}
+        onClick={() => SET_SCALE(scale * 1.2)}
       ></i>
     </div>
   );
