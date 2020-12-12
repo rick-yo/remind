@@ -29,7 +29,7 @@ function EnhancedMindMap({
   return (
     <EditorStore.Provider
       initialState={{
-        readonly: readonly,
+        readonly,
       }}
     >
       <RootStoreProvider

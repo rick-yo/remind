@@ -1,12 +1,11 @@
 import { TopicData } from 'xmind-model/types/models/topic';
 import { topicWalker, normalizeTopicSide, createTopic } from '../utils/tree';
 import { ATTACHED_KEY } from '../constant';
-import { debug } from '../utils/debug';
-import editorStore from './editor';
+import EditorStore from './editor';
 import produce from 'immer';
 import { MindmapProps } from '../index';
 import { useState } from 'react';
-import { createContainer, useContainer } from 'unstated-next';
+import { createContainer } from 'unstated-next';
 
 type IState = {
   timeline: TopicData[];
@@ -22,7 +21,7 @@ type Payload = {
 
 const UNDO_HISTORY = 'UNDO_HISTORY';
 const REDO_HISTORY = 'REDO_HISTORY';
-const SAVE_HISTORY = 'SAVE_HISTORY';
+// const SAVE_HISTORY = 'SAVE_HISTORY';
 const APPEND_CHILD = 'APPEND_CHILD';
 const DELETE_NODE = 'DELETE_NODE';
 const UPDATE_NODE = 'UPDATE_NODE';
@@ -46,31 +45,22 @@ export const defaultState: IState = {
 
 function useRoot(initialState: Partial<IState> = {}) {
   const [state, setState] = useState({ ...defaultState, ...initialState });
+  const editorStore = EditorStore.useContainer();
 
-  const UNDO_HISTORY = () => {
-    setState(prevState => ({
-      ...prevState,
-      current: Math.max(0, state.current - 1),
-    }));
-  };
-  const REDO_HISTORY = () => {
-    setState(prevState => ({
-      ...prevState,
-      current: Math.min(state.timeline.length - 1, state.current + 1),
-    }));
-  };
-  const SAVE_HISTORY = (draftState: IState, newRoot: TopicData) => {
+  const SAVE_HISTORY = (draftState: IState, lastRoot: TopicData) => {
     const { timeline, current } = draftState;
     draftState.timeline = timeline.slice(0, current + 1);
-    draftState.timeline.push(newRoot);
+    draftState.timeline.push(lastRoot);
     draftState.current = draftState.timeline.length - 1;
   };
   return {
     ...state,
     [APPEND_CHILD](payload: Payload) {
+      const lastRoot = getClonedRoot(state);
       const nextState = produce(state, draftState => {
-        const root = draftState.timeline[draftState.current];
         if (!payload.id || !payload.node) return;
+        SAVE_HISTORY(draftState, lastRoot);
+        const root = draftState.timeline[draftState.current];
         const parentNode = topicWalker.getNode(root, payload.id);
         if (!parentNode) return;
         parentNode.children = parentNode.children || {
@@ -93,13 +83,14 @@ function useRoot(initialState: Partial<IState> = {}) {
         parentNode.children[ATTACHED_KEY] =
           parentNode.children[ATTACHED_KEY] || [];
         parentNode.children[ATTACHED_KEY].push(payload.node);
-        SAVE_HISTORY(draftState, root);
       });
       setState(nextState);
     },
     [DELETE_NODE](id: string) {
       if (!id) return;
+      const lastRoot = getClonedRoot(state);
       const nextState = produce(state, draftState => {
+        SAVE_HISTORY(draftState, lastRoot);
         const root = draftState.timeline[draftState.current];
         const parentNode = topicWalker.getParentNode(root, id);
         if (parentNode && parentNode.children) {
@@ -114,25 +105,39 @@ function useRoot(initialState: Partial<IState> = {}) {
             children[previouseIndex - 1] ||
             children[previouseIndex + 1];
           const selectedNode = sibling || parentNode;
-          // editorStore.dispatch('SELECT_NODE', selectedNode.id);
+          editorStore.SELECT_NODE(selectedNode.id);
         }
-        SAVE_HISTORY(draftState, root);
       });
       setState(nextState);
     },
     [UPDATE_NODE](payload: { id: string; node: Partial<TopicData> }) {
       if (!payload.id) return;
+      const lastRoot = getClonedRoot(state);
       const nextState = produce(state, draftState => {
+        SAVE_HISTORY(draftState, lastRoot);
         const root = draftState.timeline[draftState.current];
         const currentNode = topicWalker.getNode(root, payload.id);
         currentNode && Object.assign(currentNode, payload.node);
-        SAVE_HISTORY(draftState, root);
       });
       setState(nextState);
     },
-    UNDO_HISTORY,
-    REDO_HISTORY,
+    [UNDO_HISTORY]() {
+      setState(prevState => ({
+        ...prevState,
+        current: Math.max(0, prevState.current - 1),
+      }));
+    },
+    [REDO_HISTORY]() {
+      setState(prevState => ({
+        ...prevState,
+        current: Math.min(prevState.timeline.length - 1, prevState.current + 1),
+      }));
+    },
   };
+}
+
+function getClonedRoot(state: IState) {
+  return JSON.parse(JSON.stringify(state.timeline[state.current]));
 }
 
 const RootStore = createContainer(useRoot);
