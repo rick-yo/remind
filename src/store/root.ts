@@ -1,5 +1,10 @@
 import { TopicData } from 'xmind-model/types/models/topic';
-import { topicWalker, normalizeTopicSide, createTopic } from '../utils/tree';
+import {
+  topicWalker,
+  normalizeTopicSide,
+  createTopic,
+  removeChild,
+} from '../utils/tree';
 import { ATTACHED_KEY } from '../constant';
 import EditorStore from './editor';
 import produce from 'immer';
@@ -12,11 +17,6 @@ type IState = {
   current: number;
   onChange: MindmapProps['onChange'];
   readonly: boolean;
-};
-
-type Payload = {
-  id: string;
-  node: TopicData;
 };
 
 const UNDO_HISTORY = 'UNDO_HISTORY';
@@ -60,13 +60,19 @@ function useRoot(initialState: Partial<IState> = {}) {
 
   return {
     ...state,
-    [APPEND_CHILD](payload: Payload) {
+    [APPEND_CHILD](parentId: string, node: TopicData) {
       const lastRoot = getClonedRoot(state);
       const nextState = produce(state, draftState => {
-        if (!payload.id || !payload.node) return;
+        if (!parentId || !node) return;
         SAVE_HISTORY(draftState, lastRoot);
         const root = draftState.timeline[draftState.current];
-        const parentNode = topicWalker.getNode(root, payload.id);
+        const isNodeConnected = topicWalker.getNode(root, node.id);
+        // if node already exist in node tree, delete it from it's old parent first
+        if (isNodeConnected) {
+          const prevParentNode = topicWalker.getParentNode(root, node.id);
+          prevParentNode && removeChild(prevParentNode, node.id);
+        }
+        const parentNode = topicWalker.getNode(root, parentId);
         if (!parentNode) return;
         parentNode.children = parentNode.children || {
           [ATTACHED_KEY]: [],
@@ -76,18 +82,18 @@ function useRoot(initialState: Partial<IState> = {}) {
             node => node.side === 'left'
           );
           if (parentNode.children[ATTACHED_KEY].length / 2 > leftNodes.length) {
-            payload.node = produce(payload.node, draft => {
+            node = produce(node, draft => {
               draft.side = 'left';
             });
           } else {
-            payload.node = produce(payload.node, draft => {
+            node = produce(node, draft => {
               draft.side = 'right';
             });
           }
         }
         parentNode.children[ATTACHED_KEY] =
           parentNode.children[ATTACHED_KEY] || [];
-        parentNode.children[ATTACHED_KEY].push(payload.node);
+        parentNode.children[ATTACHED_KEY].push(node);
       });
       setState(nextState);
     },
@@ -99,30 +105,30 @@ function useRoot(initialState: Partial<IState> = {}) {
         const root = draftState.timeline[draftState.current];
         const parentNode = topicWalker.getParentNode(root, id);
         if (parentNode && parentNode.children) {
-          const previouseIndex = parentNode.children[ATTACHED_KEY].findIndex(
+          const children = parentNode.children[ATTACHED_KEY];
+          const deleteNodeIndex = children.findIndex(
             (item: TopicData) => item.id === id
           );
-          const children = parentNode.children[ATTACHED_KEY];
-          children.splice(previouseIndex, 1);
+          removeChild(parentNode, id);
           // when deleted a node, select deleted node's sibing or parent
           const sibling =
-            children[previouseIndex] ||
-            children[previouseIndex - 1] ||
-            children[previouseIndex + 1];
+            children[deleteNodeIndex] ||
+            children[deleteNodeIndex - 1] ||
+            children[deleteNodeIndex + 1];
           const selectedNode = sibling || parentNode;
           editorStore.SELECT_NODE(selectedNode.id);
         }
       });
       setState(nextState);
     },
-    [UPDATE_NODE](payload: { id: string; node: Partial<TopicData> }) {
-      if (!payload.id) return;
+    [UPDATE_NODE](id: string, node: Partial<TopicData>) {
+      if (!id) return;
       const lastRoot = getClonedRoot(state);
       const nextState = produce(state, draftState => {
         SAVE_HISTORY(draftState, lastRoot);
         const root = draftState.timeline[draftState.current];
-        const currentNode = topicWalker.getNode(root, payload.id);
-        currentNode && Object.assign(currentNode, payload.node);
+        const currentNode = topicWalker.getNode(root, id);
+        currentNode && Object.assign(currentNode, node);
       });
       setState(nextState);
     },

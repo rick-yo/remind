@@ -31,9 +31,9 @@ export const defaultState: IState = {
 
 function useEditor(initialState: Partial<IState> = {}) {
   const [state, setState] = useState({ ...defaultState, ...initialState });
-  function SET_MODE(payload: EDITOR_MODE) {
+  function SET_MODE(mode: EDITOR_MODE) {
     if (state.readonly) return;
-    state.mode = payload;
+    setState(prevState => ({ ...prevState, mode }));
   }
   function SELECT_NODE(payload: string) {
     setState(prevState => ({ ...prevState, selectedNodeId: payload }));

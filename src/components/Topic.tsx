@@ -53,11 +53,8 @@ const Topic = (props: HierachyNode<TopicData>) => {
       mode === EDITOR_MODE.edit
     ) {
       editorStore.SET_MODE(EDITOR_MODE.regular);
-      rootStore.UPDATE_NODE({
-        id,
-        node: {
-          title: e.currentTarget.innerText,
-        },
+      rootStore.UPDATE_NODE(id, {
+        title: e.currentTarget.innerText,
       });
       // fix selection exit after exit edit mode on firefox
       getSelection()?.removeAllRanges();
@@ -89,11 +86,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
     if (descendants.some(node => node.id === id)) {
       return;
     }
-    rootStore.DELETE_NODE(editorStore.dragingNode?.id);
-    rootStore.APPEND_CHILD({
-      id,
-      node: editorStore.dragingNode,
-    });
+    rootStore.APPEND_CHILD(id, editorStore.dragingNode);
     handleDragLeave();
   }
 

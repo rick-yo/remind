@@ -44,8 +44,7 @@ const Mindmap = () => {
   const rootStore = RootStore.useContainer();
   const editorStore = EditorStore.useContainer();
   const theme = useContext(ThemeContext);
-  const { scale, translate } = editorStore;
-  const { mode, selectedNodeId } = editorStore;
+  const { scale, translate, mode, selectedNodeId } = editorStore;
   const id = `#topic-${selectedNodeId}`;
   const { canvasWidth, canvasHeight } = theme;
   const mindMap = useMemo(() => {
@@ -80,10 +79,7 @@ const Mindmap = () => {
     function appendChild(e: KeyboardEvent) {
       e.preventDefault();
       if (!selectedNodeId) return;
-      rootStore.APPEND_CHILD({
-        id: selectedNodeId,
-        node: createTopic(locale.subTopic),
-      });
+      rootStore.APPEND_CHILD(selectedNodeId, createTopic(locale.subTopic));
     }
 
     function editTopic(e: KeyboardEvent) {
@@ -178,11 +174,8 @@ const Mindmap = () => {
       if (!selectedNodeId) return;
       editorStore.SET_MODE(EDITOR_MODE.regular);
       const el = document.querySelector<HTMLDivElement>(id);
-      rootStore.UPDATE_NODE({
-        id: selectedNodeId,
-        node: {
-          title: el?.innerText,
-        },
+      rootStore.UPDATE_NODE(selectedNodeId, {
+        title: el?.innerText,
       });
     },
     [mode, selectedNodeId, editorStore]
@@ -219,9 +212,9 @@ const Mindmap = () => {
     setTimeout(() => {
       editorStore.SELECT_NODE(root.id);
     }, 200);
-  }, [editorStore, root.id]);
+  }, [root.id]);
 
-  debug('rootWithCoords', mindMap);
+  debug('rootStore', rootStore);
 
   const handleDragStart = useCallback(() => {
     setLastTouchPosition([0, 0]);

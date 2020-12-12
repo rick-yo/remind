@@ -180,6 +180,14 @@ export function getBottomNode(
   return getClosedNode(array, currentNode);
 }
 
+export function removeChild(parentNode: TopicData, id: string) {
+  if (parentNode.children?.attached) {
+    parentNode.children.attached = parentNode.children.attached.filter(
+      item => item.id !== id
+    );
+  }
+}
+
 export function createTopic(title: string, options: Partial<TopicData> = {}) {
   const topic: TopicData = {
     ...options,
