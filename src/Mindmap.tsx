@@ -23,8 +23,8 @@ import {
 } from './constant';
 import mindmap from './layout/mindmap';
 import Links from './components/Links';
-import * as rootStore from './store/root';
-import editorStore from './store/editor';
+import { useRootSelector, RootStore } from './store/root';
+import EditorStore from './store/editor';
 import hotkeys from 'hotkeys-js';
 import { createTopic } from './utils/tree';
 import { debug } from './utils/debug';
@@ -40,11 +40,12 @@ import { useLocale } from './context/locale';
 import { ThemeContext } from './context/theme';
 
 const Mindmap = () => {
-  const root = rootStore.useSelector(s => s);
-  const editorState = editorStore.useSelector(s => s);
+  const root = useRootSelector(s => s);
+  const rootStore = RootStore.useContainer();
+  const editorStore = EditorStore.useContainer();
   const theme = useContext(ThemeContext);
-  const { scale, translate } = editorState;
-  const { mode, selectedNodeId } = editorState;
+  const { scale, translate } = editorStore;
+  const { mode, selectedNodeId } = editorStore;
   const id = `#topic-${selectedNodeId}`;
   const { canvasWidth, canvasHeight } = theme;
   const mindMap = useMemo(() => {
@@ -79,7 +80,7 @@ const Mindmap = () => {
     function appendChild(e: KeyboardEvent) {
       e.preventDefault();
       if (!selectedNodeId) return;
-      rootStore.dispatch('APPEND_CHILD', {
+      rootStore.APPEND_CHILD({
         id: selectedNodeId,
         node: createTopic(locale.subTopic),
       });
@@ -91,11 +92,11 @@ const Mindmap = () => {
       const el = document.querySelector<HTMLDivElement>(id);
       el?.focus();
       selectText(el as HTMLDivElement);
-      editorStore.dispatch('SET_MODE', EDITOR_MODE.edit);
+      editorStore.SET_MODE(EDITOR_MODE.edit);
     }
 
     function deleteNode() {
-      rootStore.dispatch('DELETE_NODE', selectedNodeId);
+      rootStore.DELETE_NODE(selectedNodeId);
     }
 
     if (mode === EDITOR_MODE.regular) {
@@ -108,25 +109,33 @@ const Mindmap = () => {
       hotkeys.unbind(HOTKEYS.space, editTopic);
       hotkeys.unbind(HOTKEYS.backspace, deleteNode);
     };
-  }, [mode, selectedNodeId, id, locale.subTopic, hotkeyOptions]);
+  }, [
+    mode,
+    selectedNodeId,
+    id,
+    locale.subTopic,
+    hotkeyOptions,
+    rootStore,
+    editorStore,
+  ]);
 
   // regular mode, bind navigate shortcut
   useEffect(() => {
     function moveTop(e: KeyboardEvent) {
       e.preventDefault();
-      editorStore.dispatch('MOVE_TOP', mindMap);
+      editorStore.MOVE_TOP(mindMap);
     }
     function moveDown(e: KeyboardEvent) {
       e.preventDefault();
-      editorStore.dispatch('MOVE_DOWN', mindMap);
+      editorStore.MOVE_DOWN(mindMap);
     }
     function moveLeft(e: KeyboardEvent) {
       e.preventDefault();
-      editorStore.dispatch('MOVE_LEFT', mindMap);
+      editorStore.MOVE_LEFT(mindMap);
     }
     function moveRight(e: KeyboardEvent) {
       e.preventDefault();
-      editorStore.dispatch('MOVE_RIGHT', mindMap);
+      editorStore.MOVE_RIGHT(mindMap);
     }
     if (mode === EDITOR_MODE.regular) {
       hotkeys(HOTKEYS.left, hotkeyOptions, moveLeft);
@@ -140,16 +149,16 @@ const Mindmap = () => {
       hotkeys.unbind(HOTKEYS.up, moveTop);
       hotkeys.unbind(HOTKEYS.down, moveDown);
     };
-  }, [mindMap, hotkeyOptions, mode]);
+  }, [mindMap, hotkeyOptions, mode, editorStore]);
 
   // regular mode, bind undo redo shortcut
   useEffect(() => {
     function undo() {
-      rootStore.dispatch('UNDO_HISTORY');
+      rootStore.UNDO_HISTORY();
     }
 
     function redo() {
-      rootStore.dispatch('REDO_HISTORY');
+      rootStore.REDO_HISTORY();
     }
     if (mode === EDITOR_MODE.regular) {
       hotkeys(HOTKEYS.undo, hotkeyOptions, undo);
@@ -159,7 +168,7 @@ const Mindmap = () => {
       hotkeys.unbind(HOTKEYS.undo, undo);
       hotkeys.unbind(HOTKEYS.redo, redo);
     };
-  }, [hotkeyOptions, mode]);
+  }, [hotkeyOptions, mode, rootStore]);
 
   // edit mode
   useClickOutSide(
@@ -167,16 +176,16 @@ const Mindmap = () => {
     () => {
       if (mode !== EDITOR_MODE.edit) return;
       if (!selectedNodeId) return;
-      editorStore.dispatch('SET_MODE', EDITOR_MODE.regular);
+      editorStore.SET_MODE(EDITOR_MODE.regular);
       const el = document.querySelector<HTMLDivElement>(id);
-      rootStore.dispatch('UPDATE_NODE', {
+      rootStore.UPDATE_NODE({
         id: selectedNodeId,
         node: {
           title: el?.innerText,
         },
       });
     },
-    [mode, selectedNodeId]
+    [mode, selectedNodeId, editorStore]
   );
 
   useClickOutSide(
@@ -186,21 +195,21 @@ const Mindmap = () => {
       // @ts-ignore
       const isTopic = e.target?.closest(`.${TOPIC_CLASS}`);
       if (isTopic) return;
-      editorStore.dispatch('SELECT_NODE', '');
+      editorStore.SELECT_NODE('');
     },
-    [selectedNodeId]
+    [selectedNodeId, editorStore]
   );
 
   const handleWheel = useCallback(
     throttle((e: WheelEvent) => {
       e.stopPropagation();
       e.preventDefault();
-      editorStore.dispatch('SET_TRANSLATE', [
+      editorStore.SET_TRANSLATE([
         translate[0] - e.deltaX,
         translate[1] - e.deltaY,
       ]);
     }, 30),
-    [translate]
+    [translate, editorStore]
   );
 
   usePassiveWheelEvent(editorRef, handleWheel);
@@ -208,9 +217,9 @@ const Mindmap = () => {
   // select root topic after initial render
   useEffect(() => {
     setTimeout(() => {
-      editorStore.dispatch('SELECT_NODE', rootStore.getState().id);
+      editorStore.SELECT_NODE(root.id);
     }, 200);
-  }, []);
+  }, [editorStore, root.id]);
 
   debug('rootWithCoords', mindMap);
 
@@ -222,12 +231,12 @@ const Mindmap = () => {
   const handleDrag = useCallback(
     (e: MouseEvent) => {
       if (!isDragging) return;
-      editorStore.dispatch('SET_TRANSLATE', [
+      editorStore.SET_TRANSLATE([
         translate[0] + e.movementX,
         translate[1] + e.movementY,
       ]);
     },
-    [isDragging, translate]
+    [isDragging, translate, editorStore]
   );
 
   const handleTouchDrag = useCallback(
@@ -240,13 +249,10 @@ const Mindmap = () => {
       }
       const deltaX = lastTouch.clientX - lastTouchPosition[0];
       const deltaY = lastTouch.clientY - lastTouchPosition[1];
-      editorStore.dispatch('SET_TRANSLATE', [
-        translate[0] + deltaX,
-        translate[1] + deltaY,
-      ]);
+      editorStore.SET_TRANSLATE([translate[0] + deltaX, translate[1] + deltaY]);
       setLastTouchPosition([lastTouch.clientX, lastTouch.clientY]);
     },
-    [isDragging, lastTouchPosition, translate]
+    [isDragging, lastTouchPosition, translate, editorStore]
   );
 
   const handleDragEnd = useCallback(() => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import Mindmap from './Mindmap';
-import { Provider, defaultRoot } from './store/root';
+import { defaultRoot, RootStoreProvider } from './store/root';
 import EditorStore from './store/editor';
 import { ThemeContext, defaultTheme, Theme } from './context/theme';
 import { defaultLocale } from './context/locale';
@@ -29,13 +29,11 @@ function EnhancedMindMap({
   return (
     <EditorStore.Provider
       initialState={{
-        ...EditorStore.getState(),
-        readonly: readonly,
+        readonly,
       }}
     >
-      <Provider
+      <RootStoreProvider
         initialState={{
-          current: 0,
           timeline: [rootWithSide],
           onChange,
           readonly,
@@ -51,7 +49,7 @@ function EnhancedMindMap({
             <Mindmap></Mindmap>
           </LocaleContext.Provider>
         </ThemeContext.Provider>
-      </Provider>
+      </RootStoreProvider>
     </EditorStore.Provider>
   );
 }
