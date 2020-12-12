@@ -8,7 +8,7 @@ Remind is a free, open source mindmap editor based on React.
 
 ![](./illustrate.jpg)
 
-Try it on https://mindx.applet.ink
+Try it on https://remind.applet.ink
 
 ## Status
 
