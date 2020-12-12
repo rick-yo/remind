@@ -109,7 +109,15 @@ const Mindmap = () => {
       hotkeys.unbind(HOTKEYS.space, editTopic);
       hotkeys.unbind(HOTKEYS.backspace, deleteNode);
     };
-  }, [mode, selectedNodeId, id, locale.subTopic, hotkeyOptions]);
+  }, [
+    mode,
+    selectedNodeId,
+    id,
+    locale.subTopic,
+    hotkeyOptions,
+    rootStore,
+    editorStore,
+  ]);
 
   // regular mode, bind navigate shortcut
   useEffect(() => {
@@ -141,7 +149,7 @@ const Mindmap = () => {
       hotkeys.unbind(HOTKEYS.up, moveTop);
       hotkeys.unbind(HOTKEYS.down, moveDown);
     };
-  }, [mindMap, hotkeyOptions, mode]);
+  }, [mindMap, hotkeyOptions, mode, editorStore]);
 
   // regular mode, bind undo redo shortcut
   useEffect(() => {
@@ -160,7 +168,7 @@ const Mindmap = () => {
       hotkeys.unbind(HOTKEYS.undo, undo);
       hotkeys.unbind(HOTKEYS.redo, redo);
     };
-  }, [hotkeyOptions, mode]);
+  }, [hotkeyOptions, mode, rootStore]);
 
   // edit mode
   useClickOutSide(
@@ -177,7 +185,7 @@ const Mindmap = () => {
         },
       });
     },
-    [mode, selectedNodeId]
+    [mode, selectedNodeId, editorStore]
   );
 
   useClickOutSide(
@@ -189,7 +197,7 @@ const Mindmap = () => {
       if (isTopic) return;
       editorStore.SELECT_NODE('');
     },
-    [selectedNodeId]
+    [selectedNodeId, editorStore]
   );
 
   const handleWheel = useCallback(
@@ -201,7 +209,7 @@ const Mindmap = () => {
         translate[1] - e.deltaY,
       ]);
     }, 30),
-    [translate]
+    [translate, editorStore]
   );
 
   usePassiveWheelEvent(editorRef, handleWheel);
@@ -211,7 +219,7 @@ const Mindmap = () => {
     setTimeout(() => {
       editorStore.SELECT_NODE(root.id);
     }, 200);
-  }, []);
+  }, [editorStore, root.id]);
 
   debug('rootWithCoords', mindMap);
 
@@ -228,7 +236,7 @@ const Mindmap = () => {
         translate[1] + e.movementY,
       ]);
     },
-    [isDragging, translate]
+    [isDragging, translate, editorStore]
   );
 
   const handleTouchDrag = useCallback(
@@ -244,7 +252,7 @@ const Mindmap = () => {
       editorStore.SET_TRANSLATE([translate[0] + deltaX, translate[1] + deltaY]);
       setLastTouchPosition([lastTouch.clientX, lastTouch.clientY]);
     },
-    [isDragging, lastTouchPosition, translate]
+    [isDragging, lastTouchPosition, translate, editorStore]
   );
 
   const handleDragEnd = useCallback(() => {

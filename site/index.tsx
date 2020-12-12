@@ -4,6 +4,7 @@ import * as ReactDOM from 'react-dom';
 import { Mindmap } from '../src';
 import { TopicData } from 'xmind-model/types/models/topic';
 import { createTopic } from '../src/utils/tree';
+import useLocalStorageState from './useLocalStorageState';
 
 const defaultRoot: TopicData = {
   ...createTopic('How to use Remind 🤔'),
@@ -53,12 +54,8 @@ const defaultRoot: TopicData = {
 
 const App = () => {
   const id = 'remind-state-storage';
-  const [mindState, setMindState] = React.useState<TopicData | undefined>(
-    defaultRoot
-  );
-  function onChange(root: TopicData) {
-    localStorage.setItem(id, JSON.stringify(root));
-  }
+  const [mindState, setMindState] = useLocalStorageState(id, defaultRoot)
+  
   React.useEffect(() => {
     try {
       const storage = localStorage.getItem(id);
@@ -71,7 +68,7 @@ const App = () => {
   }, []);
   return (
     <div>
-      <Mindmap value={mindState} onChange={onChange} />
+      <Mindmap value={mindState} onChange={setMindState} />
     </div>
   );
 };

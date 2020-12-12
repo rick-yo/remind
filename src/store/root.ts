@@ -4,7 +4,7 @@ import { ATTACHED_KEY } from '../constant';
 import EditorStore from './editor';
 import produce from 'immer';
 import { MindmapProps } from '../index';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createContainer } from 'unstated-next';
 
 type IState = {
@@ -53,6 +53,11 @@ function useRoot(initialState: Partial<IState> = {}) {
     draftState.timeline.push(lastRoot);
     draftState.current = draftState.timeline.length - 1;
   };
+
+  useEffect(() => {
+    state.onChange?.(getClonedRoot(state));
+  }, [state]);
+
   return {
     ...state,
     [APPEND_CHILD](payload: Payload) {
