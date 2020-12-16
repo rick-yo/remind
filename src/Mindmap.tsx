@@ -194,14 +194,14 @@ const Mindmap = () => {
   );
 
   const handleWheel = useCallback(
-    throttle((e: WheelEvent) => {
+    (e: WheelEvent) => {
       e.stopPropagation();
       e.preventDefault();
       editorStore.SET_TRANSLATE([
         translate[0] - e.deltaX,
         translate[1] - e.deltaY,
       ]);
-    }, 30),
+    },
     [translate, editorStore]
   );
 
@@ -282,8 +282,8 @@ const Mindmap = () => {
         `}
       >
         <svg
-          width={canvasWidth / scale}
-          height={canvasHeight / scale}
+          width={10000}
+          height={10000}
           xmlns="http://www.w3.org/2000/svg"
           css={css`
             position: absolute;
@@ -301,17 +301,3 @@ const Mindmap = () => {
 };
 
 export default memo(Mindmap);
-
-function throttle(fn: Function, wait: number) {
-  let isCalled = false;
-
-  return function(...args: any[]) {
-    if (!isCalled) {
-      fn(...args);
-      isCalled = true;
-      setTimeout(function() {
-        isCalled = false;
-      }, wait);
-    }
-  };
-}

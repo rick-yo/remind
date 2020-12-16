@@ -41,7 +41,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
   const isSelected = id === selectedNodeId;
   const isEditing = isSelected && mode === EDITOR_MODE.edit;
   const [isDragEntering, setIsDragEntering] = useState(false);
-  const hasBorder = depth <= 1;
+  const isMainTopic = depth <= 1;
 
   function selectNode() {
     editorStore.SELECT_NODE(id);
@@ -100,7 +100,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
   }
   const outline =
     isSelected || isDragEntering ? `2px solid ${$theme.mainColor}` : 'none';
-  const background = hasBorder ? '#fff' : 'transparent';
+  const background = isMainTopic || isEditing ? '#fff' : 'transparent';
 
   // preventDefault to prevent enter keyboard event create new html element
   function handleKeyDown(e: KeyboardEvent<HTMLDivElement>) {

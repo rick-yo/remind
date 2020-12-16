@@ -35,8 +35,8 @@ function useEditor(initialState: Partial<IState> = {}) {
     if (state.readonly) return;
     setState(prevState => ({ ...prevState, mode }));
   }
-  function SELECT_NODE(payload: string) {
-    setState(prevState => ({ ...prevState, selectedNodeId: payload }));
+  function SELECT_NODE(selectedNodeId: string) {
+    setState(prevState => ({ ...prevState, selectedNodeId }));
   }
   function DRAG_NODE(payload: TopicData | null) {
     // remove TopicData's depth、side

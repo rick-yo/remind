@@ -105,16 +105,11 @@ function useRoot(initialState: Partial<IState> = {}) {
         const root = draftState.timeline[draftState.current];
         const parentNode = topicWalker.getParentNode(root, id);
         if (parentNode && parentNode.children) {
-          const children = parentNode.children[ATTACHED_KEY];
-          const deleteNodeIndex = children.findIndex(
-            (item: TopicData) => item.id === id
-          );
-          removeChild(parentNode, id);
           // when deleted a node, select deleted node's sibing or parent
           const sibling =
-            children[deleteNodeIndex] ||
-            children[deleteNodeIndex - 1] ||
-            children[deleteNodeIndex + 1];
+            topicWalker.getPreviousNode(root, id) ||
+            topicWalker.getNextNode(root, id);
+          removeChild(parentNode, id);
           const selectedNode = sibling || parentNode;
           editorStore.SELECT_NODE(selectedNode.id);
         }

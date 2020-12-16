@@ -88,7 +88,7 @@ export const defaultWalker = new TreeWalker<HierachyNodeWithTopicData>(
   defaultChildren
 );
 export const topicWalker = new TreeWalker<TopicData>(
-  node => node.children?.attached
+  node => node?.children?.attached
 );
 
 function getDistance(
