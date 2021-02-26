@@ -61,6 +61,7 @@ function useRoot(initialState: Partial<IState> = {}) {
   return {
     ...state,
     [APPEND_CHILD](parentId: string, node: TopicData) {
+      if (state.readonly) return;
       const lastRoot = getClonedRoot(state);
       const nextState = produce(state, draftState => {
         if (!parentId || !node) return;
@@ -99,6 +100,7 @@ function useRoot(initialState: Partial<IState> = {}) {
     },
     [DELETE_NODE](id: string) {
       if (!id) return;
+      if (state.readonly) return;
       const lastRoot = getClonedRoot(state);
       const nextState = produce(state, draftState => {
         SAVE_HISTORY(draftState, lastRoot);
@@ -118,6 +120,7 @@ function useRoot(initialState: Partial<IState> = {}) {
     },
     [UPDATE_NODE](id: string, node: Partial<TopicData>) {
       if (!id) return;
+      if (state.readonly) return;
       const lastRoot = getClonedRoot(state);
       const nextState = produce(state, draftState => {
         SAVE_HISTORY(draftState, lastRoot);
