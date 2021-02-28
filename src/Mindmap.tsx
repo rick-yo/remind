@@ -34,7 +34,7 @@ import {
   useClickOutSide,
   usePassiveWheelEvent,
 } from './utils/dom';
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import Toolbar from './components/Toolbar';
 import { useLocale } from './context/locale';
 import { ThemeContext } from './context/theme';

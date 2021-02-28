@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/react';
 import { EDITOR_ID } from '../constant';
 import { memo } from 'react';
 import EditorStore from '../store/editor';
