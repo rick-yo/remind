@@ -7,7 +7,7 @@ function selectText(el?: HTMLElement) {
     const selection = window.getSelection();
     if (selection?.toString() === '') {
       //no text selection
-      setTimeout(function() {
+      setTimeout(function () {
         const range = document.createRange(); //range object
         range.selectNodeContents(el); //sets Range
         selection.removeAllRanges(); //remove all ranges from selection

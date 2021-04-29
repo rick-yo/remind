@@ -35,7 +35,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
   } = props;
   const $theme = useContext(ThemeContext);
   const editorStore = EditorStore.useContainer();
-  const root = useRootSelector(s => s);
+  const root = useRootSelector((s) => s);
   const rootStore = RootStore.useContainer();
   const { mode, selectedNodeId } = editorStore;
   const isSelected = id === selectedNodeId;
@@ -83,7 +83,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
     if (editorStore.dragingNode.id === id) return;
     // should not drop topic to it's descendants
     const descendants = topicWalker.getDescendants(editorStore.dragingNode);
-    if (descendants.some(node => node.id === id)) {
+    if (descendants.some((node) => node.id === id)) {
       return;
     }
     rootStore.APPEND_CHILD(id, editorStore.dragingNode);
@@ -134,8 +134,8 @@ const Topic = (props: HierachyNode<TopicData>) => {
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       // stopPropagation to prevent invoke Mindmap's event
-      onMouseDown={e => e.stopPropagation()}
-      onTouchStart={e => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+      onTouchStart={(e) => e.stopPropagation()}
       css={css`
         display: inline-block;
         border-radius: ${TOPIC_RADIUS}px;

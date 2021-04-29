@@ -40,7 +40,7 @@ import { useLocale } from './context/locale';
 import { ThemeContext } from './context/theme';
 
 const Mindmap = () => {
-  const root = useRootSelector(s => s);
+  const root = useRootSelector((s) => s);
   const rootStore = RootStore.useContainer();
   const editorStore = EditorStore.useContainer();
   const theme = useContext(ThemeContext);
@@ -50,7 +50,7 @@ const Mindmap = () => {
   const mindMap = useMemo(() => {
     const map = mindmap(root);
     // move mindmap to canvas central positon
-    map.eachNode(node => {
+    map.eachNode((node) => {
       node.x += canvasWidth / 2 - TOPIC_HORIZENTAL_MARGIN;
       node.y += canvasHeight / 2;
     });
@@ -68,7 +68,7 @@ const Mindmap = () => {
 
   const topics: ReactElement[] = useMemo(() => {
     const nodes: ReactElement[] = [];
-    mindMap.eachNode(node => {
+    mindMap.eachNode((node) => {
       nodes.push(<Topic key={node.data.id} {...node} />);
     });
     return nodes;
@@ -183,7 +183,7 @@ const Mindmap = () => {
 
   useClickOutSide(
     id,
-    e => {
+    (e) => {
       if (!selectedNodeId) return;
       // @ts-ignore
       const isTopic = e.target?.closest(`.${TOPIC_CLASS}`);

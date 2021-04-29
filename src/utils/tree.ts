@@ -22,7 +22,7 @@ class TreeWalker<T extends UnionNode> {
   }
   getNode(root: T, id: string): T | null {
     let target: T | null = null;
-    this.eachBefore(root, node => {
+    this.eachBefore(root, (node) => {
       if (node.id === id) target = node;
     });
     return target;
@@ -32,16 +32,16 @@ class TreeWalker<T extends UnionNode> {
    */
   getDescendants(root: T): T[] {
     const nodes: T[] = [];
-    this.eachBefore(root, node => {
+    this.eachBefore(root, (node) => {
       nodes.push(node);
     });
-    return nodes.filter(node => node !== root);
+    return nodes.filter((node) => node !== root);
   }
   getParentNode(root: T, id: string): T | undefined {
     let target: T | undefined = undefined;
-    this.eachBefore(root, node => {
+    this.eachBefore(root, (node) => {
       if (!Array.isArray(this.children(node))) return;
-      if (this.children(node)?.some(item => item.id === id)) target = node;
+      if (this.children(node)?.some((item) => item.id === id)) target = node;
     });
     return target;
   }
@@ -50,7 +50,7 @@ class TreeWalker<T extends UnionNode> {
     const parent = this.getParentNode(root, id);
     const children = this.children(parent as T);
     if (parent && children) {
-      const index = children.findIndex(node => node.id === id);
+      const index = children.findIndex((node) => node.id === id);
       return children[index - 1];
     }
     return undefined;
@@ -60,7 +60,7 @@ class TreeWalker<T extends UnionNode> {
     const parent = this.getParentNode(root, id);
     const children = this.children(parent as T);
     if (parent && children) {
-      const index = children.findIndex(node => node.id === id);
+      const index = children.findIndex((node) => node.id === id);
       return children[index + 1];
     }
     return undefined;
@@ -88,7 +88,7 @@ export const defaultWalker = new TreeWalker<HierachyNodeWithTopicData>(
   defaultChildren
 );
 export const topicWalker = new TreeWalker<TopicData>(
-  node => node?.children?.attached
+  (node) => node?.children?.attached
 );
 
 function getDistance(
@@ -119,7 +119,7 @@ export function getLeftNode(
 ) {
   if (root.id === currentId) {
     return getClosedNode(
-      defaultWalker.getDescendants(root).filter(node => node.x < root.x),
+      defaultWalker.getDescendants(root).filter((node) => node.x < root.x),
       root
     );
   }
@@ -139,7 +139,7 @@ export function getRighttNode(
 ) {
   if (root.id === currentId) {
     return getClosedNode(
-      defaultWalker.getDescendants(root).filter(node => node.x > root.x),
+      defaultWalker.getDescendants(root).filter((node) => node.x > root.x),
       root
     );
   }
@@ -157,7 +157,7 @@ export function getTopNode(root: HierachyNodeWithTopicData, currentId: string) {
   const array: HierachyNodeWithTopicData[] = [];
   const currentNode = defaultWalker.getNode(root, currentId);
   if (!currentNode) return undefined;
-  defaultWalker.eachBefore(root, node => {
+  defaultWalker.eachBefore(root, (node) => {
     if (node.y < currentNode.y) {
       array.push(node);
     }
@@ -172,7 +172,7 @@ export function getBottomNode(
   const array: HierachyNodeWithTopicData[] = [];
   const currentNode = defaultWalker.getNode(root, currentId);
   if (!currentNode) return undefined;
-  defaultWalker.eachBefore(root, node => {
+  defaultWalker.eachBefore(root, (node) => {
     if (node.y > currentNode.y) {
       array.push(node);
     }
@@ -183,7 +183,7 @@ export function getBottomNode(
 export function removeChild(parentNode: TopicData, id: string) {
   if (parentNode.children?.attached) {
     parentNode.children.attached = parentNode.children.attached.filter(
-      item => item.id !== id
+      (item) => item.id !== id
     );
   }
 }
@@ -204,7 +204,7 @@ export function normalizeTopicSide(root: TopicData) {
   if (!root?.children?.attached.length) return;
   if (root.children.attached.length < 4) return;
   const mid = Math.ceil(root.children.attached.length / 2);
-  root.children[ATTACHED_KEY].slice(mid).forEach(node => {
+  root.children[ATTACHED_KEY].slice(mid).forEach((node) => {
     node.side = node.side || 'left';
   });
 }
@@ -217,13 +217,13 @@ export function normalizeTopicDepth(root: TopicData) {
   const nodes = [root];
   while (nodes.length) {
     const current = nodes.shift();
-    current?.children?.attached.forEach(node => {
+    current?.children?.attached.forEach((node) => {
       node.parent = current;
       node.depth = (current.depth as number) + 1;
       nodes.push(node);
     });
   }
-  topicWalker.eachBefore(root, node => {
+  topicWalker.eachBefore(root, (node) => {
     delete node.parent;
   });
 }

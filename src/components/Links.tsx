@@ -30,14 +30,14 @@ const Links = (props: LinksProps) => {
   const linkTheme = useContext(ThemeContext).link;
   const links: string[] = [];
 
-  mindmap.eachNode(node => {
+  mindmap.eachNode((node) => {
     if (node.depth === 0) {
-      node.children?.forEach(child => {
+      node.children?.forEach((child) => {
         links.push(getMainTopicLinkPosition(node, child));
       });
       return;
     }
-    node.children?.forEach(child => {
+    node.children?.forEach((child) => {
       const x1 = node.x + (child.side === 'right' ? node.width : 0);
       const y1 = node.y + node.height / 2;
       const x2 = x1 + (child.side === 'right' ? 10 : -10);
@@ -49,7 +49,7 @@ const Links = (props: LinksProps) => {
   });
   return (
     <g>
-      {links.map(link => {
+      {links.map((link) => {
         return (
           <polyline
             key={link}

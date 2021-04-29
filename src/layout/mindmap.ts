@@ -75,7 +75,7 @@ const defaultOptions: Options<TopicData> = {
   },
 };
 
-export default function(
+export default function (
   root: TopicData,
   options: Options<TopicData> = defaultOptions
 ) {
@@ -83,7 +83,7 @@ export default function(
   const rootWithDepth = produce(root, normalizeTopicDepth);
   const rootNode = hierarchy.mindmap(rootWithDepth, options);
   // add left right margin
-  rootNode.eachNode(node => {
+  rootNode.eachNode((node) => {
     node.x +=
       node.depth *
       (node.side === 'right'
@@ -92,7 +92,7 @@ export default function(
   });
   // // move mindmap to canvas center
   const descendants: HierachyNode<TopicData>[] = [];
-  rootNode.eachNode(node => descendants.push(node));
+  rootNode.eachNode((node) => descendants.push(node));
   // console.timeEnd('mindmap layout')
   return rootNode;
 }

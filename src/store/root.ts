@@ -63,7 +63,7 @@ function useRoot(initialState: Partial<IState> = {}) {
     [APPEND_CHILD](parentId: string, node: TopicData) {
       if (state.readonly) return;
       const lastRoot = getClonedRoot(state);
-      const nextState = produce(state, draftState => {
+      const nextState = produce(state, (draftState) => {
         if (!parentId || !node) return;
         SAVE_HISTORY(draftState, lastRoot);
         const root = draftState.timeline[draftState.current];
@@ -80,14 +80,14 @@ function useRoot(initialState: Partial<IState> = {}) {
         };
         if (parentNode === root) {
           const leftNodes = parentNode.children[ATTACHED_KEY].filter(
-            node => node.side === 'left'
+            (node) => node.side === 'left'
           );
           if (parentNode.children[ATTACHED_KEY].length / 2 > leftNodes.length) {
-            node = produce(node, draft => {
+            node = produce(node, (draft) => {
               draft.side = 'left';
             });
           } else {
-            node = produce(node, draft => {
+            node = produce(node, (draft) => {
               draft.side = 'right';
             });
           }
@@ -102,7 +102,7 @@ function useRoot(initialState: Partial<IState> = {}) {
       if (!id) return;
       if (state.readonly) return;
       const lastRoot = getClonedRoot(state);
-      const nextState = produce(state, draftState => {
+      const nextState = produce(state, (draftState) => {
         SAVE_HISTORY(draftState, lastRoot);
         const root = draftState.timeline[draftState.current];
         const parentNode = topicWalker.getParentNode(root, id);
@@ -122,7 +122,7 @@ function useRoot(initialState: Partial<IState> = {}) {
       if (!id) return;
       if (state.readonly) return;
       const lastRoot = getClonedRoot(state);
-      const nextState = produce(state, draftState => {
+      const nextState = produce(state, (draftState) => {
         SAVE_HISTORY(draftState, lastRoot);
         const root = draftState.timeline[draftState.current];
         const currentNode = topicWalker.getNode(root, id);
@@ -131,13 +131,13 @@ function useRoot(initialState: Partial<IState> = {}) {
       setState(nextState);
     },
     [UNDO_HISTORY]() {
-      setState(prevState => ({
+      setState((prevState) => ({
         ...prevState,
         current: Math.max(0, prevState.current - 1),
       }));
     },
     [REDO_HISTORY]() {
-      setState(prevState => ({
+      setState((prevState) => ({
         ...prevState,
         current: Math.min(prevState.timeline.length - 1, prevState.current + 1),
       }));
