@@ -44,7 +44,7 @@
     "@storybook/addon-info": "^5.3.17",
     "@storybook/addon-links": "^6.2.9",
     "@storybook/addons": "^6.1.15",
-    "@storybook/react": "^5.3.17",
+    "@storybook/react": "^6.2.9",
     "@types/jest": "^26.0.4",
     "@types/jszip": "^3.4.1",
     "@types/react": "^17.0.2",
