@@ -21,7 +21,7 @@
     "pre-commit": "npm run lint && npm run test && npm run build"
   },
   "peerDependencies": {
-    "react": ">=16"
+    "react": ">=17"
   },
   "husky": {
     "hooks": {
@@ -38,40 +38,40 @@
   "author": "luvsic3",
   "module": "dist/remindjs.esm.js",
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@storybook/addon-actions": "^5.3.17",
-    "@storybook/addon-docs": "^6.1.11",
-    "@storybook/addon-info": "^5.3.17",
+    "@babel/core": "^7.13.16",
+    "@storybook/addon-actions": "^6.2.9",
+    "@storybook/addon-docs": "^6.2.9",
+    "@storybook/addon-info": "^5.3.21",
     "@storybook/addon-links": "^6.2.9",
-    "@storybook/addons": "^6.1.15",
+    "@storybook/addons": "^6.2.9",
     "@storybook/react": "^6.2.9",
-    "@types/jest": "^26.0.4",
+    "@types/jest": "^26.0.23",
     "@types/jszip": "^3.4.1",
-    "@types/react": "^17.0.2",
-    "@types/react-dom": "^17.0.0",
-    "@types/uuid": "^8.0.0",
-    "babel-loader": "^8.1.0",
+    "@types/react": "^17.0.4",
+    "@types/react-dom": "^17.0.3",
+    "@types/uuid": "^8.3.0",
+    "babel-loader": "^8.2.2",
     "husky": "^6.0.0",
-    "jest-canvas-mock": "^2.2.0",
+    "jest-canvas-mock": "^2.3.1",
     "parcel-plugin-bundle-visualiser": "^1.2.0",
     "react": "^17.0.1",
-    "react-docgen-typescript-loader": "^3.7.1",
-    "react-dom": "^17.0.1",
-    "react-is": "^17.0.1",
-    "release-it": "^14.2.2",
-    "ts-loader": "^8.0.0",
+    "react-docgen-typescript-loader": "^3.7.2",
+    "react-dom": "^17.0.2",
+    "react-is": "^17.0.2",
+    "release-it": "^14.6.1",
+    "ts-loader": "^9.1.1",
     "tsdx": "^0.14.1",
-    "tslib": "^2.0.0",
-    "typescript": "^3.9.6",
-    "xmind-model": "^1.1.10"
+    "tslib": "^2.2.0",
+    "typescript": "^4.2.4",
+    "xmind-model": "^1.1.12"
   },
   "dependencies": {
-    "@antv/hierarchy": "^0.6.4",
+    "@antv/hierarchy": "^0.6.7",
     "@emotion/react": "^11.1.5",
-    "hotkeys-js": "^3.8.1",
+    "hotkeys-js": "^3.8.3",
     "immer": "^9.0.1",
     "unstated-next": "^1.1.0",
-    "uuid": "^8.2.0"
+    "uuid": "^8.3.2"
   },
   "jest": {
     "setupFiles": [
