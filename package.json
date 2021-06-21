@@ -38,7 +38,7 @@
   "author": "luvsic3",
   "module": "dist/remindjs.esm.js",
   "devDependencies": {
-    "@babel/core": "^7.13.16",
+    "@babel/core": "^7.14.6",
     "@storybook/addon-actions": "^6.2.9",
     "@storybook/addon-docs": "^6.2.9",
     "@storybook/addon-info": "^5.3.21",
