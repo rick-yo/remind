@@ -38,7 +38,7 @@
   "author": "luvsic3",
   "module": "dist/remindjs.esm.js",
   "devDependencies": {
-    "@babel/core": "^7.13.16",
+    "@babel/core": "^7.14.8",
     "@storybook/addon-actions": "^6.2.9",
     "@storybook/addon-docs": "^6.2.9",
     "@storybook/addon-info": "^5.3.21",
@@ -68,7 +68,7 @@
   "dependencies": {
     "@antv/hierarchy": "^0.6.7",
     "@emotion/react": "^11.1.5",
-    "hotkeys-js": "^3.8.3",
+    "hotkeys-js": "^3.8.7",
     "immer": "^9.0.1",
     "unstated-next": "^1.1.0",
     "uuid": "^8.3.2"
