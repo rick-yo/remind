@@ -58,17 +58,17 @@
     "react-docgen-typescript-loader": "^3.7.2",
     "react-dom": "^17.0.2",
     "react-is": "^17.0.2",
-    "release-it": "^14.6.1",
-    "ts-loader": "^9.1.1",
+    "release-it": "^14.10.1",
+    "ts-loader": "^9.2.4",
     "tsdx": "^0.14.1",
-    "tslib": "^2.2.0",
+    "tslib": "^2.3.0",
     "typescript": "^4.2.4",
     "xmind-model": "^1.1.12"
   },
   "dependencies": {
     "@antv/hierarchy": "^0.6.7",
     "@emotion/react": "^11.1.5",
-    "hotkeys-js": "^3.8.3",
+    "hotkeys-js": "^3.8.7",
     "immer": "^9.0.1",
     "unstated-next": "^1.1.0",
     "uuid": "^8.3.2"
