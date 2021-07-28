@@ -39,7 +39,7 @@
   "module": "dist/remindjs.esm.js",
   "devDependencies": {
     "@babel/core": "^7.14.8",
-    "@storybook/addon-actions": "^6.2.9",
+    "@storybook/addon-actions": "^6.3.6",
     "@storybook/addon-docs": "^6.2.9",
     "@storybook/addon-info": "^5.3.21",
     "@storybook/addon-links": "^6.2.9",
