@@ -68,7 +68,7 @@
   "dependencies": {
     "@antv/hierarchy": "^0.6.7",
     "@emotion/react": "^11.1.5",
-    "hotkeys-js": "^3.8.3",
+    "hotkeys-js": "^3.8.7",
     "immer": "^9.0.1",
     "unstated-next": "^1.1.0",
     "uuid": "^8.3.2"
