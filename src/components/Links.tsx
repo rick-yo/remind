@@ -1,4 +1,4 @@
-import React, { useContext, memo } from 'react';
+import { useContext, memo } from 'react';
 import { ThemeContext } from '../context/theme';
 import { HierachyNodeWithTopicData } from '../utils/tree';
 import { TOPIC_HORIZENTAL_MARGIN } from '../constant';

@@ -6,7 +6,6 @@
     "importHelpers": true,
     "declaration": true,
     "sourceMap": true,
-    "rootDir": "./src",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -23,7 +22,8 @@
     "paths": {
       "@": ["./"]
     },
-    "jsx": "react",
+    "jsx": "preserve",
+    "jsxImportSource": "@emotion/react",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "suppressImplicitAnyIndexErrors": true

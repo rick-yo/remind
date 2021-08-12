@@ -1,5 +1,4 @@
-/** @jsxImportSource @emotion/react */
-import { css, jsx } from '@emotion/react';
+import { css } from '@emotion/react';
 import { EDITOR_ID } from '../constant';
 import { memo } from 'react';
 import EditorStore from '../store/editor';

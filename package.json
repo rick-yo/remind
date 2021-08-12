@@ -1,6 +1,8 @@
 {
   "version": "0.2.2",
   "license": "MIT",
+  "type": "module",
+  "source": "src/index.tsx",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -11,14 +13,13 @@
     "node": ">=10"
   },
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test --passWithNoTests",
-    "lint": "tsdx lint",
+    "start": "microbundle watch",
+    "build": "microbundle build",
+    "lint": "ts-standard",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "release": "release-it",
-    "pre-commit": "npm run lint && npm run test && npm run build"
+    "pre-commit": "npm run lint && npm run build"
   },
   "peerDependencies": {
     "react": ">=17"
@@ -36,42 +37,29 @@
   },
   "name": "remindjs",
   "author": "luvsic3",
-  "module": "dist/remindjs.esm.js",
   "devDependencies": {
-    "@babel/core": "^7.14.8",
     "@storybook/addon-actions": "^6.3.7",
     "@storybook/addon-docs": "^6.3.7",
     "@storybook/addon-info": "^5.3.21",
     "@storybook/addon-links": "^6.3.7",
     "@storybook/addons": "^6.3.7",
     "@storybook/react": "^6.3.7",
-    "@types/jest": "^26.0.23",
-    "@types/jszip": "^3.4.1",
-    "@types/react": "^17.0.15",
-    "@types/react-dom": "^17.0.3",
-    "babel-loader": "^8.2.2",
+    "@types/react": "^17.0.17",
+    "@types/react-dom": "^17.0.9",
     "husky": "^7.0.1",
-    "jest-canvas-mock": "^2.3.1",
-    "parcel-plugin-bundle-visualiser": "^1.2.0",
+    "microbundle": "^0.13.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.2",
-    "react-is": "^17.0.2",
-    "release-it": "^14.10.1",
-    "tsdx": "^0.14.1",
-    "tslib": "^2.2.0",
-    "typescript": "^4.2.4",
+    "release-it": "^14.11.3",
+    "ts-standard": "^10.0.0",
+    "typescript": "^4.3.5",
     "xmind-model": "^1.1.12"
   },
   "dependencies": {
-    "@antv/hierarchy": "^0.6.7",
-    "@emotion/react": "^11.4.0",
+    "@antv/hierarchy": "^0.6.8",
+    "@emotion/react": "^11.4.1",
     "hotkeys-js": "^3.8.7",
     "immer": "^9.0.5",
     "unstated-next": "^1.1.0"
-  },
-  "jest": {
-    "setupFiles": [
-      "jest-canvas-mock"
-    ]
   }
 }

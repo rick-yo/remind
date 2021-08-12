@@ -1,4 +1,3 @@
-import React from 'react';
 import Mindmap from './Mindmap';
 import { defaultRoot, RootStoreProvider } from './store/root';
 import EditorStore from './store/editor';

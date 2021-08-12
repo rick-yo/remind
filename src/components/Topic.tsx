@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import {
   useContext,
   KeyboardEvent,
@@ -15,7 +14,7 @@ import {
   KEY_MAPS,
   TOPIC_CLASS,
 } from '../constant';
-import { css, jsx } from '@emotion/react';
+import { css } from '@emotion/react';
 import { TopicData } from 'xmind-model/types/models/topic';
 import { HierachyNode } from '@antv/hierarchy';
 import { getTopicFontsize } from '../layout/mindmap';

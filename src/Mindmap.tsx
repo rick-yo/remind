@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import {
   useEffect,
   ReactElement,
@@ -34,7 +33,7 @@ import {
   useClickOutSide,
   usePassiveWheelEvent,
 } from './utils/dom';
-import { css, jsx } from '@emotion/react';
+import { css } from '@emotion/react';
 import Toolbar from './components/Toolbar';
 import { useLocale } from './context/locale';
 import { ThemeContext } from './context/theme';
