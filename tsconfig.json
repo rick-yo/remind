@@ -22,8 +22,7 @@
     "paths": {
       "@": ["./"]
     },
-    "jsx": "preserve",
-    "jsxImportSource": "@emotion/react",
+    "jsx": "react",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "suppressImplicitAnyIndexErrors": true

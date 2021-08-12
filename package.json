@@ -1,7 +1,6 @@
 {
   "version": "0.2.2",
   "license": "MIT",
-  "type": "module",
   "source": "src/index.tsx",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -57,7 +56,6 @@
   },
   "dependencies": {
     "@antv/hierarchy": "^0.6.8",
-    "@emotion/react": "^11.4.1",
     "hotkeys-js": "^3.8.7",
     "immer": "^9.0.5",
     "unstated-next": "^1.1.0"
