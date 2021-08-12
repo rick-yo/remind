@@ -1,4 +1,4 @@
-import { TopicData } from 'xmind-model/types/models/topic';
+import type { TopicData } from 'xmind-model/types/models/topic.d';
 import hierarchy, { Options, HierachyNode } from '@antv/hierarchy';
 import {
   MIN_TOPIC_HEIGHT,

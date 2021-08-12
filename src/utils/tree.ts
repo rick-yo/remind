@@ -1,8 +1,11 @@
-import { v4 as uuidv4 } from 'uuid';
 import { TopicData } from 'xmind-model/types/models/topic';
 import { HierachyNode } from '@antv/hierarchy';
 import { ATTACHED_KEY } from '../constant';
 import { debug } from './debug';
+
+function uuidv4() {
+  return URL.createObjectURL(new Blob([])).substring(31);
+}
 
 export type HierachyNodeWithTopicData = HierachyNode<TopicData>;
 type UnionNode = HierachyNodeWithTopicData | TopicData;
