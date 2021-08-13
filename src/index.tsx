@@ -22,7 +22,7 @@ function EnhancedMindMap ({
   theme = defaultTheme,
   locale = defaultLocale.locale,
   onChange = () => {}
-}: MindmapProps): JSX.Element {
+}: MindmapProps) {
   const rootWithSide = produce(value, normalizeTopicSide)
   return (
     <EditorStore.Provider

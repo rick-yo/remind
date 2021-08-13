@@ -1,8 +1,15 @@
 declare module '@antv/hierarchy' {
-  export function mindmap<Data> (
-    root: Data,
-    option: Options<Data>
-  ): HierachyNode<Data>
+  export interface Options<Data> {
+    direction?: 'H' | 'V' | 'LR' | 'RL' | 'TB' | 'BT'
+    getSubTreeSep(d: Data): number
+    getWidth(d: Data): number
+    getHeight(d: Data): number
+    getHGap(d: Data): number
+    getVGap(d: Data): number
+    getId(d: Data): string
+    getChildren(d: Data): Data[]
+    getSide?(d: Data): 'left' | 'right'
+  }
 
   export interface HierachyNode<Data = Object> {
     depth: number
@@ -31,15 +38,8 @@ declare module '@antv/hierarchy' {
     }
   }
 
-  export interface Options<Data> {
-    direction?: 'H' | 'V' | 'LR' | 'RL' | 'TB' | 'BT'
-    getSubTreeSep(d: Data): number
-    getWidth(d: Data): number
-    getHeight(d: Data): number
-    getHGap(d: Data): number
-    getVGap(d: Data): number
-    getId(d: Data): string
-    getChildren(d: Data): Data[]
-    getSide?(d: Data): 'left' | 'right'
-  }
+  export function mindmap<Data> (
+    root: Data,
+    option: Options<Data>
+  ): HierachyNode<Data>
 }

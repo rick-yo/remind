@@ -75,7 +75,7 @@ function useRoot (initialState: Partial<IState> = {}) {
         }
         const parentNode = topicWalker.getNode(root, parentId)
         if (parentNode == null) return
-        parentNode.children = (parentNode.children != null) || {
+        parentNode.children = parentNode.children ?? {
           [ATTACHED_KEY]: []
         }
         if (parentNode === root) {
@@ -109,10 +109,10 @@ function useRoot (initialState: Partial<IState> = {}) {
         if ((parentNode != null) && (parentNode.children != null)) {
           // when deleted a node, select deleted node's sibing or parent
           const sibling =
-            (topicWalker.getPreviousNode(root, id) != null) ||
+            topicWalker.getPreviousNode(root, id) ??
             topicWalker.getNextNode(root, id)
           removeChild(parentNode, id)
-          const selectedNode = (sibling != null) || parentNode
+          const selectedNode = sibling ?? parentNode
           editorStore.SELECT_NODE(selectedNode.id)
         }
       })

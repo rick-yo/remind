@@ -26,7 +26,7 @@ import classNames from 'classnames'
 
 const topicClass = classNames(TOPIC_CLASS, styles.topic)
 
-const Topic = (props: HierachyNode<TopicData>): JSX.Element => {
+const Topic = (props: HierachyNode<TopicData>) => {
   const {
     data: { title, id },
     x,

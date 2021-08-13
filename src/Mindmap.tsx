@@ -38,7 +38,7 @@ import Toolbar from './components/Toolbar'
 import { useLocale } from './context/locale'
 import { ThemeContext } from './context/theme'
 
-const Mindmap = (): JSX.Element => {
+const Mindmap = () => {
   const root = useRootSelector((s) => s)
   const rootStore = RootStore.useContainer()
   const editorStore = EditorStore.useContainer()

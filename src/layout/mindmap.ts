@@ -16,6 +16,7 @@ declare module 'xmind-model/types/models/topic' {
     side?: 'left' | 'right'
     depth?: number
     parent?: TopicData
+    data?: any
   }
 }
 

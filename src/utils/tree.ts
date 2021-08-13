@@ -76,7 +76,6 @@ class TreeWalker<T extends UnionNode> {
     let i
     // @ts-expect-error
     while (((node = nodes.pop()) != null)) {
-      // @ts-expect-error
       callback(node)
       children = this.children(node)
       if (children != null) {
