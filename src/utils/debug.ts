@@ -1,10 +1,10 @@
-const isProd = process.env.NODE_ENV === 'production';
-const isDev = process.env.NODE_ENV === 'development';
+const isProd = process.env.NODE_ENV === 'production'
+const isDev = process.env.NODE_ENV === 'development'
 
-function debug(key: string, value?: unknown) {
+function debug (key: string, value?: unknown) {
   if (isDev) {
-    console.log(key, value);
+    console.log(key, value)
   }
 }
 
-export { isProd, debug };
+export { isProd, debug }

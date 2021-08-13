@@ -22,7 +22,7 @@
     "paths": {
       "@": ["./"]
     },
-    "jsx": "react",
+    "jsx": "react-jsx",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "suppressImplicitAnyIndexErrors": true

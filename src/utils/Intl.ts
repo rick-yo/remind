@@ -1,16 +1,16 @@
-type IntlKey = 'en' | 'cn' | 'ja';
+type IntlKey = 'en' | 'cn' | 'ja'
 
 interface IntlValue {
-  open: string;
-  subTopic: string;
-  focus: string;
-  cancelFocus: string;
-  link: string;
+  open: string
+  subTopic: string
+  focus: string
+  cancelFocus: string
+  link: string
 
-  font: string;
-  background: string;
-  tag: string;
-  icon: string;
+  font: string
+  background: string
+  tag: string
+  icon: string
 }
 
 const Intl: Record<IntlKey, IntlValue> = {
@@ -25,7 +25,7 @@ const Intl: Record<IntlKey, IntlValue> = {
     font: '文字',
     background: '背景',
     tag: '标签',
-    icon: '图标',
+    icon: '图标'
   },
   en: {
     open: 'Open File',
@@ -38,7 +38,7 @@ const Intl: Record<IntlKey, IntlValue> = {
     font: 'Font',
     background: 'Background',
     tag: 'Tag',
-    icon: 'Icon',
+    icon: 'Icon'
   },
   ja: {
     open: '開いたファイル',
@@ -51,8 +51,8 @@ const Intl: Record<IntlKey, IntlValue> = {
     font: 'フォント',
     background: 'バックグラウンド',
     tag: 'タグ',
-    icon: 'アイコン',
-  },
-};
+    icon: 'アイコン'
+  }
+}
 
-export { Intl, IntlValue, IntlKey };
+export { Intl, IntlValue, IntlKey }
