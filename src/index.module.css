@@ -1,0 +1,40 @@
+.editorContainer {
+  position: relative;
+  background: #eef8fa;
+  overflow: hidden;
+}
+
+.editor {
+  position: relative;
+  transition: all 0.2s;
+  background: #eef8fa;
+}
+
+.svgCanvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.toolbar {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  background: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.toolbar i {
+  margin: 0 5px;
+}
+
+.topic {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: default;
+  user-select: none;
+}

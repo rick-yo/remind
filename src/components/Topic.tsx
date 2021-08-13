@@ -14,7 +14,7 @@ import {
   KEY_MAPS,
   TOPIC_CLASS
 } from '../constant'
-import { css } from '@emotion/react'
+import styles from '../index.module.css'
 import { TopicData } from 'xmind-model/types/models/topic'
 import { HierachyNode } from '@antv/hierarchy'
 import { getTopicFontsize } from '../layout/mindmap'
@@ -22,8 +22,11 @@ import { topicWalker } from '../utils/tree'
 import { selectText } from '../utils/dom'
 import EditorStore from '../store/editor'
 import { RootStore, useRootSelector } from '../store/root'
+import classNames from 'classnames'
 
-const Topic = (props: HierachyNode<TopicData>) => {
+const topicClass = classNames(TOPIC_CLASS, styles.topic)
+
+const Topic = (props: HierachyNode<TopicData>): JSX.Element => {
   const {
     data: { title, id },
     x,
@@ -120,7 +123,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
   return (
     <div
       id={`topic-${id}`}
-      className={TOPIC_CLASS}
+      className={topicClass}
       contentEditable={isEditing}
       onClick={selectNode}
       onDoubleClick={editTopic}
@@ -135,22 +138,16 @@ const Topic = (props: HierachyNode<TopicData>) => {
       // stopPropagation to prevent invoke Mindmap's event
       onMouseDown={(e) => e.stopPropagation()}
       onTouchStart={(e) => e.stopPropagation()}
-      css={css`
-        display: inline-block;
-        border-radius: ${TOPIC_RADIUS}px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        transform: translate(${x}px, ${y}px);
-        background: ${background};
-        max-width: ${MAX_TOPIC_WIDTH}px;
-        padding: ${padding};
-        font-size: ${getTopicFontsize(props.data)}px;
-        cursor: default;
-        outline: ${outline};
-        user-select: none;
-        translate: 0 ${isEditing ? '2px' : 0};
-      `}
+      style={{
+        borderRadius: `${TOPIC_RADIUS}px`,
+        transform: `translate(${x}px, ${y}px)`,
+        background: `${background}`,
+        maxWidth: `${MAX_TOPIC_WIDTH}px`,
+        padding: `${padding}`,
+        fontSize: `${getTopicFontsize(props.data)}px`,
+        outline: `${outline}`,
+        translate: `0 ${isEditing ? '2px' : 0}`,
+      }}
       suppressContentEditableWarning
     >
       {title}

@@ -39,7 +39,6 @@ const defaultOptions: Options<TopicData> = {
   direction: 'H',
   getSide (node) {
     // FIXME fix type
-    // @ts-expect-error
     return node.data.side || 'right'
   },
   getId (node) {
@@ -71,7 +70,7 @@ const defaultOptions: Options<TopicData> = {
     return 12
   },
   getChildren (node) {
-    return ((node.children?.attached) != null) || []
+    return node.children?.attached || []
   }
 }
 

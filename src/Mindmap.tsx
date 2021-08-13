@@ -33,12 +33,12 @@ import {
   useClickOutSide,
   usePassiveWheelEvent
 } from './utils/dom'
-import { css } from '@emotion/react'
+import styles from './index.module.css'
 import Toolbar from './components/Toolbar'
 import { useLocale } from './context/locale'
 import { ThemeContext } from './context/theme'
 
-const Mindmap = () => {
+const Mindmap = (): JSX.Element => {
   const root = useRootSelector((s) => s)
   const rootStore = RootStore.useContainer()
   const editorStore = EditorStore.useContainer()
@@ -255,14 +255,12 @@ const Mindmap = () => {
     <div
       ref={editorRef}
       id={EDITOR_ID}
-      css={css`
-        position: relative;
-        font-family: ${TOPIC_FONT_FAMILY};
-        background: #eef8fa;
-        width: ${canvasWidth}px;
-        height: ${canvasHeight}px;
-        overflow: hidden;
-      `}
+      className={styles.editorContainer}
+      style={{
+        fontFamily: TOPIC_FONT_FAMILY,
+        width: `${canvasWidth}px`,
+        height: `${canvasHeight}px`
+      }}
       onMouseDown={handleDragStart}
       onTouchStart={handleDragStart}
       onMouseMove={handleDrag}
@@ -272,23 +270,17 @@ const Mindmap = () => {
     >
       <div
         id={CORE_EDITOR_ID}
-        css={css`
-          position: relative;
-          transform: scale(${scale}, ${scale})
-            translate(${translate[0]}px, ${translate[1]}px);
-          transition: all 0.2s;
-          background: #eef8fa;
-        `}
+        className={styles.editor}
+        style={{
+          transform: `scale(${scale}, ${scale})
+            translate(${translate[0]}px, ${translate[1]}px)`
+        }}
       >
         <svg
           width={10000}
           height={10000}
           xmlns='http://www.w3.org/2000/svg'
-          css={css`
-            position: absolute;
-            left: 0;
-            top: 0;
-          `}
+          className={styles.svgCanvas}
         >
           <Links mindmap={mindMap} />
         </svg>

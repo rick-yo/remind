@@ -1,5 +1,5 @@
 {
-  "include": ["src", "test"],
+  "include": ["src", "test", "node_modules/microbundle/index.d.ts"],
   "compilerOptions": {
     "module": "esnext",
     "lib": ["dom", "esnext"],

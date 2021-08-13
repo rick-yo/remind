@@ -1,7 +1,7 @@
-import { css } from '@emotion/react'
 import { EDITOR_ID } from '../constant'
 import { memo } from 'react'
 import EditorStore from '../store/editor'
+import styles from '../index.module.css'
 
 const Toolbar = () => {
   const { scale, SET_SCALE, SET_TRANSLATE } = EditorStore.useContainer()
@@ -11,18 +11,7 @@ const Toolbar = () => {
 
   return (
     <div
-      css={css`
-        position: absolute;
-        bottom: 10px;
-        right: 15px;
-        background: #fff;
-        padding: 5px;
-        border-radius: 5px;
-        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-        i {
-          margin: 0 5px;
-        }
-      `}
+      className={styles.toolbar}
     >
       <i className='iconfont icon-full-screen' onClick={requestFullScreen} />
       <i
