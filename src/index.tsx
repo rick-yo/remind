@@ -1,12 +1,12 @@
+import produce from 'immer'
+import { TopicData } from 'xmind-model/types/models/topic'
 import Mindmap from './Mindmap'
 import { defaultRoot, RootStoreProvider } from './store/root'
 import EditorStore from './store/editor'
 import { ThemeContext, defaultTheme, Theme } from './context/theme'
 import { defaultLocale, LocaleContext } from './context/locale'
 import { normalizeTopicSide } from './utils/tree'
-import produce from 'immer'
 import { IntlKey } from './utils/Intl'
-import { TopicData } from 'xmind-model/types/models/topic'
 
 export interface MindmapProps {
   theme?: Partial<Theme>
@@ -16,31 +16,31 @@ export interface MindmapProps {
   onChange?: (value: TopicData) => void
 }
 
-function EnhancedMindMap ({
+function EnhancedMindMap({
   readonly = false,
   value = defaultRoot,
   theme = defaultTheme,
   locale = defaultLocale.locale,
-  onChange = () => {}
+  onChange = () => {},
 }: MindmapProps) {
   const rootWithSide = produce(value, normalizeTopicSide)
   return (
     <EditorStore.Provider
       initialState={{
-        readonly
+        readonly,
       }}
     >
       <RootStoreProvider
         initialState={{
           timeline: [rootWithSide],
           onChange,
-          readonly
+          readonly,
         }}
       >
         <ThemeContext.Provider
           value={{
             ...defaultTheme,
-            ...theme
+            ...theme,
           }}
         >
           <LocaleContext.Provider value={{ locale }}>

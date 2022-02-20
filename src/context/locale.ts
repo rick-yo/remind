@@ -1,4 +1,5 @@
-import React, { useContext } from 'react'
+import { createContext } from 'preact'
+import { useContext } from 'preact/hooks'
 import { Intl, IntlValue, IntlKey } from '../utils/Intl'
 
 interface Locale {
@@ -6,14 +7,15 @@ interface Locale {
 }
 
 const defaultLocale: Locale = {
-  locale: 'en'
+  locale: 'en',
 }
 
-const LocaleContext = React.createContext(defaultLocale)
+const LocaleContext = createContext(defaultLocale)
 
-function useLocale (): IntlValue {
-  const locale = useContext(LocaleContext).locale
+function useLocale(): IntlValue {
+  const { locale } = useContext(LocaleContext)
   return Intl[locale]
 }
 
-export { LocaleContext, defaultLocale, useLocale, Locale }
+export { LocaleContext, defaultLocale, useLocale }
+export type { Locale }

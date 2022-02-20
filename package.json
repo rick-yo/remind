@@ -1,7 +1,6 @@
 {
   "version": "0.2.2",
   "license": "MIT",
-  "source": "src/index.tsx",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -12,57 +11,31 @@
     "node": ">=10"
   },
   "scripts": {
-    "start": "microbundle watch",
-    "build": "microbundle build",
-    "lint": "eslint src/ --ext .tsx,.ts",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint:fix": "xo --fix",
     "release": "release-it",
-    "pre-commit": "npm run lint && npm run build"
-  },
-  "peerDependencies": {
-    "react": ">=17"
+    "pre-commit": "npm run lint:fix && npm run build"
   },
   "husky": {
     "hooks": {
       "pre-commit": "npm run pre-commit"
     }
   },
-  "prettier": {
-    "printWidth": 80,
-    "semi": true,
-    "singleQuote": true,
-    "trailingComma": "es5"
-  },
   "name": "remindjs",
   "author": "luvsic3",
   "devDependencies": {
-    "@storybook/addon-actions": "^6.3.7",
-    "@storybook/addon-docs": "^6.3.7",
-    "@storybook/addon-info": "^5.3.21",
-    "@storybook/addon-links": "^6.3.7",
-    "@storybook/addons": "^6.3.7",
-    "@storybook/react": "^6.3.7",
-    "@types/react": "^17.0.17",
-    "@types/react-dom": "^17.0.9",
-    "@typescript-eslint/eslint-plugin": "^4.29.1",
-    "@typescript-eslint/parser": "^4.29.1",
-    "eslint": "^7.32.0",
-    "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.24.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-react": "^7.24.0",
+    "@preact/preset-vite": "^2.1.5",
+    "typescript": "^4.5.4",
+    "vite": "^2.8.0",
+    "xo": "^0.48.0",
     "husky": "^7.0.1",
-    "microbundle": "^0.13.3",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.2",
     "release-it": "^14.11.3",
-    "storybook-css-modules-preset": "^1.1.1",
-    "typescript": "^4.3.5",
     "xmind-model": "^1.1.12"
   },
   "dependencies": {
+    "preact": "^10.5.15",
     "@antv/hierarchy": "^0.6.8",
     "classnames": "^2.3.1",
     "hotkeys-js": "^3.8.7",

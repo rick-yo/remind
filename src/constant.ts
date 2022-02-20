@@ -5,11 +5,9 @@ const TOPIC_HORIZENTAL_MARGIN = 50
 const MAX_TOPIC_WIDTH = 240
 const MIN_TOPIC_HEIGHT = 30
 
-const canvasContext = document
-  .createElement('canvas')
-  .getContext('2d') as CanvasRenderingContext2D
+const canvasContext = document.createElement('canvas').getContext('2d')!
 
-const ATTACHED_KEY: string = 'attached'
+const ATTACHED_KEY = 'attached'
 
 enum EDITOR_MODE {
   regular,
@@ -26,7 +24,7 @@ const KEY_MAPS: Record<string, string> = {
   ArrowLeft: 'ArrowLeft',
   ArrowRight: 'ArrowRight',
   ArrowUp: 'ArrowUp',
-  ArrowDown: 'ArrowDown'
+  ArrowDown: 'ArrowDown',
 }
 
 const HOTKEYS = {
@@ -38,7 +36,7 @@ const HOTKEYS = {
   up: 'up,top',
   down: 'down',
   undo: 'command+z,ctrl+z',
-  redo: 'command+shift+z,ctrl+shift+z'
+  redo: 'command+shift+z,ctrl+shift+z',
 }
 
 const EDITOR_ID = 'remind-editor'
@@ -59,5 +57,5 @@ export {
   TOPIC_FONT_FAMILY,
   CORE_EDITOR_ID,
   TOPIC_CLASS,
-  HOTKEYS
+  HOTKEYS,
 }

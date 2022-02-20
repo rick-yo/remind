@@ -3,8 +3,8 @@ import { HierachyNode } from '@antv/hierarchy'
 import { ATTACHED_KEY } from '../constant'
 import { debug } from './debug'
 
-function uuidv4 () {
-  return URL.createObjectURL(new Blob([])).substring(31)
+function uuidv4() {
+  return URL.createObjectURL(new Blob([])).slice(31)
 }
 
 export type HierachyNodeWithTopicData = HierachyNode<TopicData>
@@ -18,12 +18,12 @@ const defaultChildren = (node: HierachyNodeWithTopicData) => {
 
 class TreeWalker<T extends UnionNode> {
   children: ChildrenFn<T>
-  constructor (children: ChildrenFn<T>) {
+  constructor(children: ChildrenFn<T>) {
     this.children = children
   }
 
-  getNode (root: T, id: string): T | null {
-    let target: T | null = null
+  getNode(root: T, id: string): T | undefined {
+    let target: T | undefined = null
     this.eachBefore(root, (node) => {
       if (node.id === id) target = node
     })
@@ -31,9 +31,9 @@ class TreeWalker<T extends UnionNode> {
   }
 
   /**
-   * get node's descendants, exclude this node
+   * Get node's descendants, exclude this node
    */
-  getDescendants (root: T): T[] {
+  getDescendants(root: T): T[] {
     const nodes: T[] = []
     this.eachBefore(root, (node) => {
       nodes.push(node)
@@ -41,7 +41,7 @@ class TreeWalker<T extends UnionNode> {
     return nodes.filter((node) => node !== root)
   }
 
-  getParentNode (root: T, id: string): T | undefined {
+  getParentNode(root: T, id: string): T | undefined {
     let target: T | undefined
     this.eachBefore(root, (node) => {
       if (!Array.isArray(this.children(node))) return
@@ -50,32 +50,34 @@ class TreeWalker<T extends UnionNode> {
     return target
   }
 
-  getPreviousNode (root: T, id: string): T | undefined {
+  getPreviousNode(root: T, id: string): T | undefined {
     const parent = this.getParentNode(root, id)
-    const children = this.children(parent as T)
-    if ((parent != null) && (children != null)) {
+    const children = this.children(parent!)
+    if (parent != null && children != null) {
       const index = children.findIndex((node) => node.id === id)
       return children[index - 1]
     }
+
     return undefined
   }
 
-  getNextNode (root: T, id: string): T | undefined {
+  getNextNode(root: T, id: string): T | undefined {
     const parent = this.getParentNode(root, id)
-    const children = this.children(parent as T)
-    if ((parent != null) && (children != null)) {
+    const children = this.children(parent!)
+    if (parent != null && children != null) {
       const index = children.findIndex((node) => node.id === id)
       return children[index + 1]
     }
+
     return undefined
   }
 
-  eachBefore (node: T, callback: (node: T) => void) {
+  eachBefore(node: T, callback: (node: T) => void) {
     const nodes = [node]
     let children
     let i
     // @ts-expect-error
-    while (((node = nodes.pop()) != null)) {
+    while ((node = nodes.pop()) != null) {
       callback(node)
       children = this.children(node)
       if (children != null) {
@@ -88,44 +90,51 @@ class TreeWalker<T extends UnionNode> {
 }
 
 export const defaultWalker = new TreeWalker<HierachyNodeWithTopicData>(
-  defaultChildren
+  defaultChildren,
 )
 export const topicWalker = new TreeWalker<TopicData>(
-  (node) => node?.children?.attached
+  (node) => node?.children?.attached,
 )
 
-function getDistance (
+function getDistance(
   a: HierachyNodeWithTopicData,
-  b: HierachyNodeWithTopicData
+  b: HierachyNodeWithTopicData,
 ) {
   const xDiff = Math.abs(a.x - b.x)
   const yDiff = Math.abs(a.y - b.y)
-  return Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2))
+  return Math.sqrt(xDiff ** 2 + yDiff ** 2)
 }
 
-function getClosedNode (
+function getClosedNode(
   array: HierachyNodeWithTopicData[],
-  target: HierachyNodeWithTopicData
+  target: HierachyNodeWithTopicData,
 ): HierachyNodeWithTopicData | undefined {
   if (array.length === 0) return undefined
-  return array.reduce<HierachyNodeWithTopicData | undefined>((prev, curr) => {
-    if (prev == null) {
-      prev = curr
-    }
-    return getDistance(target, curr) < getDistance(target, prev) ? curr : prev
-  }, undefined)
+  return array.reduce<HierachyNodeWithTopicData | undefined>(
+    (previous, curr) => {
+      if (previous == null) {
+        previous = curr
+      }
+
+      return getDistance(target, curr) < getDistance(target, previous)
+        ? curr
+        : previous
+    },
+    undefined,
+  )
 }
 
-export function getLeftNode (
+export function getLeftNode(
   root: HierachyNodeWithTopicData,
-  currentId: string
+  currentId: string,
 ) {
   if (root.id === currentId) {
     return getClosedNode(
       defaultWalker.getDescendants(root).filter((node) => node.x < root.x),
-      root
+      root,
     )
   }
+
   const currentNode = defaultWalker.getNode(root, currentId)
   if (currentNode == null) return
   const left =
@@ -136,16 +145,17 @@ export function getLeftNode (
   return left
 }
 
-export function getRighttNode (
+export function getRighttNode(
   root: HierachyNodeWithTopicData,
-  currentId: string
+  currentId: string,
 ) {
   if (root.id === currentId) {
     return getClosedNode(
       defaultWalker.getDescendants(root).filter((node) => node.x > root.x),
-      root
+      root,
     )
   }
+
   const currentNode = defaultWalker.getNode(root, currentId)
   if (currentNode == null) return
   const right =
@@ -156,7 +166,7 @@ export function getRighttNode (
   return right
 }
 
-export function getTopNode (root: HierachyNodeWithTopicData, currentId: string) {
+export function getTopNode(root: HierachyNodeWithTopicData, currentId: string) {
   const array: HierachyNodeWithTopicData[] = []
   const currentNode = defaultWalker.getNode(root, currentId)
   if (currentNode == null) return undefined
@@ -168,9 +178,9 @@ export function getTopNode (root: HierachyNodeWithTopicData, currentId: string) 
   return getClosedNode(array, currentNode)
 }
 
-export function getBottomNode (
+export function getBottomNode(
   root: HierachyNodeWithTopicData,
-  currentId: string
+  currentId: string,
 ) {
   const array: HierachyNodeWithTopicData[] = []
   const currentNode = defaultWalker.getNode(root, currentId)
@@ -183,19 +193,19 @@ export function getBottomNode (
   return getClosedNode(array, currentNode)
 }
 
-export function removeChild (parentNode: TopicData, id: string) {
-  if ((parentNode.children?.attached) != null) {
+export function removeChild(parentNode: TopicData, id: string) {
+  if (parentNode.children?.attached != null) {
     parentNode.children.attached = parentNode.children.attached.filter(
-      (item) => item.id !== id
+      (item) => item.id !== id,
     )
   }
 }
 
-export function createTopic (title: string, options: Partial<TopicData> = {}) {
+export function createTopic(title: string, options: Partial<TopicData> = {}) {
   const topic: TopicData = {
     ...options,
     id: uuidv4(),
-    title
+    title,
   }
   return topic
 }
@@ -203,29 +213,30 @@ export function createTopic (title: string, options: Partial<TopicData> = {}) {
 /**
  * Add side to TopicData, this will mutate TopicData and can be serialize to localStorage or database
  */
-export function normalizeTopicSide (root: TopicData) {
+export function normalizeTopicSide(root: TopicData) {
   if (!root?.children?.attached.length) return
   if (root.children.attached.length < 4) return
   const mid = Math.ceil(root.children.attached.length / 2)
-  root.children[ATTACHED_KEY].slice(mid).forEach((node) => {
+  for (const node of root.children[ATTACHED_KEY].slice(mid)) {
     node.side = node.side || 'left'
-  })
+  }
 }
 
 /**
  * Add depth to TopicData, this is used for local state, should not affect TopicData
  */
-export function normalizeTopicDepth (root: TopicData) {
+export function normalizeTopicDepth(root: TopicData) {
   root.depth = 0
   const nodes = [root]
   while (nodes.length > 0) {
     const current = nodes.shift()
     current?.children?.attached.forEach((node) => {
       node.parent = current
-      node.depth = (current.depth as number) + 1
+      node.depth = current.depth! + 1
       nodes.push(node)
     })
   }
+
   topicWalker.eachBefore(root, (node) => {
     delete node.parent
   })

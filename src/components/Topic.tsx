@@ -1,28 +1,22 @@
-import {
-  useContext,
-  KeyboardEvent,
-  useState,
-  DragEvent,
-  MouseEvent,
-  memo
-} from 'react'
+import { TopicData } from 'xmind-model/types/models/topic'
+import { HierachyNode } from '@antv/hierarchy'
+import classNames from 'classnames'
+import { useContext, useState } from 'preact/hooks'
 import { ThemeContext } from '../context/theme'
 import {
   MAX_TOPIC_WIDTH,
   TOPIC_RADIUS,
   EDITOR_MODE,
   KEY_MAPS,
-  TOPIC_CLASS
+  TOPIC_CLASS,
 } from '../constant'
 import styles from '../index.module.css'
-import { TopicData } from 'xmind-model/types/models/topic'
-import { HierachyNode } from '@antv/hierarchy'
 import { getTopicFontsize } from '../layout/mindmap'
 import { topicWalker } from '../utils/tree'
 import { selectText } from '../utils/dom'
 import EditorStore from '../store/editor'
 import { RootStore, useRootSelector } from '../store/root'
-import classNames from 'classnames'
+import { assert } from '../utils/assert'
 
 const topicClass = classNames(TOPIC_CLASS, styles.topic)
 
@@ -33,7 +27,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
     y,
     depth,
     hgap,
-    vgap
+    vgap,
   } = props
   const $theme = useContext(ThemeContext)
   const editorStore = EditorStore.useContainer()
@@ -45,49 +39,55 @@ const Topic = (props: HierachyNode<TopicData>) => {
   const [isDragEntering, setIsDragEntering] = useState(false)
   const isMainTopic = depth <= 1
 
-  function selectNode () {
+  function selectNode() {
     editorStore.SELECT_NODE(id)
   }
 
-  function exitEditMode (e: KeyboardEvent<HTMLDivElement>) {
+  function exitEditMode(e: KeyboardEvent) {
     if (
       [KEY_MAPS.Enter, KEY_MAPS.Escape].includes(e.key) &&
       mode === EDITOR_MODE.edit
     ) {
       editorStore.SET_MODE(EDITOR_MODE.regular)
+      assert(e.currentTarget instanceof HTMLDivElement)
       rootStore.UPDATE_NODE(id, {
-        title: e.currentTarget.innerText
+        title: e.currentTarget.innerText,
       })
-      // fix selection exit after exit edit mode on firefox
+      // Fix selection exit after exit edit mode on firefox
       getSelection()?.removeAllRanges()
     }
   }
 
-  function handleDragStart (e: DragEvent) {
-    // root node is not draggable
+  function handleDragStart(e: DragEvent) {
+    // Root node is not draggable
     if (id === root.id) {
       e.preventDefault()
       return
     }
-    // setData dataTransfer to make drag and drop work in firefox
+
+    assert(e.dataTransfer instanceof HTMLDivElement)
+    // SetData dataTransfer to make drag and drop work in firefox
     e.dataTransfer.setData('text/plain', '')
     editorStore.DRAG_NODE(props.data)
   }
-  function handleDragEnter () {
+
+  function handleDragEnter() {
     setIsDragEntering(true)
   }
-  function handleDragLeave () {
+
+  function handleDragLeave() {
     setIsDragEntering(false)
   }
 
-  function handleDrop () {
+  function handleDrop() {
     if (editorStore.dragingNode == null) return
     if (editorStore.dragingNode.id === id) return
-    // should not drop topic to it's descendants
+    // Should not drop topic to it's descendants
     const descendants = topicWalker.getDescendants(editorStore.dragingNode)
     if (descendants.some((node) => node.id === id)) {
       return
     }
+
     rootStore.APPEND_CHILD(id, editorStore.dragingNode)
     handleDragLeave()
   }
@@ -97,24 +97,25 @@ const Topic = (props: HierachyNode<TopicData>) => {
   // event to fire.
   // It may sound weird, but the default is
   // to cancel out the drop.
-  function handleDragOver (e: DragEvent<HTMLDivElement>) {
+  function handleDragOver(e: DragEvent) {
     e.preventDefault()
   }
+
   const outline =
     isSelected || isDragEntering ? `2px solid ${$theme.mainColor}` : 'none'
   const background = isMainTopic || isEditing ? '#fff' : 'transparent'
 
-  // preventDefault to prevent enter keyboard event create new html element
-  function handleKeyDown (e: KeyboardEvent<HTMLDivElement>) {
+  // PreventDefault to prevent enter keyboard event create new html element
+  function handleKeyDown(e: KeyboardEvent) {
     if ([KEY_MAPS.Enter].includes(e.key) && mode === EDITOR_MODE.edit) {
       e.preventDefault()
     }
   }
 
-  function editTopic (e: MouseEvent<HTMLDivElement>) {
-    const el = e.target as HTMLDivElement
-    el?.focus()
-    selectText(el)
+  function editTopic(e: MouseEvent) {
+    const element = e.target as HTMLDivElement
+    element?.focus()
+    selectText(element)
     editorStore.SET_MODE(EDITOR_MODE.edit)
   }
 
@@ -126,7 +127,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
       className={topicClass}
       contentEditable={isEditing}
       onClick={selectNode}
-      onDoubleClick={editTopic}
+      onDblClick={editTopic}
       onKeyUp={exitEditMode}
       onKeyDown={handleKeyDown}
       draggable
@@ -135,9 +136,13 @@ const Topic = (props: HierachyNode<TopicData>) => {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
-      // stopPropagation to prevent invoke Mindmap's event
-      onMouseDown={(e) => e.stopPropagation()}
-      onTouchStart={(e) => e.stopPropagation()}
+      // StopPropagation to prevent invoke Mindmap's event
+      onMouseDown={(e) => {
+        e.stopPropagation()
+      }}
+      onTouchStart={(e) => {
+        e.stopPropagation()
+      }}
       style={{
         borderRadius: `${TOPIC_RADIUS}px`,
         transform: `translate(${x}px, ${y}px)`,
@@ -148,11 +153,10 @@ const Topic = (props: HierachyNode<TopicData>) => {
         outline: `${outline}`,
         translate: `0 ${isEditing ? '2px' : 0}`,
       }}
-      suppressContentEditableWarning
     >
       {title}
     </div>
   )
 }
 
-export default memo(Topic)
+export default Topic

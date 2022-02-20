@@ -1,29 +1,30 @@
+import { RefObject } from 'preact'
+import { useEffect } from 'preact/hooks'
 import { debug } from './debug'
-import { useEffect, DependencyList, RefObject } from 'react'
 
-function selectText (el?: HTMLElement) {
-  if (el == null) return
+function selectText(element?: HTMLElement) {
+  if (element == null) return
   if (window.getSelection && document.createRange) {
     const selection = window.getSelection()
     if (selection?.toString() === '') {
-      // no text selection
+      // No text selection
       setTimeout(function () {
-        const range = document.createRange() // range object
-        range.selectNodeContents(el) // sets Range
-        selection.removeAllRanges() // remove all ranges from selection
-        selection.addRange(range) // add Range to a Selection.
+        const range = document.createRange() // Range object
+        range.selectNodeContents(element) // Sets Range
+        selection.removeAllRanges() // Remove all ranges from selection
+        selection.addRange(range) // Add Range to a Selection.
       }, 1)
     }
   }
 }
 
-function useClickOutSide (
+function useClickOutSide(
   selector: string,
   callback: (e: MouseEvent) => void,
-  deps: DependencyList
+  deps: any[],
 ) {
   useEffect(() => {
-    function handleDocumentClick (e: MouseEvent) {
+    function handleDocumentClick(e: MouseEvent) {
       // @ts-expect-error
       const parent = e.target?.closest(selector)
       debug('onClickOutSide event fired')
@@ -31,6 +32,7 @@ function useClickOutSide (
         callback(e)
       }
     }
+
     document.addEventListener('click', handleDocumentClick)
     return () => {
       document.removeEventListener('click', handleDocumentClick)
@@ -38,7 +40,7 @@ function useClickOutSide (
   }, [selector, callback, ...deps])
 }
 
-function useIconFont () {
+function useIconFont() {
   const href = 'https://at.alicdn.com/t/font_1924427_4b37bvd5e4o.css'
   useEffect(() => {
     const linkElement = document.createElement('link')
@@ -51,13 +53,13 @@ function useIconFont () {
   }, [])
 }
 
-function usePassiveWheelEvent (
-  ref: RefObject<HTMLElement> | null,
-  callback: (e: WheelEvent) => void
+function usePassiveWheelEvent(
+  ref: RefObject<HTMLElement> | undefined,
+  callback: (e: WheelEvent) => void,
 ) {
   useEffect(() => {
     ref?.current?.addEventListener('wheel', callback, {
-      passive: false
+      passive: false,
     })
     return () => {
       ref?.current?.removeEventListener('wheel', callback)

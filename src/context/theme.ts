@@ -1,11 +1,11 @@
-import React from 'react'
+import { createContext } from 'preact'
 
 interface Theme {
   link: {
     stroke: string
     strokeWidth: number
   }
-  topic: {}
+  topic: Record<string, unknown>
   mainColor: string
   canvasWidth: number
   canvasHeight: number
@@ -14,14 +14,15 @@ interface Theme {
 const defaultTheme: Theme = {
   link: {
     stroke: '#000',
-    strokeWidth: 0.5
+    strokeWidth: 0.5,
   },
   topic: {},
   mainColor: '#4dc4ff',
   canvasWidth: window.innerWidth,
-  canvasHeight: window.innerHeight
+  canvasHeight: window.innerHeight,
 }
 
-const ThemeContext = React.createContext(defaultTheme)
+const ThemeContext = createContext(defaultTheme)
 
-export { ThemeContext, defaultTheme, Theme }
+export { ThemeContext, defaultTheme }
+export type { Theme }

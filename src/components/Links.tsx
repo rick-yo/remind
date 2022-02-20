@@ -1,4 +1,4 @@
-import { useContext, memo } from 'react'
+import { useContext } from 'preact/hooks'
 import { ThemeContext } from '../context/theme'
 import { HierachyNodeWithTopicData } from '../utils/tree'
 import { TOPIC_HORIZENTAL_MARGIN } from '../constant'
@@ -7,9 +7,9 @@ interface LinksProps {
   mindmap: HierachyNodeWithTopicData
 }
 
-function getMainTopicLinkPosition (
+function getMainTopicLinkPosition(
   root: HierachyNodeWithTopicData,
-  child: HierachyNodeWithTopicData
+  child: HierachyNodeWithTopicData,
 ) {
   const x1Offset = child.side === 'right' ? root.width - 50 : 50
   const x3Offset = child.side === 'right' ? 0 : child.width
@@ -37,6 +37,7 @@ const Links = (props: LinksProps) => {
       })
       return
     }
+
     node.children?.forEach((child) => {
       const x1 = node.x + (child.side === 'right' ? node.width : 0)
       const y1 = node.y + node.height / 2
@@ -54,7 +55,7 @@ const Links = (props: LinksProps) => {
           <polyline
             key={link}
             points={link}
-            fill='transparent'
+            fill="transparent"
             stroke={linkTheme.stroke}
             strokeWidth={linkTheme.strokeWidth}
           />
@@ -64,4 +65,4 @@ const Links = (props: LinksProps) => {
   )
 }
 
-export default memo(Links)
+export default Links

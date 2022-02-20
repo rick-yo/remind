@@ -1,7 +1,7 @@
 import hotkeys, { KeyHandler } from 'hotkeys-js'
-import { useEffect, useCallback, DependencyList } from 'react'
+import { useCallback, useEffect } from 'preact/hooks'
 
-function useHotKeys (keys: string, callback: KeyHandler, deps: DependencyList) {
+function useHotKeys(keys: string, callback: KeyHandler, deps: any[]) {
   const memoisedCallback = useCallback(callback, deps)
   useEffect(() => {
     hotkeys(keys, memoisedCallback)

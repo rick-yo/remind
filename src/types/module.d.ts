@@ -11,7 +11,7 @@ declare module '@antv/hierarchy' {
     getSide?(d: Data): 'left' | 'right'
   }
 
-  export interface HierachyNode<Data = Object> {
+  export interface HierachyNode<Data = Record<string, unknown>> {
     depth: number
     height: number
     hgap: number
@@ -27,7 +27,7 @@ declare module '@antv/hierarchy' {
     children: Array<HierachyNode<Data>>
     // FIXME inherit from TopicData
     side: 'left' | 'right'
-    // prototype
+    // Prototype
     translate(x: number, y: number): void
     eachNode(cb: (node: HierachyNode<Data>) => void): void
     getBoundingBox(): {
@@ -38,8 +38,8 @@ declare module '@antv/hierarchy' {
     }
   }
 
-  export function mindmap<Data> (
+  export function mindmap<Data>(
     root: Data,
-    option: Options<Data>
+    option: Options<Data>,
   ): HierachyNode<Data>
 }

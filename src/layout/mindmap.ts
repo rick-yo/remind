@@ -1,14 +1,14 @@
 import type { TopicData } from 'xmind-model/types/models/topic.d'
 import hierarchy, { Options, HierachyNode } from '@antv/hierarchy'
+import produce from 'immer'
 import {
   MIN_TOPIC_HEIGHT,
   canvasContext,
   MAX_TOPIC_WIDTH,
   TOPIC_FONT_SIZE,
   TOPIC_HORIZENTAL_MARGIN,
-  TOPIC_FONT_FAMILY
+  TOPIC_FONT_FAMILY,
 } from '../constant'
-import produce from 'immer'
 import { normalizeTopicDepth } from '../utils/tree'
 
 declare module 'xmind-model/types/models/topic' {
@@ -20,14 +20,14 @@ declare module 'xmind-model/types/models/topic' {
   }
 }
 
-export function getTopicFontsize (node: TopicData) {
+export function getTopicFontsize(node: TopicData) {
   const fontSizeOffset = node.depth || 0 * 5
   const fontSize = `${Math.max(16, TOPIC_FONT_SIZE - fontSizeOffset)}`
   return fontSize
 }
 
 // FIXME fontSize is diffrent between topic, should fix this to get correct topic width and height
-function measureText (node: TopicData) {
+function measureText(node: TopicData) {
   const fontSize = getTopicFontsize(node)
   canvasContext.save()
   canvasContext.font = `${fontSize}px ${TOPIC_FONT_FAMILY}`
@@ -38,51 +38,51 @@ function measureText (node: TopicData) {
 
 const defaultOptions: Options<TopicData> = {
   direction: 'H',
-  getSide (node) {
+  getSide(node) {
     // FIXME fix type
     return node.data.side || 'right'
   },
-  getId (node) {
+  getId(node) {
     return node.id
   },
-  getHeight (node) {
-    const width = measureText(node).width
+  getHeight(node) {
+    const { width } = measureText(node)
     const lines = Math.ceil(width / MAX_TOPIC_WIDTH)
     const contentHeight = Math.max(
       MIN_TOPIC_HEIGHT,
-      TOPIC_FONT_SIZE * lines * 1.2
+      TOPIC_FONT_SIZE * lines * 1.2,
     )
     return contentHeight
   },
-  getWidth (node) {
+  getWidth(node) {
     const measure = measureText(node)
     const contentWidth = Math.min(measure.width, MAX_TOPIC_WIDTH)
     return contentWidth
   },
-  getSubTreeSep () {
+  getSubTreeSep() {
     return 10
   },
-  // left right padding
-  getHGap () {
+  // Left right padding
+  getHGap() {
     return 20
   },
-  // top bottom padding
-  getVGap () {
+  // Top bottom padding
+  getVGap() {
     return 12
   },
-  getChildren (node) {
+  getChildren(node) {
     return node.children?.attached || []
-  }
+  },
 }
 
 export default function (
   root: TopicData,
-  options: Options<TopicData> = defaultOptions
+  options: Options<TopicData> = defaultOptions,
 ) {
-  // console.time('mindmap layout')
+  // Console.time('mindmap layout')
   const rootWithDepth = produce(root, normalizeTopicDepth)
   const rootNode = hierarchy.mindmap(rootWithDepth, options)
-  // add left right margin
+  // Add left right margin
   rootNode.eachNode((node) => {
     node.x +=
       node.depth *
@@ -93,6 +93,6 @@ export default function (
   // // move mindmap to canvas center
   const descendants: Array<HierachyNode<TopicData>> = []
   rootNode.eachNode((node) => descendants.push(node))
-  // console.timeEnd('mindmap layout')
+  // Console.timeEnd('mindmap layout')
   return rootNode
 }
