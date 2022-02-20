@@ -1,9 +1,10 @@
 import { RefObject } from 'preact'
 import { useEffect } from 'preact/hooks'
+import { assert } from './assert'
 import { debug } from './debug'
 
 function selectText(element?: HTMLElement) {
-  if (element == null) return
+  if (!element) return
   if (window.getSelection && document.createRange) {
     const selection = window.getSelection()
     if (selection?.toString() === '') {
@@ -25,7 +26,7 @@ function useClickOutSide(
 ) {
   useEffect(() => {
     function handleDocumentClick(e: MouseEvent) {
-      // @ts-expect-error
+      assert(e.target instanceof HTMLDivElement)
       const parent = e.target?.closest(selector)
       debug('onClickOutSide event fired')
       if (!parent) {

@@ -40,7 +40,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
   const isMainTopic = depth <= 1
 
   function selectNode() {
-    editorStore.SELECT_NODE(id)
+    editorStore.selectNode(id)
   }
 
   function exitEditMode(e: KeyboardEvent) {
@@ -48,10 +48,10 @@ const Topic = (props: HierachyNode<TopicData>) => {
       [KEY_MAPS.Enter, KEY_MAPS.Escape].includes(e.key) &&
       mode === EDITOR_MODE.edit
     ) {
-      editorStore.SET_MODE(EDITOR_MODE.regular)
+      editorStore.setMode(EDITOR_MODE.regular)
       assert(e.currentTarget instanceof HTMLDivElement)
-      rootStore.UPDATE_NODE(id, {
-        title: e.currentTarget.innerText,
+      rootStore.updateNode(id, {
+        title: e.currentTarget.textContent ?? '',
       })
       // Fix selection exit after exit edit mode on firefox
       getSelection()?.removeAllRanges()
@@ -68,7 +68,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
     assert(e.dataTransfer instanceof HTMLDivElement)
     // SetData dataTransfer to make drag and drop work in firefox
     e.dataTransfer.setData('text/plain', '')
-    editorStore.DRAG_NODE(props.data)
+    editorStore.dragNode(props.data)
   }
 
   function handleDragEnter() {
@@ -80,7 +80,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
   }
 
   function handleDrop() {
-    if (editorStore.dragingNode == null) return
+    if (!editorStore.dragingNode) return
     if (editorStore.dragingNode.id === id) return
     // Should not drop topic to it's descendants
     const descendants = topicWalker.getDescendants(editorStore.dragingNode)
@@ -88,7 +88,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
       return
     }
 
-    rootStore.APPEND_CHILD(id, editorStore.dragingNode)
+    rootStore.appendChild(id, editorStore.dragingNode)
     handleDragLeave()
   }
 
@@ -116,7 +116,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
     const element = e.target as HTMLDivElement
     element?.focus()
     selectText(element)
-    editorStore.SET_MODE(EDITOR_MODE.edit)
+    editorStore.setMode(EDITOR_MODE.edit)
   }
 
   const padding = `${vgap}px ${hgap}px`

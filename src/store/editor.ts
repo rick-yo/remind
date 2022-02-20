@@ -30,30 +30,30 @@ export const defaultState: IState = {
 
 function useEditor(initialState: Partial<IState> = {}) {
   const [state, setState] = useState({ ...defaultState, ...initialState })
-  function SET_MODE(mode: EDITOR_MODE) {
+  function setMode(mode: EDITOR_MODE) {
     if (state.readonly) return
     setState((previousState) => ({ ...previousState, mode }))
   }
 
-  function SELECT_NODE(selectedNodeId: string) {
+  function selectNode(selectedNodeId: string) {
     setState((previousState) => ({ ...previousState, selectedNodeId }))
   }
 
-  function DRAG_NODE(payload: TopicData) {
+  function dragNode(payload: TopicData) {
     // Remove TopicData's depth、side
     const { side, depth, ...dragingNode } = payload
     setState((previousState) => ({ ...previousState, dragingNode }))
   }
 
-  function SET_SCALE(scale: number) {
+  function setScale(scale: number) {
     setState((previousState) => ({ ...previousState, scale }))
   }
 
-  function SET_TRANSLATE(translate: [number, number]) {
+  function setTranslate(translate: [number, number]) {
     setState((previousState) => ({ ...previousState, translate }))
   }
 
-  function MOVE_LEFT(rootWithCoords: HierachyNodeWithTopicData) {
+  function moveLeft(rootWithCoords: HierachyNodeWithTopicData) {
     const target = getLeftNode(rootWithCoords, state.selectedNodeId)
     if (target) {
       setState((previousState) => ({
@@ -63,7 +63,7 @@ function useEditor(initialState: Partial<IState> = {}) {
     }
   }
 
-  function MOVE_RIGHT(rootWithCoords: HierachyNodeWithTopicData) {
+  function moveRight(rootWithCoords: HierachyNodeWithTopicData) {
     const target = getRighttNode(rootWithCoords, state.selectedNodeId)
     if (target) {
       setState((previousState) => ({
@@ -73,7 +73,7 @@ function useEditor(initialState: Partial<IState> = {}) {
     }
   }
 
-  function MOVE_TOP(rootWithCoords: HierachyNodeWithTopicData) {
+  function moveTop(rootWithCoords: HierachyNodeWithTopicData) {
     const target = getTopNode(rootWithCoords, state.selectedNodeId)
     if (target) {
       setState((previousState) => ({
@@ -83,7 +83,7 @@ function useEditor(initialState: Partial<IState> = {}) {
     }
   }
 
-  function MOVE_DOWN(rootWithCoords: HierachyNodeWithTopicData) {
+  function moveDown(rootWithCoords: HierachyNodeWithTopicData) {
     const target = getBottomNode(rootWithCoords, state.selectedNodeId)
     if (target) {
       setState((previousState) => ({
@@ -95,15 +95,15 @@ function useEditor(initialState: Partial<IState> = {}) {
 
   return {
     ...state,
-    SET_MODE,
-    SELECT_NODE,
-    DRAG_NODE,
-    SET_SCALE,
-    SET_TRANSLATE,
-    MOVE_LEFT,
-    MOVE_RIGHT,
-    MOVE_TOP,
-    MOVE_DOWN,
+    setMode,
+    selectNode,
+    dragNode,
+    setScale,
+    setTranslate,
+    moveLeft,
+    moveRight,
+    moveTop,
+    moveDown,
   }
 }
 

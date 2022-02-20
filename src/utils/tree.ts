@@ -22,7 +22,7 @@ class TreeWalker<T extends UnionNode> {
   }
 
   getNode(root: T, id: string): T | undefined {
-    let target: T | undefined = null
+    let target: T | undefined
     this.eachBefore(root, (node) => {
       if (node.id === id) target = node
     })
@@ -52,7 +52,7 @@ class TreeWalker<T extends UnionNode> {
   getPreviousNode(root: T, id: string): T | undefined {
     const parent = this.getParentNode(root, id)
     const children = this.children(parent!)
-    if (parent != null && children != null) {
+    if (parent && children) {
       const index = children.findIndex((node) => node.id === id)
       return children[index - 1]
     }
@@ -63,7 +63,7 @@ class TreeWalker<T extends UnionNode> {
   getNextNode(root: T, id: string): T | undefined {
     const parent = this.getParentNode(root, id)
     const children = this.children(parent!)
-    if (parent != null && children != null) {
+    if (parent && children) {
       const index = children.findIndex((node) => node.id === id)
       return children[index + 1]
     }
@@ -75,11 +75,11 @@ class TreeWalker<T extends UnionNode> {
     const nodes = [node]
     let children
     let i
-    // @ts-expect-error
-    while ((node = nodes.pop()) != null) {
-      callback(node)
-      children = this.children(node)
-      if (children != null) {
+    let current: T | undefined
+    while ((current = nodes.pop())) {
+      callback(current)
+      children = this.children(current)
+      if (children) {
         for (i = children.length - 1; i >= 0; --i) {
           nodes.push(children[i])
         }
@@ -109,7 +109,7 @@ function getClosedNode(
   if (array.length === 0) return undefined
   return array.reduce<HierachyNodeWithTopicData | undefined>(
     (previous, curr) => {
-      if (previous == null) {
+      if (!previous) {
         previous = curr
       }
 
@@ -133,7 +133,7 @@ export function getLeftNode(
   }
 
   const currentNode = defaultWalker.getNode(root, currentId)
-  if (currentNode == null) return
+  if (!currentNode) return
   const left =
     currentNode.side === 'right'
       ? defaultWalker.getParentNode(root, currentNode.id)
@@ -154,7 +154,7 @@ export function getRighttNode(
   }
 
   const currentNode = defaultWalker.getNode(root, currentId)
-  if (currentNode == null) return
+  if (!currentNode) return
   const right =
     currentNode.side === 'right'
       ? getClosedNode(defaultWalker.getDescendants(currentNode), currentNode)
@@ -166,7 +166,7 @@ export function getRighttNode(
 export function getTopNode(root: HierachyNodeWithTopicData, currentId: string) {
   const array: HierachyNodeWithTopicData[] = []
   const currentNode = defaultWalker.getNode(root, currentId)
-  if (currentNode == null) return undefined
+  if (!currentNode) return undefined
   defaultWalker.eachBefore(root, (node) => {
     if (node.y < currentNode.y) {
       array.push(node)
@@ -181,7 +181,7 @@ export function getBottomNode(
 ) {
   const array: HierachyNodeWithTopicData[] = []
   const currentNode = defaultWalker.getNode(root, currentId)
-  if (currentNode == null) return undefined
+  if (!currentNode) return undefined
   defaultWalker.eachBefore(root, (node) => {
     if (node.y > currentNode.y) {
       array.push(node)

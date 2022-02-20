@@ -1,20 +1,11 @@
 import Mindmap from './Mindmap'
-import { defaultRoot, RootStoreProvider } from './store/root'
+import { defaultRoot, RootStore } from './store/root'
 import EditorStore from './store/editor'
-import { ThemeContext, defaultTheme, Theme } from './context/theme'
+import { ThemeContext, defaultTheme } from './context/theme'
 import { defaultLocale, LocaleContext } from './context/locale'
 import { normalizeTopicSide } from './utils/tree'
-import { IntlKey } from './utils/Intl'
-import { TopicData } from './types'
 import { noop } from './utils/common'
-
-export interface MindmapProps {
-  theme?: Partial<Theme>
-  locale?: IntlKey
-  value?: TopicData
-  readonly?: boolean
-  onChange?: (value: TopicData) => void
-}
+import { MindmapProps } from './types'
 
 function EnhancedMindMap({
   readonly = false,
@@ -30,7 +21,7 @@ function EnhancedMindMap({
         readonly,
       }}
     >
-      <RootStoreProvider
+      <RootStore.Provider
         initialState={{
           timeline: [rootWithSide],
           onChange,
@@ -47,7 +38,7 @@ function EnhancedMindMap({
             <Mindmap />
           </LocaleContext.Provider>
         </ThemeContext.Provider>
-      </RootStoreProvider>
+      </RootStore.Provider>
     </EditorStore.Provider>
   )
 }

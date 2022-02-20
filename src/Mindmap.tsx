@@ -18,7 +18,7 @@ import {
   HOTKEYS,
   TOPIC_HORIZENTAL_MARGIN,
 } from './constant'
-import mindmap from './layout/mindmap'
+import { mindmap } from './layout/mindmap'
 import Links from './components/Links'
 import { useRootSelector, RootStore } from './store/root'
 import EditorStore from './store/editor'
@@ -34,6 +34,7 @@ import styles from './index.module.css'
 import Toolbar from './components/Toolbar'
 import { useLocale } from './context/locale'
 import { ThemeContext } from './context/theme'
+import { assert } from './utils/assert'
 
 const Mindmap = () => {
   const root = useRootSelector((s) => s)
@@ -75,7 +76,7 @@ const Mindmap = () => {
     function appendChild(e: KeyboardEvent) {
       e.preventDefault()
       if (!selectedNodeId) return
-      rootStore.APPEND_CHILD(selectedNodeId, createTopic(locale.subTopic))
+      rootStore.appendChild(selectedNodeId, createTopic(locale.subTopic))
     }
 
     function editTopic(e: KeyboardEvent) {
@@ -84,11 +85,11 @@ const Mindmap = () => {
       const element = document.querySelector<HTMLDivElement>(id)
       element?.focus()
       selectText(element!)
-      editorStore.SET_MODE(EDITOR_MODE.edit)
+      editorStore.setMode(EDITOR_MODE.edit)
     }
 
     function deleteNode() {
-      rootStore.DELETE_NODE(selectedNodeId)
+      rootStore.deleteNode(selectedNodeId)
     }
 
     if (mode === EDITOR_MODE.regular) {
@@ -116,22 +117,22 @@ const Mindmap = () => {
   useEffect(() => {
     function moveTop(e: KeyboardEvent) {
       e.preventDefault()
-      editorStore.MOVE_TOP(mindMap)
+      editorStore.moveTop(mindMap)
     }
 
     function moveDown(e: KeyboardEvent) {
       e.preventDefault()
-      editorStore.MOVE_DOWN(mindMap)
+      editorStore.moveDown(mindMap)
     }
 
     function moveLeft(e: KeyboardEvent) {
       e.preventDefault()
-      editorStore.MOVE_LEFT(mindMap)
+      editorStore.moveLeft(mindMap)
     }
 
     function moveRight(e: KeyboardEvent) {
       e.preventDefault()
-      editorStore.MOVE_RIGHT(mindMap)
+      editorStore.moveRight(mindMap)
     }
 
     if (mode === EDITOR_MODE.regular) {
@@ -152,11 +153,11 @@ const Mindmap = () => {
   // Regular mode, bind undo redo shortcut
   useEffect(() => {
     function undo() {
-      rootStore.UNDO_HISTORY()
+      rootStore.undo()
     }
 
     function redo() {
-      rootStore.REDO_HISTORY()
+      rootStore.redo()
     }
 
     if (mode === EDITOR_MODE.regular) {
@@ -176,9 +177,9 @@ const Mindmap = () => {
     () => {
       if (mode !== EDITOR_MODE.edit) return
       if (!selectedNodeId) return
-      editorStore.SET_MODE(EDITOR_MODE.regular)
+      editorStore.setMode(EDITOR_MODE.regular)
       const element = document.querySelector<HTMLDivElement>(id)
-      rootStore.UPDATE_NODE(selectedNodeId, {
+      rootStore.updateNode(selectedNodeId, {
         title: element?.innerText,
       })
     },
@@ -189,10 +190,10 @@ const Mindmap = () => {
     id,
     (e) => {
       if (!selectedNodeId) return
-      // @ts-expect-error
+      assert(e.target instanceof HTMLDivElement)
       const isTopic = e.target?.closest(`.${TOPIC_CLASS}`)
       if (isTopic) return
-      editorStore.SELECT_NODE('')
+      editorStore.selectNode('')
     },
     [selectedNodeId, editorStore],
   )
@@ -201,7 +202,7 @@ const Mindmap = () => {
     (e: WheelEvent) => {
       e.stopPropagation()
       e.preventDefault()
-      editorStore.SET_TRANSLATE([
+      editorStore.setTranslate([
         translate[0] - e.deltaX,
         translate[1] - e.deltaY,
       ])
@@ -214,7 +215,7 @@ const Mindmap = () => {
   // Select root topic after initial render
   useEffect(() => {
     setTimeout(() => {
-      editorStore.SELECT_NODE(root.id)
+      editorStore.selectNode(root.id)
     }, 200)
   }, [root.id])
 
@@ -228,7 +229,7 @@ const Mindmap = () => {
   const handleDrag = useCallback(
     (e: MouseEvent) => {
       if (!isDragging) return
-      editorStore.SET_TRANSLATE([
+      editorStore.setTranslate([
         translate[0] + e.movementX,
         translate[1] + e.movementY,
       ])
@@ -247,7 +248,7 @@ const Mindmap = () => {
 
       const deltaX = lastTouch.clientX - lastTouchPosition[0]
       const deltaY = lastTouch.clientY - lastTouchPosition[1]
-      editorStore.SET_TRANSLATE([translate[0] + deltaX, translate[1] + deltaY])
+      editorStore.setTranslate([translate[0] + deltaX, translate[1] + deltaY])
       setLastTouchPosition([lastTouch.clientX, lastTouch.clientY])
     },
     [isDragging, lastTouchPosition, translate, editorStore],

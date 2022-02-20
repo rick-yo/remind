@@ -3,9 +3,9 @@ import EditorStore from '../store/editor'
 import styles from '../index.module.css'
 
 const Toolbar = () => {
-  const { scale, SET_SCALE, SET_TRANSLATE } = EditorStore.useContainer()
-  function requestFullScreen() {
-    document.querySelector(`#${EDITOR_ID}`)?.requestFullscreen()
+  const { scale, setScale, setTranslate } = EditorStore.useContainer()
+  async function requestFullScreen() {
+    await document.querySelector(`#${EDITOR_ID}`)?.requestFullscreen()
   }
 
   return (
@@ -14,20 +14,20 @@ const Toolbar = () => {
       <i
         className="iconfont icon-location"
         onClick={() => {
-          SET_SCALE(1)
-          SET_TRANSLATE([0, 0])
+          setScale(1)
+          setTranslate([0, 0])
         }}
       />
       <i
         className="iconfont icon-subtract"
         onClick={() => {
-          SET_SCALE(scale * 0.8)
+          setScale(scale * 0.8)
         }}
       />
       <i
         className="iconfont icon-plus"
         onClick={() => {
-          SET_SCALE(scale * 1.2)
+          setScale(scale * 1.2)
         }}
       />
     </div>

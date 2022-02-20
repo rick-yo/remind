@@ -11,12 +11,12 @@ import { TopicData } from '../types'
 import { normalizeTopicDepth } from '../utils/tree'
 
 export function getTopicFontsize(node: TopicData) {
-  const fontSizeOffset = node.depth || 0 * 5
+  const fontSizeOffset = node.depth ?? 0 * 5
   const fontSize = `${Math.max(16, TOPIC_FONT_SIZE - fontSizeOffset)}`
   return fontSize
 }
 
-// FIXME fontSize is diffrent between topic, should fix this to get correct topic width and height
+// WARN fontSize is diffrent between topic, should fix this to get correct topic width and height
 function measureText(node: TopicData) {
   const fontSize = getTopicFontsize(node)
   canvasContext.save()
@@ -29,8 +29,7 @@ function measureText(node: TopicData) {
 const defaultOptions: Options<TopicData> = {
   direction: 'H',
   getSide(node) {
-    // FIXME fix type
-    return node.data.side ?? 'right'
+    return node.data?.side ?? 'right'
   },
   getId(node) {
     return node.id
