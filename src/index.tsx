@@ -1,4 +1,3 @@
-import { produce } from 'immer'
 import Mindmap from './Mindmap'
 import { defaultRoot, RootStoreProvider } from './store/root'
 import EditorStore from './store/editor'
@@ -7,6 +6,7 @@ import { defaultLocale, LocaleContext } from './context/locale'
 import { normalizeTopicSide } from './utils/tree'
 import { IntlKey } from './utils/Intl'
 import { TopicData } from './types'
+import { noop } from './utils/common'
 
 export interface MindmapProps {
   theme?: Partial<Theme>
@@ -21,9 +21,9 @@ function EnhancedMindMap({
   value = defaultRoot,
   theme = defaultTheme,
   locale = defaultLocale.locale,
-  onChange = () => {},
+  onChange = noop,
 }: MindmapProps) {
-  const rootWithSide = produce(value, normalizeTopicSide)
+  const rootWithSide = normalizeTopicSide(value)
   return (
     <EditorStore.Provider
       initialState={{

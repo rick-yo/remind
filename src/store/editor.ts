@@ -1,4 +1,3 @@
-import { produce } from 'immer'
 import { createContainer } from 'unstated-next'
 import { useState } from 'preact/hooks'
 import {
@@ -40,12 +39,9 @@ function useEditor(initialState: Partial<IState> = {}) {
     setState((previousState) => ({ ...previousState, selectedNodeId }))
   }
 
-  function DRAG_NODE(payload: TopicData | undefined) {
+  function DRAG_NODE(payload: TopicData) {
     // Remove TopicData's depth、side
-    const dragingNode = produce(payload, (draft) => {
-      delete draft?.side
-      delete draft?.depth
-    })
+    const { side, depth, ...dragingNode } = payload
     setState((previousState) => ({ ...previousState, dragingNode }))
   }
 

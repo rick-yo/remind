@@ -1,5 +1,4 @@
 import hierarchy, { Options, HierachyNode } from '@antv/hierarchy'
-import produce from 'immer'
 import {
   MIN_TOPIC_HEIGHT,
   canvasContext,
@@ -31,7 +30,7 @@ const defaultOptions: Options<TopicData> = {
   direction: 'H',
   getSide(node) {
     // FIXME fix type
-    return node.data.side || 'right'
+    return node.data.side ?? 'right'
   },
   getId(node) {
     return node.id
@@ -62,16 +61,16 @@ const defaultOptions: Options<TopicData> = {
     return 12
   },
   getChildren(node) {
-    return node.children
+    return node.children ?? []
   },
 }
 
-export default function (
+function mindmap(
   root: TopicData,
   options: Options<TopicData> = defaultOptions,
 ) {
   // Console.time('mindmap layout')
-  const rootWithDepth = produce(root, normalizeTopicDepth)
+  const rootWithDepth = normalizeTopicDepth(root)
   const rootNode = hierarchy.mindmap(rootWithDepth, options)
   // Add left right margin
   rootNode.eachNode((node) => {
@@ -87,3 +86,5 @@ export default function (
   // Console.timeEnd('mindmap layout')
   return rootNode
 }
+
+export { mindmap }

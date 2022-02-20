@@ -208,31 +208,36 @@ export function createTopic(title: string, options: Partial<TopicData> = {}) {
 /**
  * Add side to TopicData, this will mutate TopicData and can be serialize to localStorage or database
  */
-export function normalizeTopicSide(root: TopicData) {
-  if (!root?.children?.length) return
-  if (root.children.length < 4) return
-  const mid = Math.ceil(root.children.length / 2)
-  for (const node of root.children.slice(mid)) {
-    node.side = node.side || 'left'
+export function normalizeTopicSide(root: TopicData): TopicData {
+  const { children } = root
+  if (!children) return root
+  if (children.length < 4) return root
+  const mid = Math.ceil(children.length / 2)
+  return {
+    ...root,
+    children: children.map((node, index) => {
+      if (index < mid) {
+        return {
+          side: 'left',
+          ...node,
+        }
+      }
+
+      return node
+    }),
   }
 }
 
 /**
  * Add depth to TopicData, this is used for local state, should not affect TopicData
  */
-export function normalizeTopicDepth(root: TopicData) {
-  root.depth = 0
-  const nodes = [root]
-  while (nodes.length > 0) {
-    const current = nodes.shift()
-    current?.children?.forEach((node) => {
-      node.parent = current
-      node.depth = current.depth! + 1
-      nodes.push(node)
-    })
+export function normalizeTopicDepth(root: TopicData, depth = 0): TopicData {
+  return {
+    ...root,
+    depth,
+    children: root.children?.map((node) =>
+      normalizeTopicDepth(node, depth + 1),
+    ),
+    parent: undefined,
   }
-
-  topicWalker.eachBefore(root, (node) => {
-    delete node.parent
-  })
 }

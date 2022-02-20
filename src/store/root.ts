@@ -1,4 +1,3 @@
-import { produce } from 'immer'
 import { createContainer } from 'unstated-next'
 import { useEffect, useState } from 'preact/hooks'
 import {
@@ -14,7 +13,7 @@ import EditorStore from './editor'
 interface IState {
   timeline: TopicData[]
   current: number
-  onChange: MindmapProps['onChange']
+  onChange?: MindmapProps['onChange']
   readonly: boolean
 }
 
@@ -25,18 +24,14 @@ const APPEND_CHILD = 'APPEND_CHILD'
 const DELETE_NODE = 'DELETE_NODE'
 const UPDATE_NODE = 'UPDATE_NODE'
 
-const defaultRoot: TopicData = produce(
-  {
-    ...createTopic('Central Topic'),
-    children: [createTopic('main topic 1'), createTopic('main topic 2')],
-  },
-  normalizeTopicSide,
-)
+const defaultRoot: TopicData = normalizeTopicSide({
+  ...createTopic('Central Topic'),
+  children: [createTopic('main topic 1'), createTopic('main topic 2')],
+})
 
 export const defaultState: IState = {
   current: 0,
   timeline: [defaultRoot],
-  onChange() {},
   readonly: false,
 }
 
@@ -44,11 +39,15 @@ function useRoot(initialState: Partial<IState> = {}) {
   const [state, setState] = useState({ ...defaultState, ...initialState })
   const editorStore = EditorStore.useContainer()
 
-  const SAVE_HISTORY = (draftState: IState, lastRoot: TopicData) => {
+  const SAVE_HISTORY = (draftState: IState, lastRoot: TopicData): IState => {
     const { timeline, current } = draftState
-    draftState.timeline = timeline.slice(0, current + 1)
-    draftState.timeline.push(lastRoot)
-    draftState.current = draftState.timeline.length - 1
+    const nextTimeline = timeline.slice(0, current + 1)
+    nextTimeline.push(lastRoot)
+    return {
+      ...draftState,
+      timeline: nextTimeline,
+      current: nextTimeline.length - 1,
+    }
   }
 
   useEffect(() => {
@@ -60,70 +59,61 @@ function useRoot(initialState: Partial<IState> = {}) {
     [APPEND_CHILD](parentId: string, node: TopicData) {
       if (state.readonly) return
       const lastRoot = getClonedRoot(state)
-      const nextState = produce(state, (draftState) => {
-        if (!parentId || !node) return
-        SAVE_HISTORY(draftState, lastRoot)
-        const root = draftState.timeline[draftState.current]
-        const isNodeConnected = topicWalker.getNode(root, node.id)
-        // If node already exist in node tree, delete it from it's old parent first
-        if (isNodeConnected != null) {
-          const previousParentNode = topicWalker.getParentNode(root, node.id)
-          previousParentNode != null && removeChild(previousParentNode, node.id)
+      const nextState = SAVE_HISTORY(state, lastRoot)
+      const root = nextState.timeline[nextState.current]
+      const isNodeConnected = topicWalker.getNode(root, node.id)
+      // If node already exist in node tree, delete it from it's old parent first
+      if (isNodeConnected) {
+        const previousParentNode = topicWalker.getParentNode(root, node.id)
+        if (previousParentNode) {
+          removeChild(previousParentNode, node.id)
         }
+      }
 
-        const parentNode = topicWalker.getNode(root, parentId)
-        if (parentNode == null) return
-        parentNode.children = parentNode.children ?? []
-        if (parentNode === root) {
-          const leftNodes = parentNode.children.filter(
-            (node) => node.side === 'left',
-          )
-          if (parentNode.children.length / 2 > leftNodes.length) {
-            node = produce(node, (draft) => {
-              draft.side = 'left'
-            })
-          } else {
-            node = produce(node, (draft) => {
-              draft.side = 'right'
-            })
-          }
-        }
+      const parentNode = topicWalker.getNode(root, parentId)
+      if (!parentNode) return
+      parentNode.children = parentNode.children ?? []
+      if (parentNode === root) {
+        const leftNodes = parentNode.children.filter(
+          (node) => node.side === 'left',
+        )
+        node.side =
+          parentNode.children.length / 2 > leftNodes.length ? 'left' : 'right'
+      }
 
-        parentNode.children = parentNode.children || []
-        parentNode.children.push(node)
-      })
+      parentNode.children = parentNode.children || []
+      parentNode.children.push(node)
       setState(nextState)
     },
     [DELETE_NODE](id: string) {
       if (!id) return
       if (state.readonly) return
       const lastRoot = getClonedRoot(state)
-      const nextState = produce(state, (draftState) => {
-        SAVE_HISTORY(draftState, lastRoot)
-        const root = draftState.timeline[draftState.current]
-        const parentNode = topicWalker.getParentNode(root, id)
-        if (parentNode != null && parentNode.children != null) {
-          // When deleted a node, select deleted node's sibing or parent
-          const sibling =
-            topicWalker.getPreviousNode(root, id) ??
-            topicWalker.getNextNode(root, id)
-          removeChild(parentNode, id)
-          const selectedNode = sibling ?? parentNode
-          editorStore.SELECT_NODE(selectedNode.id)
-        }
-      })
+      const nextState = SAVE_HISTORY(state, lastRoot)
+      const root = nextState.timeline[nextState.current]
+      const parentNode = topicWalker.getParentNode(root, id)
+      if (parentNode?.children) {
+        // When deleted a node, select deleted node's sibing or parent
+        const sibling =
+          topicWalker.getPreviousNode(root, id) ??
+          topicWalker.getNextNode(root, id)
+        removeChild(parentNode, id)
+        const selectedNode = sibling ?? parentNode
+        editorStore.SELECT_NODE(selectedNode.id)
+      }
+
       setState(nextState)
     },
     [UPDATE_NODE](id: string, node: Partial<TopicData>) {
       if (!id) return
       if (state.readonly) return
       const lastRoot = getClonedRoot(state)
-      const nextState = produce(state, (draftState) => {
-        SAVE_HISTORY(draftState, lastRoot)
-        const root = draftState.timeline[draftState.current]
-        const currentNode = topicWalker.getNode(root, id)
-        currentNode != null && Object.assign(currentNode, node)
-      })
+      const nextState = SAVE_HISTORY(state, lastRoot)
+      const root = nextState.timeline[nextState.current]
+      const currentNode = topicWalker.getNode(root, id)
+      if (currentNode) {
+        Object.assign(currentNode, node)
+      }
       setState(nextState)
     },
     [UNDO_HISTORY]() {
@@ -145,7 +135,7 @@ function useRoot(initialState: Partial<IState> = {}) {
 }
 
 function getClonedRoot(state: IState) {
-  return JSON.parse(JSON.stringify(state.timeline[state.current]))
+  return JSON.parse(JSON.stringify(state.timeline[state.current])) as TopicData
 }
 
 const RootStore = createContainer(useRoot)

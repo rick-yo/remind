@@ -38,7 +38,6 @@
     "@antv/hierarchy": "^0.6.8",
     "classnames": "^2.3.1",
     "hotkeys-js": "^3.8.7",
-    "immer": "^9.0.5",
     "unstated-next": "^1.1.0"
   }
 }
