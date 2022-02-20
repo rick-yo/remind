@@ -25,7 +25,7 @@ declare module '@antv/hierarchy' {
     y: number
     data: Data
     children: Array<HierachyNode<Data>>
-    // FIXME inherit from TopicData
+    // Inherit from TopicData
     side: 'left' | 'right'
     // Prototype
     translate(x: number, y: number): void

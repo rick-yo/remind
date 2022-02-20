@@ -1,4 +1,4 @@
-import produce from 'immer'
+import { produce } from 'immer'
 import { TopicData } from 'xmind-model/types/models/topic'
 import Mindmap from './Mindmap'
 import { defaultRoot, RootStoreProvider } from './store/root'

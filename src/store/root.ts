@@ -1,5 +1,5 @@
 import { TopicData } from 'xmind-model/types/models/topic'
-import produce from 'immer'
+import { produce } from 'immer'
 import { createContainer } from 'unstated-next'
 import { useEffect, useState } from 'preact/hooks'
 import {
