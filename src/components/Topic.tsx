@@ -1,4 +1,3 @@
-import { TopicData } from 'xmind-model/types/models/topic'
 import { HierachyNode } from '@antv/hierarchy'
 import classNames from 'classnames'
 import { useContext, useState } from 'preact/hooks'
@@ -17,6 +16,7 @@ import { selectText } from '../utils/dom'
 import EditorStore from '../store/editor'
 import { RootStore, useRootSelector } from '../store/root'
 import { assert } from '../utils/assert'
+import { TopicData } from '../types'
 
 const topicClass = classNames(TOPIC_CLASS, styles.topic)
 

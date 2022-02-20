@@ -31,8 +31,7 @@
     "vite": "^2.8.0",
     "xo": "^0.48.0",
     "husky": "^7.0.1",
-    "release-it": "^14.11.3",
-    "xmind-model": "^1.1.12"
+    "release-it": "^14.11.3"
   },
   "dependencies": {
     "preact": "^10.5.15",

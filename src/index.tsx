@@ -1,5 +1,4 @@
 import { produce } from 'immer'
-import { TopicData } from 'xmind-model/types/models/topic'
 import Mindmap from './Mindmap'
 import { defaultRoot, RootStoreProvider } from './store/root'
 import EditorStore from './store/editor'
@@ -7,6 +6,7 @@ import { ThemeContext, defaultTheme, Theme } from './context/theme'
 import { defaultLocale, LocaleContext } from './context/locale'
 import { normalizeTopicSide } from './utils/tree'
 import { IntlKey } from './utils/Intl'
+import { TopicData } from './types'
 
 export interface MindmapProps {
   theme?: Partial<Theme>

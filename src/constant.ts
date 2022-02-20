@@ -7,8 +7,6 @@ const MIN_TOPIC_HEIGHT = 30
 
 const canvasContext = document.createElement('canvas').getContext('2d')!
 
-const ATTACHED_KEY = 'attached'
-
 enum EDITOR_MODE {
   regular,
   drag,
@@ -49,7 +47,6 @@ export {
   TOPIC_RADIUS,
   canvasContext,
   MIN_TOPIC_HEIGHT,
-  ATTACHED_KEY,
   EDITOR_MODE,
   KEY_MAPS,
   EDITOR_ID,

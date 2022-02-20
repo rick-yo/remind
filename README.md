@@ -59,12 +59,10 @@ TopicData
 
 ```typescript
 interface TopicData {
-  id: string;
-  title: string;
-  side?: 'left' | 'right';
-  children?: {
-      attached: Array<TopicData>;
-  };
+  id: string
+  title: string
+  children?: TopicData[]
+  side?: 'left' | 'right'
 }
 ```
 

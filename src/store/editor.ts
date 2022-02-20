@@ -1,5 +1,4 @@
-import { TopicData } from 'xmind-model/types/models/topic'
-import produce from 'immer'
+import { produce } from 'immer'
 import { createContainer } from 'unstated-next'
 import { useState } from 'preact/hooks'
 import {
@@ -10,12 +9,13 @@ import {
   getBottomNode,
 } from '../utils/tree'
 import { EDITOR_MODE } from '../constant'
+import { TopicData } from '../types'
 
 type IState = {
   mode: EDITOR_MODE
   selectedNodeId: string
   scale: number
-  dragingNode: TopicData | undefined
+  dragingNode?: TopicData
   readonly: boolean
   translate: [number, number]
 }
@@ -24,7 +24,7 @@ export const defaultState: IState = {
   mode: EDITOR_MODE.regular,
   selectedNodeId: '',
   scale: 1,
-  dragingNode: null,
+  dragingNode: undefined,
   readonly: false,
   translate: [0, 0],
 }

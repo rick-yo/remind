@@ -1,4 +1,3 @@
-import type { TopicData } from 'xmind-model/types/models/topic.d'
 import hierarchy, { Options, HierachyNode } from '@antv/hierarchy'
 import produce from 'immer'
 import {
@@ -9,16 +8,8 @@ import {
   TOPIC_HORIZENTAL_MARGIN,
   TOPIC_FONT_FAMILY,
 } from '../constant'
+import { TopicData } from '../types'
 import { normalizeTopicDepth } from '../utils/tree'
-
-declare module 'xmind-model/types/models/topic' {
-  interface TopicData {
-    side?: 'left' | 'right'
-    depth?: number
-    parent?: TopicData
-    data?: any
-  }
-}
 
 export function getTopicFontsize(node: TopicData) {
   const fontSizeOffset = node.depth || 0 * 5
@@ -71,7 +62,7 @@ const defaultOptions: Options<TopicData> = {
     return 12
   },
   getChildren(node) {
-    return node.children?.attached || []
+    return node.children
   },
 }
 

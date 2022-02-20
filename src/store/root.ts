@@ -1,4 +1,3 @@
-import { TopicData } from 'xmind-model/types/models/topic'
 import { produce } from 'immer'
 import { createContainer } from 'unstated-next'
 import { useEffect, useState } from 'preact/hooks'
@@ -8,8 +7,8 @@ import {
   createTopic,
   removeChild,
 } from '../utils/tree'
-import { ATTACHED_KEY } from '../constant'
 import { MindmapProps } from '../index'
+import { TopicData } from '../types'
 import EditorStore from './editor'
 
 interface IState {
@@ -29,9 +28,7 @@ const UPDATE_NODE = 'UPDATE_NODE'
 const defaultRoot: TopicData = produce(
   {
     ...createTopic('Central Topic'),
-    children: {
-      attached: [createTopic('main topic 1'), createTopic('main topic 2')],
-    },
+    children: [createTopic('main topic 1'), createTopic('main topic 2')],
   },
   normalizeTopicSide,
 )
@@ -76,14 +73,12 @@ function useRoot(initialState: Partial<IState> = {}) {
 
         const parentNode = topicWalker.getNode(root, parentId)
         if (parentNode == null) return
-        parentNode.children = parentNode.children ?? {
-          [ATTACHED_KEY]: [],
-        }
+        parentNode.children = parentNode.children ?? []
         if (parentNode === root) {
-          const leftNodes = parentNode.children[ATTACHED_KEY].filter(
+          const leftNodes = parentNode.children.filter(
             (node) => node.side === 'left',
           )
-          if (parentNode.children[ATTACHED_KEY].length / 2 > leftNodes.length) {
+          if (parentNode.children.length / 2 > leftNodes.length) {
             node = produce(node, (draft) => {
               draft.side = 'left'
             })
@@ -94,9 +89,8 @@ function useRoot(initialState: Partial<IState> = {}) {
           }
         }
 
-        parentNode.children[ATTACHED_KEY] =
-          parentNode.children[ATTACHED_KEY] || []
-        parentNode.children[ATTACHED_KEY].push(node)
+        parentNode.children = parentNode.children || []
+        parentNode.children.push(node)
       })
       setState(nextState)
     },

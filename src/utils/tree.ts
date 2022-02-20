@@ -1,6 +1,5 @@
-import { TopicData } from 'xmind-model/types/models/topic'
 import { HierachyNode } from '@antv/hierarchy'
-import { ATTACHED_KEY } from '../constant'
+import { TopicData } from '../types'
 import { debug } from './debug'
 
 function uuidv4() {
@@ -92,9 +91,7 @@ class TreeWalker<T extends UnionNode> {
 export const defaultWalker = new TreeWalker<HierachyNodeWithTopicData>(
   defaultChildren,
 )
-export const topicWalker = new TreeWalker<TopicData>(
-  (node) => node?.children?.attached,
-)
+export const topicWalker = new TreeWalker<TopicData>((node) => node?.children)
 
 function getDistance(
   a: HierachyNodeWithTopicData,
@@ -194,10 +191,8 @@ export function getBottomNode(
 }
 
 export function removeChild(parentNode: TopicData, id: string) {
-  if (parentNode.children?.attached != null) {
-    parentNode.children.attached = parentNode.children.attached.filter(
-      (item) => item.id !== id,
-    )
+  if (parentNode.children) {
+    parentNode.children = parentNode.children.filter((item) => item.id !== id)
   }
 }
 
@@ -214,10 +209,10 @@ export function createTopic(title: string, options: Partial<TopicData> = {}) {
  * Add side to TopicData, this will mutate TopicData and can be serialize to localStorage or database
  */
 export function normalizeTopicSide(root: TopicData) {
-  if (!root?.children?.attached.length) return
-  if (root.children.attached.length < 4) return
-  const mid = Math.ceil(root.children.attached.length / 2)
-  for (const node of root.children[ATTACHED_KEY].slice(mid)) {
+  if (!root?.children?.length) return
+  if (root.children.length < 4) return
+  const mid = Math.ceil(root.children.length / 2)
+  for (const node of root.children.slice(mid)) {
     node.side = node.side || 'left'
   }
 }
@@ -230,7 +225,7 @@ export function normalizeTopicDepth(root: TopicData) {
   const nodes = [root]
   while (nodes.length > 0) {
     const current = nodes.shift()
-    current?.children?.attached.forEach((node) => {
+    current?.children?.forEach((node) => {
       node.parent = current
       node.depth = current.depth! + 1
       nodes.push(node)
