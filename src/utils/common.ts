@@ -5,4 +5,8 @@ function deepClone<T>(obj: T) {
   return JSON.parse(JSON.stringify(obj)) as T
 }
 
-export { noop, deepClone }
+function classNames(...strs: string[]) {
+  return strs.join(' ')
+}
+
+export { noop, deepClone, classNames }

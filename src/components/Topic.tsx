@@ -1,5 +1,4 @@
 import { HierachyNode } from '@antv/hierarchy'
-import classNames from 'classnames'
 import { useContext, useState } from 'preact/hooks'
 import { ThemeContext } from '../context/theme'
 import {
@@ -17,6 +16,7 @@ import EditorStore from '../store/editor'
 import { RootStore, useRootSelector } from '../store/root'
 import { assert } from '../utils/assert'
 import { TopicData } from '../types'
+import { classNames } from '../utils/common'
 
 const topicClass = classNames(TOPIC_CLASS, styles.topic)
 
