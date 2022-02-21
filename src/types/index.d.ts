@@ -1,3 +1,4 @@
+import { HierarchyPointNode } from 'd3-hierarchy'
 import { Theme } from '../context/theme'
 import { IntlKey } from '../utils/Intl'
 
@@ -19,4 +20,6 @@ interface MindmapProps {
   onChange?: (value: TopicData) => void
 }
 
-export type { TopicData, MindmapProps }
+type LayoutNode = HierarchyPointNode<TopicData>
+
+export type { TopicData, MindmapProps, LayoutNode }

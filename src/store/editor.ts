@@ -1,14 +1,8 @@
 import { createContainer } from 'unstated-next'
 import { useState } from 'preact/hooks'
-import {
-  getLeftNode,
-  HierachyNodeWithTopicData,
-  getRighttNode,
-  getTopNode,
-  getBottomNode,
-} from '../utils/tree'
+import { LayoutTree } from '../utils/tree'
 import { EDITOR_MODE } from '../constant'
-import { TopicData } from '../types'
+import { LayoutNode, TopicData } from '../types'
 
 type IState = {
   mode: EDITOR_MODE
@@ -53,8 +47,10 @@ function useEditor(initialState: Partial<IState> = {}) {
     setState((previousState) => ({ ...previousState, translate }))
   }
 
-  function moveLeft(rootWithCoords: HierachyNodeWithTopicData) {
-    const target = getLeftNode(rootWithCoords, state.selectedNodeId)
+  function moveLeft(rootWithCoords: LayoutNode) {
+    const target = LayoutTree.from(rootWithCoords).getLeftNode(
+      state.selectedNodeId,
+    )
     if (target) {
       setState((previousState) => ({
         ...previousState,
@@ -63,8 +59,10 @@ function useEditor(initialState: Partial<IState> = {}) {
     }
   }
 
-  function moveRight(rootWithCoords: HierachyNodeWithTopicData) {
-    const target = getRighttNode(rootWithCoords, state.selectedNodeId)
+  function moveRight(rootWithCoords: LayoutNode) {
+    const target = LayoutTree.from(rootWithCoords).getRighttNode(
+      state.selectedNodeId,
+    )
     if (target) {
       setState((previousState) => ({
         ...previousState,
@@ -73,8 +71,10 @@ function useEditor(initialState: Partial<IState> = {}) {
     }
   }
 
-  function moveTop(rootWithCoords: HierachyNodeWithTopicData) {
-    const target = getTopNode(rootWithCoords, state.selectedNodeId)
+  function moveTop(rootWithCoords: LayoutNode) {
+    const target = LayoutTree.from(rootWithCoords).getTopNode(
+      state.selectedNodeId,
+    )
     if (target) {
       setState((previousState) => ({
         ...previousState,
@@ -83,8 +83,10 @@ function useEditor(initialState: Partial<IState> = {}) {
     }
   }
 
-  function moveDown(rootWithCoords: HierachyNodeWithTopicData) {
-    const target = getBottomNode(rootWithCoords, state.selectedNodeId)
+  function moveDown(rootWithCoords: LayoutNode) {
+    const target = LayoutTree.from(rootWithCoords).getBottomNode(
+      state.selectedNodeId,
+    )
     if (target) {
       setState((previousState) => ({
         ...previousState,

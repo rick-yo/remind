@@ -23,7 +23,7 @@ function EnhancedMindMap({
     >
       <RootStore.Provider
         initialState={{
-          timeline: [rootWithSide],
+          root: rootWithSide,
           onChange,
           readonly,
         }}

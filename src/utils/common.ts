@@ -9,4 +9,6 @@ function classNames(...strs: string[]) {
   return strs.join(' ')
 }
 
-export { noop, deepClone, classNames }
+const toPX = (length: number | string) => `${length}px`
+
+export { noop, deepClone, classNames, toPX }

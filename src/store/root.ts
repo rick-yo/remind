@@ -1,10 +1,10 @@
 import { createContainer } from 'unstated-next'
 import { useEffect, useState } from 'preact/hooks'
 import {
-  topicWalker,
   normalizeTopicSide,
   createTopic,
   removeChild,
+  TopicTree,
 } from '../utils/tree'
 import { MindmapProps, TopicData } from '../types'
 import { History } from '../utils/history'
@@ -45,16 +45,17 @@ function useRoot(initialState: Partial<IState> = {}) {
     appendChild(parentId: string, node: TopicData) {
       if (state.readonly) return
       const root = pushSync(state.root)
-      const isNodeConnected = topicWalker.getNode(root, node.id)
+      const rootTopic = TopicTree.from(root)
+      const isNodeConnected = rootTopic.getNodeById(node.id)
       // If node already exist in node tree, delete it from it's old parent first
       if (isNodeConnected) {
-        const previousParentNode = topicWalker.getParentNode(root, node.id)
+        const previousParentNode = rootTopic.getNodeById(node.id)?.parent?.data
         if (previousParentNode) {
           removeChild(previousParentNode, node.id)
         }
       }
 
-      const parentNode = topicWalker.getNode(root, parentId)
+      const parentNode = rootTopic.getNodeById(parentId)?.data
       if (!parentNode) return
       parentNode.children = parentNode.children ?? []
       if (parentNode === root) {
@@ -73,12 +74,12 @@ function useRoot(initialState: Partial<IState> = {}) {
       if (!id) return
       if (state.readonly) return
       const root = pushSync(state.root)
-      const parentNode = topicWalker.getParentNode(root, id)
+      const rootTopic = TopicTree.from(root)
+      const parentNode = rootTopic.getNodeById(id)?.parent?.data
       if (parentNode?.children) {
         // When deleted a node, select deleted node's sibing or parent
         const sibling =
-          topicWalker.getPreviousNode(root, id) ??
-          topicWalker.getNextNode(root, id)
+          rootTopic.getPreviousNode(id) ?? rootTopic.getNextNode(id)
         removeChild(parentNode, id)
         const selectedNode = sibling ?? parentNode
         editorStore.selectNode(selectedNode.id)
@@ -90,7 +91,8 @@ function useRoot(initialState: Partial<IState> = {}) {
       if (!id) return
       if (state.readonly) return
       const root = pushSync(state.root)
-      const currentNode = topicWalker.getNode(root, id)
+      const rootTopic = TopicTree.from(root)
+      const currentNode = rootTopic.getNodeById(id)
       if (currentNode) {
         Object.assign(currentNode, node)
       }

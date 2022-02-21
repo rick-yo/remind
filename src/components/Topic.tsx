@@ -1,33 +1,23 @@
-import { HierachyNode } from '@antv/hierarchy'
 import { useContext, useState } from 'preact/hooks'
 import { ThemeContext } from '../context/theme'
-import {
-  MAX_TOPIC_WIDTH,
-  TOPIC_RADIUS,
-  EDITOR_MODE,
-  KEY_MAPS,
-  TOPIC_CLASS,
-} from '../constant'
+import { EDITOR_MODE, KEY_MAPS, TopicStyle, TOPIC_CLASS } from '../constant'
 import styles from '../index.module.css'
 import { getTopicFontsize } from '../layout/mindmap'
-import { topicWalker } from '../utils/tree'
 import { selectText } from '../utils/dom'
 import EditorStore from '../store/editor'
 import { RootStore, useRootSelector } from '../store/root'
 import { assert } from '../utils/assert'
-import { TopicData } from '../types'
-import { classNames } from '../utils/common'
+import { LayoutNode, TopicData } from '../types'
+import { classNames, toPX } from '../utils/common'
 
 const topicClass = classNames(TOPIC_CLASS, styles.topic)
 
-const Topic = (props: HierachyNode<TopicData>) => {
+const Topic = (props: LayoutNode) => {
   const {
     data: { title, id },
     x,
     y,
     depth,
-    hgap,
-    vgap,
   } = props
   const $theme = useContext(ThemeContext)
   const editorStore = EditorStore.useContainer()
@@ -83,7 +73,7 @@ const Topic = (props: HierachyNode<TopicData>) => {
     if (!editorStore.dragingNode) return
     if (editorStore.dragingNode.id === id) return
     // Should not drop topic to it's descendants
-    const descendants = topicWalker.getDescendants(editorStore.dragingNode)
+    const descendants: TopicData[] = []
     if (descendants.some((node) => node.id === id)) {
       return
     }
@@ -119,8 +109,6 @@ const Topic = (props: HierachyNode<TopicData>) => {
     editorStore.setMode(EDITOR_MODE.edit)
   }
 
-  const padding = `${vgap}px ${hgap}px`
-
   return (
     <div
       id={`topic-${id}`}
@@ -144,12 +132,12 @@ const Topic = (props: HierachyNode<TopicData>) => {
         e.stopPropagation()
       }}
       style={{
-        borderRadius: `${TOPIC_RADIUS}px`,
+        borderRadius: `${TopicStyle.radius}px`,
         transform: `translate(${x}px, ${y}px)`,
         background: `${background}`,
-        maxWidth: `${MAX_TOPIC_WIDTH}px`,
-        padding: `${padding}`,
-        fontSize: `${getTopicFontsize(props.data)}px`,
+        maxWidth: toPX(TopicStyle.maxWidth),
+        padding: toPX(TopicStyle.padding),
+        fontSize: toPX(getTopicFontsize(props.data)),
         outline: `${outline}`,
         translate: `0 ${isEditing ? '2px' : 0}`,
       }}

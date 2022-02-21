@@ -12,11 +12,10 @@ import Topic from './components/Topic'
 import {
   EDITOR_MODE,
   EDITOR_ID,
-  TOPIC_FONT_FAMILY,
   CORE_EDITOR_ID,
   TOPIC_CLASS,
   HOTKEYS,
-  TOPIC_HORIZENTAL_MARGIN,
+  TopicStyle,
 } from './constant'
 import { mindmap } from './layout/mindmap'
 import Links from './components/Links'
@@ -47,8 +46,8 @@ const Mindmap = () => {
   const mindMap = useMemo(() => {
     const map = mindmap(root)
     // Move mindmap to canvas central positon
-    map.eachNode((node) => {
-      node.x += canvasWidth / 2 - TOPIC_HORIZENTAL_MARGIN
+    map.each((node) => {
+      node.x += canvasWidth / 2 - TopicStyle.maxWidth
       node.y += canvasHeight / 2
     })
     return map
@@ -65,7 +64,7 @@ const Mindmap = () => {
 
   const topics: JSX.Element[] = useMemo(() => {
     const nodes: JSX.Element[] = []
-    mindMap.eachNode((node) => {
+    mindMap.each((node) => {
       nodes.push(<Topic key={node.data.id} {...node} />)
     })
     return nodes
@@ -219,7 +218,7 @@ const Mindmap = () => {
     }, 200)
   }, [root.id])
 
-  debug('rootStore', rootStore)
+  debug('mindMap', mindMap)
 
   const handleDragStart = useCallback(() => {
     setLastTouchPosition([0, 0])
@@ -264,7 +263,7 @@ const Mindmap = () => {
       id={EDITOR_ID}
       className={styles.editorContainer}
       style={{
-        fontFamily: TOPIC_FONT_FAMILY,
+        fontFamily: TopicStyle.fontFamily,
         width: `${canvasWidth}px`,
         height: `${canvasHeight}px`,
       }}

@@ -7,11 +7,11 @@ const customData: TopicData = {
   title: 'Central Topic',
   children: [
     {
-      title: 'main topic 2',
+      title: 'main topic 1',
       id: 'd5b93d9e-4a3b-49fe-83a0-f4cb61397246',
     },
     {
-      title: 'main topic',
+      title: 'main topic 2',
       id: '7312ed2e-b90f-44a8-b0bd-fa4df6c9708c',
       children: [
         {

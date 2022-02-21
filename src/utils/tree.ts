@@ -1,57 +1,129 @@
-import { HierachyNode } from '@antv/hierarchy'
-import { TopicData } from '../types'
+import { hierarchy, HierarchyNode } from 'd3-hierarchy'
+import { LayoutNode, TopicData } from '../types'
 import { debug } from './debug'
 
 function uuidv4() {
   return URL.createObjectURL(new Blob([])).slice(31)
 }
 
-export type HierachyNodeWithTopicData = HierachyNode<TopicData>
-type UnionNode = HierachyNodeWithTopicData | TopicData
-
-type ChildrenFn<T> = (node: T) => T[] | undefined
-
-const defaultChildren = (node: HierachyNodeWithTopicData) => {
-  return node.children
+function getDistance(a: LayoutNode, b: LayoutNode) {
+  const xDiff = Math.abs(a.x - b.x)
+  const yDiff = Math.abs(a.y - b.y)
+  return Math.sqrt(xDiff ** 2 + yDiff ** 2)
 }
 
-class TreeWalker<T extends UnionNode> {
-  children: ChildrenFn<T>
-  constructor(children: ChildrenFn<T>) {
-    this.children = children
+export class LayoutTree {
+  static from(root: LayoutNode) {
+    return new LayoutTree(root)
   }
 
-  getNode(root: T, id: string): T | undefined {
-    let target: T | undefined
-    this.eachBefore(root, (node) => {
-      if (node.id === id) target = node
+  root: LayoutNode
+  constructor(root: LayoutNode) {
+    this.root = root
+  }
+
+  getNodeById(targetId: string) {
+    return this.root.descendants().find((node) => node.data.id === targetId)
+  }
+
+  getClosedNode(
+    array: LayoutNode[],
+    target: LayoutNode,
+  ): LayoutNode | undefined {
+    if (array.length === 0) return undefined
+    return array.reduce<LayoutNode | undefined>((previous, curr) => {
+      if (!previous) {
+        previous = curr
+      }
+
+      return getDistance(target, curr) < getDistance(target, previous)
+        ? curr
+        : previous
+    }, undefined)
+  }
+
+  getLeftNode(currentId: string) {
+    if (this.root.id === currentId) {
+      return this.getClosedNode(
+        this.root.descendants().filter((node) => node.x < this.root.x),
+        this.root,
+      )
+    }
+
+    const currentNode = this.getNodeById(currentId)
+    if (!currentNode) return
+    const left =
+      currentNode.data.side === 'right'
+        ? this.getNodeById(currentNode.data.id)?.parent
+        : this.getClosedNode(currentNode.descendants(), currentNode)
+    debug('getLeftNode', left)
+    return left
+  }
+
+  getRighttNode(currentId: string) {
+    if (this.root.id === currentId) {
+      return this.getClosedNode(
+        this.root.descendants().filter((node) => node.x > this.root.x),
+        this.root,
+      )
+    }
+
+    const currentNode = this.getNodeById(currentId)
+    if (!currentNode) return
+    const right =
+      currentNode.data.side === 'right'
+        ? this.getClosedNode(currentNode.descendants(), currentNode)
+        : this.getNodeById(currentNode.data.id)?.parent
+    debug('getRighttNode', right)
+    return right
+  }
+
+  getTopNode(currentId: string) {
+    const array: LayoutNode[] = []
+    const currentNode = this.getNodeById(currentId)
+    if (!currentNode) return undefined
+    this.root.eachBefore((node) => {
+      if (node.y < currentNode.y) {
+        array.push(node)
+      }
     })
-    return target
+    return this.getClosedNode(array, currentNode)
   }
 
-  /**
-   * Get node's descendants, exclude this node
-   */
-  getDescendants(root: T): T[] {
-    const nodes: T[] = []
-    this.eachBefore(root, (node) => {
-      nodes.push(node)
+  getBottomNode(currentId: string) {
+    const array: LayoutNode[] = []
+    const currentNode = this.getNodeById(currentId)
+    if (!currentNode) return undefined
+    this.root.eachBefore((node) => {
+      if (node.y > currentNode.y) {
+        array.push(node)
+      }
     })
-    return nodes.filter((node) => node !== root)
+    return this.getClosedNode(array, currentNode)
+  }
+}
+
+export class TopicTree {
+  static from(root: TopicData) {
+    return new TopicTree(root)
   }
 
-  getParentNode(root: T, id: string): T | undefined {
-    let target: T | undefined
-    this.eachBefore(root, (node) => {
-      if (!Array.isArray(this.children(node))) return
-      if (this.children(node)?.some((item) => item.id === id)) target = node
-    })
-    return target
+  root: HierarchyNode<TopicData>
+  constructor(root: TopicData) {
+    this.root = hierarchy<TopicData>(root)
   }
 
-  getPreviousNode(root: T, id: string): T | undefined {
-    const parent = this.getParentNode(root, id)
-    const children = this.children(parent!)
+  getNodeById(targetId: string) {
+    return this.root.descendants().find((node) => node.data.id === targetId)
+  }
+
+  getParentNode(targetId: string) {
+    return this.getNodeById(targetId)?.parent?.data
+  }
+
+  getPreviousNode(id: string) {
+    const parent = this.getParentNode(id)
+    const children = parent?.children
     if (parent && children) {
       const index = children.findIndex((node) => node.id === id)
       return children[index - 1]
@@ -60,9 +132,9 @@ class TreeWalker<T extends UnionNode> {
     return undefined
   }
 
-  getNextNode(root: T, id: string): T | undefined {
-    const parent = this.getParentNode(root, id)
-    const children = this.children(parent!)
+  getNextNode(id: string) {
+    const parent = this.getParentNode(id)
+    const children = parent?.children
     if (parent && children) {
       const index = children.findIndex((node) => node.id === id)
       return children[index + 1]
@@ -70,124 +142,6 @@ class TreeWalker<T extends UnionNode> {
 
     return undefined
   }
-
-  eachBefore(node: T, callback: (node: T) => void) {
-    const nodes = [node]
-    let children
-    let i
-    let current: T | undefined
-    while ((current = nodes.pop())) {
-      callback(current)
-      children = this.children(current)
-      if (children) {
-        for (i = children.length - 1; i >= 0; --i) {
-          nodes.push(children[i])
-        }
-      }
-    }
-  }
-}
-
-export const defaultWalker = new TreeWalker<HierachyNodeWithTopicData>(
-  defaultChildren,
-)
-export const topicWalker = new TreeWalker<TopicData>((node) => node?.children)
-
-function getDistance(
-  a: HierachyNodeWithTopicData,
-  b: HierachyNodeWithTopicData,
-) {
-  const xDiff = Math.abs(a.x - b.x)
-  const yDiff = Math.abs(a.y - b.y)
-  return Math.sqrt(xDiff ** 2 + yDiff ** 2)
-}
-
-function getClosedNode(
-  array: HierachyNodeWithTopicData[],
-  target: HierachyNodeWithTopicData,
-): HierachyNodeWithTopicData | undefined {
-  if (array.length === 0) return undefined
-  return array.reduce<HierachyNodeWithTopicData | undefined>(
-    (previous, curr) => {
-      if (!previous) {
-        previous = curr
-      }
-
-      return getDistance(target, curr) < getDistance(target, previous)
-        ? curr
-        : previous
-    },
-    undefined,
-  )
-}
-
-export function getLeftNode(
-  root: HierachyNodeWithTopicData,
-  currentId: string,
-) {
-  if (root.id === currentId) {
-    return getClosedNode(
-      defaultWalker.getDescendants(root).filter((node) => node.x < root.x),
-      root,
-    )
-  }
-
-  const currentNode = defaultWalker.getNode(root, currentId)
-  if (!currentNode) return
-  const left =
-    currentNode.side === 'right'
-      ? defaultWalker.getParentNode(root, currentNode.id)
-      : getClosedNode(defaultWalker.getDescendants(currentNode), currentNode)
-  debug('getLeftNode', left)
-  return left
-}
-
-export function getRighttNode(
-  root: HierachyNodeWithTopicData,
-  currentId: string,
-) {
-  if (root.id === currentId) {
-    return getClosedNode(
-      defaultWalker.getDescendants(root).filter((node) => node.x > root.x),
-      root,
-    )
-  }
-
-  const currentNode = defaultWalker.getNode(root, currentId)
-  if (!currentNode) return
-  const right =
-    currentNode.side === 'right'
-      ? getClosedNode(defaultWalker.getDescendants(currentNode), currentNode)
-      : defaultWalker.getParentNode(root, currentNode.id)
-  debug('getRighttNode', right)
-  return right
-}
-
-export function getTopNode(root: HierachyNodeWithTopicData, currentId: string) {
-  const array: HierachyNodeWithTopicData[] = []
-  const currentNode = defaultWalker.getNode(root, currentId)
-  if (!currentNode) return undefined
-  defaultWalker.eachBefore(root, (node) => {
-    if (node.y < currentNode.y) {
-      array.push(node)
-    }
-  })
-  return getClosedNode(array, currentNode)
-}
-
-export function getBottomNode(
-  root: HierachyNodeWithTopicData,
-  currentId: string,
-) {
-  const array: HierachyNodeWithTopicData[] = []
-  const currentNode = defaultWalker.getNode(root, currentId)
-  if (!currentNode) return undefined
-  defaultWalker.eachBefore(root, (node) => {
-    if (node.y > currentNode.y) {
-      array.push(node)
-    }
-  })
-  return getClosedNode(array, currentNode)
 }
 
 export function removeChild(parentNode: TopicData, id: string) {

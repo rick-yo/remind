@@ -1,18 +1,10 @@
-import hierarchy, { Options, HierachyNode } from '@antv/hierarchy'
-import {
-  MIN_TOPIC_HEIGHT,
-  canvasContext,
-  MAX_TOPIC_WIDTH,
-  TOPIC_FONT_SIZE,
-  TOPIC_HORIZENTAL_MARGIN,
-  TOPIC_FONT_FAMILY,
-} from '../constant'
+import { hierarchy, HierarchyPointNode, tree } from 'd3-hierarchy'
+import { canvasContext, TopicStyle } from '../constant'
 import { TopicData } from '../types'
-import { normalizeTopicDepth } from '../utils/tree'
 
 export function getTopicFontsize(node: TopicData) {
   const fontSizeOffset = node.depth ?? 0 * 5
-  const fontSize = `${Math.max(16, TOPIC_FONT_SIZE - fontSizeOffset)}`
+  const fontSize = `${Math.max(16, TopicStyle.fontSize - fontSizeOffset)}`
   return fontSize
 }
 
@@ -20,70 +12,42 @@ export function getTopicFontsize(node: TopicData) {
 function measureText(node: TopicData) {
   const fontSize = getTopicFontsize(node)
   canvasContext.save()
-  canvasContext.font = `${fontSize}px ${TOPIC_FONT_FAMILY}`
+  canvasContext.font = `${fontSize}px ${TopicStyle.fontFamily}`
   const measure = canvasContext.measureText(node.title)
   canvasContext.restore()
   return measure
 }
 
-const defaultOptions: Options<TopicData> = {
-  direction: 'H',
-  getSide(node) {
-    return node.data?.side ?? 'right'
-  },
-  getId(node) {
-    return node.id
-  },
-  getHeight(node) {
-    const { width } = measureText(node)
-    const lines = Math.ceil(width / MAX_TOPIC_WIDTH)
-    const contentHeight = Math.max(
-      MIN_TOPIC_HEIGHT,
-      TOPIC_FONT_SIZE * lines * 1.2,
-    )
-    return contentHeight
-  },
-  getWidth(node) {
-    const measure = measureText(node)
-    const contentWidth = Math.min(measure.width, MAX_TOPIC_WIDTH)
-    return contentWidth
-  },
-  getSubTreeSep() {
-    return 10
-  },
-  // Left right padding
-  getHGap() {
-    return 20
-  },
-  // Top bottom padding
-  getVGap() {
-    return 12
-  },
-  getChildren(node) {
-    return node.children ?? []
-  },
+declare module 'd3-hierarchy' {
+  export interface HierarchyPointNode<Datum> extends HierarchyNode<Datum> {
+    size: [number, number]
+  }
 }
 
-function mindmap(
-  root: TopicData,
-  options: Options<TopicData> = defaultOptions,
-) {
-  // Console.time('mindmap layout')
-  const rootWithDepth = normalizeTopicDepth(root)
-  const rootNode = hierarchy.mindmap(rootWithDepth, options)
-  // Add left right margin
-  rootNode.eachNode((node) => {
-    node.x +=
-      node.depth *
-      (node.side === 'right'
-        ? TOPIC_HORIZENTAL_MARGIN
-        : -TOPIC_HORIZENTAL_MARGIN)
+function mindmap(root: TopicData): HierarchyPointNode<TopicData> {
+  const rootNode = hierarchy(root)
+  const layoutNode = tree<TopicData>()
+    .nodeSize([150, 40])
+    .separation((a, b) => (a.parent === b.parent ? 1 : 1))(rootNode)
+
+  layoutNode.each((node) => {
+    // Rotate entire tree
+    const { x, y, depth } = node
+    node.x = y
+    node.y = x
+    // Reduce margin
+    node.x += depth * 140
+    // Compute node size
+    const measure = measureText(node.data)
+    const width = Math.min(measure.width, TopicStyle.maxWidth)
+    const lines = Math.ceil(width / TopicStyle.maxWidth)
+    const height = Math.max(
+      TopicStyle.minHeight,
+      TopicStyle.fontSize * lines * 1.2,
+    )
+    node.size = [width, height]
   })
-  // // move mindmap to canvas center
-  const descendants: Array<HierachyNode<TopicData>> = []
-  rootNode.eachNode((node) => descendants.push(node))
-  // Console.timeEnd('mindmap layout')
-  return rootNode
+  return layoutNode
 }
 
 export { mindmap }

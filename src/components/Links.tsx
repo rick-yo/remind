@@ -1,24 +1,17 @@
 import { useContext } from 'preact/hooks'
 import { ThemeContext } from '../context/theme'
-import { HierachyNodeWithTopicData } from '../utils/tree'
-import { TOPIC_HORIZENTAL_MARGIN } from '../constant'
+import { LayoutNode } from '../types'
 
 interface LinksProps {
-  mindmap: HierachyNodeWithTopicData
+  mindmap: LayoutNode
 }
 
-function getMainTopicLinkPosition(
-  root: HierachyNodeWithTopicData,
-  child: HierachyNodeWithTopicData,
-) {
-  const x1Offset = child.side === 'right' ? root.width - 50 : 50
-  const x3Offset = child.side === 'right' ? 0 : child.width
+function getMainTopicLinkPosition(root: LayoutNode, child: LayoutNode) {
+  const x1Offset = child.data.side === 'right' ? root.size[0] - 50 : 50
+  const x3Offset = child.data.side === 'right' ? 0 : child.size[0]
   const x1 = root.x + x1Offset
   const y1 = root.y + root.height / 2
-  const x2 =
-    child.side === 'right'
-      ? x1 + TOPIC_HORIZENTAL_MARGIN
-      : x1 - TOPIC_HORIZENTAL_MARGIN
+  const x2 = child.data.side === 'right' ? x1 + 20 : x1 - 20
   const y2 = child.y + child.height / 2
   const x3 = child.x + x3Offset
   const y3 = y2
@@ -30,7 +23,7 @@ const Links = (props: LinksProps) => {
   const linkTheme = useContext(ThemeContext).link
   const links: string[] = []
 
-  mindmap.eachNode((node) => {
+  mindmap.each((node) => {
     if (node.depth === 0) {
       node.children?.forEach((child) => {
         links.push(getMainTopicLinkPosition(node, child))
@@ -39,11 +32,11 @@ const Links = (props: LinksProps) => {
     }
 
     node.children?.forEach((child) => {
-      const x1 = node.x + (child.side === 'right' ? node.width : 0)
+      const x1 = node.x + (child.data.side === 'right' ? node.size[0] : 0)
       const y1 = node.y + node.height / 2
-      const x2 = x1 + (child.side === 'right' ? 10 : -10)
+      const x2 = x1 + (child.data.side === 'right' ? 10 : -10)
       const y2 = y1
-      const x3 = child.x + (child.side === 'right' ? 0 : child.width)
+      const x3 = child.x + (child.data.side === 'right' ? 0 : child.size[0])
       const y3 = child.y + child.height / 2
       links.push(`${x1},${y1} ${x2},${y2} ${x3},${y3}`)
     })
