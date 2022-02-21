@@ -1,9 +1,9 @@
 import { EDITOR_ID } from '../constant'
-import EditorStore from '../store/editor'
-import styles from '../index.module.css'
+import { ViewModel } from '../viewModel'
+import styles from './index.module.css'
 
 const Toolbar = () => {
-  const { scale, setScale, setTranslate } = EditorStore.useContainer()
+  const { scale, setScale, setTranslate } = ViewModel.useContainer()
   async function requestFullScreen() {
     await document.querySelector(`#${EDITOR_ID}`)?.requestFullscreen()
   }

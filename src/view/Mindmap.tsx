@@ -8,7 +8,6 @@ import {
 } from 'preact/hooks'
 import hotkeys from 'hotkeys-js'
 import { JSX } from 'preact'
-import Topic from './components/Topic'
 import {
   EDITOR_MODE,
   EDITOR_ID,
@@ -16,31 +15,32 @@ import {
   TOPIC_CLASS,
   HOTKEYS,
   TopicStyle,
-} from './constant'
-import { mindmap } from './layout/mindmap'
-import Links from './components/Links'
-import { useRootSelector, RootStore } from './store/root'
-import EditorStore from './store/editor'
-import { createTopic } from './utils/tree'
-import { debug } from './utils/debug'
+} from '../constant'
+import { mindmap } from '../layout/mindmap'
+import { Model } from '../model'
+import { ViewModel } from '../viewModel'
+import { createTopic } from '../utils/tree'
+import { debug } from '../utils/debug'
 import {
   selectText,
   useIconFont,
   useClickOutSide,
   usePassiveWheelEvent,
-} from './utils/dom'
+} from '../utils/dom'
+import { useLocale } from '../context/locale'
+import { ThemeContext } from '../context/theme'
+import { assert } from '../utils/assert'
+import Toolbar from './Toolbar'
+import Links from './Links'
 import styles from './index.module.css'
-import Toolbar from './components/Toolbar'
-import { useLocale } from './context/locale'
-import { ThemeContext } from './context/theme'
-import { assert } from './utils/assert'
+import Topic from './Topic'
 
 const Mindmap = () => {
-  const root = useRootSelector((s) => s)
-  const rootStore = RootStore.useContainer()
-  const editorStore = EditorStore.useContainer()
+  const model = Model.useContainer()
+  const { root } = model
+  const viewModel = ViewModel.useContainer()
   const theme = useContext(ThemeContext)
-  const { scale, translate, mode, selectedNodeId } = editorStore
+  const { scale, translate, mode, selectedNodeId } = viewModel
   const id = `#topic-${selectedNodeId}`
   const { canvasWidth, canvasHeight } = theme
   const mindMap = useMemo(() => {
@@ -75,7 +75,7 @@ const Mindmap = () => {
     function appendChild(e: KeyboardEvent) {
       e.preventDefault()
       if (!selectedNodeId) return
-      rootStore.appendChild(selectedNodeId, createTopic(locale.subTopic))
+      model.appendChild(selectedNodeId, createTopic(locale.subTopic))
     }
 
     function editTopic(e: KeyboardEvent) {
@@ -84,11 +84,11 @@ const Mindmap = () => {
       const element = document.querySelector<HTMLDivElement>(id)
       element?.focus()
       selectText(element!)
-      editorStore.setMode(EDITOR_MODE.edit)
+      viewModel.setMode(EDITOR_MODE.edit)
     }
 
     function deleteNode() {
-      rootStore.deleteNode(selectedNodeId)
+      model.deleteNode(selectedNodeId)
     }
 
     if (mode === EDITOR_MODE.regular) {
@@ -108,30 +108,30 @@ const Mindmap = () => {
     id,
     locale.subTopic,
     hotkeyOptions,
-    rootStore,
-    editorStore,
+    model,
+    viewModel,
   ])
 
   // Regular mode, bind navigate shortcut
   useEffect(() => {
     function moveTop(e: KeyboardEvent) {
       e.preventDefault()
-      editorStore.moveTop(mindMap)
+      viewModel.moveTop(mindMap)
     }
 
     function moveDown(e: KeyboardEvent) {
       e.preventDefault()
-      editorStore.moveDown(mindMap)
+      viewModel.moveDown(mindMap)
     }
 
     function moveLeft(e: KeyboardEvent) {
       e.preventDefault()
-      editorStore.moveLeft(mindMap)
+      viewModel.moveLeft(mindMap)
     }
 
     function moveRight(e: KeyboardEvent) {
       e.preventDefault()
-      editorStore.moveRight(mindMap)
+      viewModel.moveRight(mindMap)
     }
 
     if (mode === EDITOR_MODE.regular) {
@@ -147,16 +147,16 @@ const Mindmap = () => {
       hotkeys.unbind(HOTKEYS.up, moveTop)
       hotkeys.unbind(HOTKEYS.down, moveDown)
     }
-  }, [mindMap, hotkeyOptions, mode, editorStore])
+  }, [mindMap, hotkeyOptions, mode, viewModel])
 
   // Regular mode, bind undo redo shortcut
   useEffect(() => {
     function undo() {
-      rootStore.undo()
+      model.undo()
     }
 
     function redo() {
-      rootStore.redo()
+      model.redo()
     }
 
     if (mode === EDITOR_MODE.regular) {
@@ -168,7 +168,7 @@ const Mindmap = () => {
       hotkeys.unbind(HOTKEYS.undo, undo)
       hotkeys.unbind(HOTKEYS.redo, redo)
     }
-  }, [hotkeyOptions, mode, rootStore])
+  }, [hotkeyOptions, mode, model])
 
   // Edit mode
   useClickOutSide(
@@ -176,13 +176,13 @@ const Mindmap = () => {
     () => {
       if (mode !== EDITOR_MODE.edit) return
       if (!selectedNodeId) return
-      editorStore.setMode(EDITOR_MODE.regular)
+      viewModel.setMode(EDITOR_MODE.regular)
       const element = document.querySelector<HTMLDivElement>(id)
-      rootStore.updateNode(selectedNodeId, {
+      model.updateNode(selectedNodeId, {
         title: element?.innerText,
       })
     },
-    [mode, selectedNodeId, editorStore],
+    [mode, selectedNodeId, viewModel],
   )
 
   useClickOutSide(
@@ -192,21 +192,18 @@ const Mindmap = () => {
       assert(e.target instanceof HTMLDivElement)
       const isTopic = e.target?.closest(`.${TOPIC_CLASS}`)
       if (isTopic) return
-      editorStore.selectNode('')
+      viewModel.selectNode('')
     },
-    [selectedNodeId, editorStore],
+    [selectedNodeId, viewModel],
   )
 
   const handleWheel = useCallback(
     (e: WheelEvent) => {
       e.stopPropagation()
       e.preventDefault()
-      editorStore.setTranslate([
-        translate[0] - e.deltaX,
-        translate[1] - e.deltaY,
-      ])
+      viewModel.setTranslate([translate[0] - e.deltaX, translate[1] - e.deltaY])
     },
-    [translate, editorStore],
+    [translate, viewModel],
   )
 
   usePassiveWheelEvent(editorRef, handleWheel)
@@ -214,7 +211,7 @@ const Mindmap = () => {
   // Select root topic after initial render
   useEffect(() => {
     setTimeout(() => {
-      editorStore.selectNode(root.id)
+      viewModel.selectNode(root.id)
     }, 200)
   }, [root.id])
 
@@ -228,12 +225,12 @@ const Mindmap = () => {
   const handleDrag = useCallback(
     (e: MouseEvent) => {
       if (!isDragging) return
-      editorStore.setTranslate([
+      viewModel.setTranslate([
         translate[0] + e.movementX,
         translate[1] + e.movementY,
       ])
     },
-    [isDragging, translate, editorStore],
+    [isDragging, translate, viewModel],
   )
 
   const handleTouchDrag = useCallback(
@@ -247,10 +244,10 @@ const Mindmap = () => {
 
       const deltaX = lastTouch.clientX - lastTouchPosition[0]
       const deltaY = lastTouch.clientY - lastTouchPosition[1]
-      editorStore.setTranslate([translate[0] + deltaX, translate[1] + deltaY])
+      viewModel.setTranslate([translate[0] + deltaX, translate[1] + deltaY])
       setLastTouchPosition([lastTouch.clientX, lastTouch.clientY])
     },
-    [isDragging, lastTouchPosition, translate, editorStore],
+    [isDragging, lastTouchPosition, translate, viewModel],
   )
 
   const handleDragEnd = useCallback(() => {

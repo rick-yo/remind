@@ -22,7 +22,7 @@ export const defaultState: IState = {
   translate: [0, 0],
 }
 
-function useEditor(initialState: Partial<IState> = {}) {
+function useViewModel(initialState: Partial<IState> = {}) {
   const [state, setState] = useState({ ...defaultState, ...initialState })
   function setMode(mode: EDITOR_MODE) {
     if (state.readonly) return
@@ -109,6 +109,6 @@ function useEditor(initialState: Partial<IState> = {}) {
   }
 }
 
-const EditorStore = createContainer(useEditor)
+const ViewModel = createContainer(useViewModel)
 
-export default EditorStore
+export { ViewModel }

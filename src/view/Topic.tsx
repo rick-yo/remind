@@ -1,14 +1,14 @@
 import { useContext, useState } from 'preact/hooks'
 import { ThemeContext } from '../context/theme'
 import { EDITOR_MODE, KEY_MAPS, TopicStyle, TOPIC_CLASS } from '../constant'
-import styles from '../index.module.css'
 import { getTopicFontsize } from '../layout/mindmap'
 import { selectText } from '../utils/dom'
-import EditorStore from '../store/editor'
-import { RootStore, useRootSelector } from '../store/root'
+import { ViewModel } from '../viewModel'
+import { Model } from '../model'
 import { assert } from '../utils/assert'
 import { LayoutNode, TopicData } from '../types'
 import { classNames, toPX } from '../utils/common'
+import styles from './index.module.css'
 
 const topicClass = classNames(TOPIC_CLASS, styles.topic)
 
@@ -20,17 +20,17 @@ const Topic = (props: LayoutNode) => {
     depth,
   } = props
   const $theme = useContext(ThemeContext)
-  const editorStore = EditorStore.useContainer()
-  const root = useRootSelector((s) => s)
-  const rootStore = RootStore.useContainer()
-  const { mode, selectedNodeId } = editorStore
+  const viewModel = ViewModel.useContainer()
+  const model = Model.useContainer()
+  const { root } = model
+  const { mode, selectedNodeId } = viewModel
   const isSelected = id === selectedNodeId
   const isEditing = isSelected && mode === EDITOR_MODE.edit
   const [isDragEntering, setIsDragEntering] = useState(false)
   const isMainTopic = depth <= 1
 
   function selectNode() {
-    editorStore.selectNode(id)
+    viewModel.selectNode(id)
   }
 
   function exitEditMode(e: KeyboardEvent) {
@@ -38,9 +38,9 @@ const Topic = (props: LayoutNode) => {
       [KEY_MAPS.Enter, KEY_MAPS.Escape].includes(e.key) &&
       mode === EDITOR_MODE.edit
     ) {
-      editorStore.setMode(EDITOR_MODE.regular)
+      viewModel.setMode(EDITOR_MODE.regular)
       assert(e.currentTarget instanceof HTMLDivElement)
-      rootStore.updateNode(id, {
+      model.updateNode(id, {
         title: e.currentTarget.textContent ?? '',
       })
       // Fix selection exit after exit edit mode on firefox
@@ -58,7 +58,7 @@ const Topic = (props: LayoutNode) => {
     assert(e.dataTransfer instanceof HTMLDivElement)
     // SetData dataTransfer to make drag and drop work in firefox
     e.dataTransfer.setData('text/plain', '')
-    editorStore.dragNode(props.data)
+    viewModel.dragNode(props.data)
   }
 
   function handleDragEnter() {
@@ -70,15 +70,15 @@ const Topic = (props: LayoutNode) => {
   }
 
   function handleDrop() {
-    if (!editorStore.dragingNode) return
-    if (editorStore.dragingNode.id === id) return
+    if (!viewModel.dragingNode) return
+    if (viewModel.dragingNode.id === id) return
     // Should not drop topic to it's descendants
     const descendants: TopicData[] = []
     if (descendants.some((node) => node.id === id)) {
       return
     }
 
-    rootStore.appendChild(id, editorStore.dragingNode)
+    model.appendChild(id, viewModel.dragingNode)
     handleDragLeave()
   }
 
@@ -106,7 +106,7 @@ const Topic = (props: LayoutNode) => {
     const element = e.target as HTMLDivElement
     element?.focus()
     selectText(element)
-    editorStore.setMode(EDITOR_MODE.edit)
+    viewModel.setMode(EDITOR_MODE.edit)
   }
 
   return (

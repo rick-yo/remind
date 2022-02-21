@@ -9,7 +9,7 @@ import {
 import { MindmapProps, TopicData } from '../types'
 import { History } from '../utils/history'
 import { deepClone } from '../utils/common'
-import EditorStore from './editor'
+import { ViewModel } from '../viewModel'
 
 interface IState {
   root: TopicData
@@ -27,9 +27,9 @@ export const defaultState: IState = {
   readonly: false,
 }
 
-function useRoot(initialState: Partial<IState> = {}) {
+function useModel(initialState: Partial<IState> = {}) {
   const [state, setState] = useState({ ...defaultState, ...initialState })
-  const editorStore = EditorStore.useContainer()
+  const viewModel = ViewModel.useContainer()
   const history = new History<TopicData>()
 
   const pushSync = (newRoot: TopicData): TopicData => {
@@ -82,7 +82,7 @@ function useRoot(initialState: Partial<IState> = {}) {
           rootTopic.getPreviousNode(id) ?? rootTopic.getNextNode(id)
         removeChild(parentNode, id)
         const selectedNode = sibling ?? parentNode
-        editorStore.selectNode(selectedNode.id)
+        viewModel.selectNode(selectedNode.id)
       }
 
       setState({ ...state, root })
@@ -114,11 +114,6 @@ function useRoot(initialState: Partial<IState> = {}) {
   }
 }
 
-const RootStore = createContainer(useRoot)
+const Model = createContainer(useModel)
 
-const useRootSelector = <T>(selector: (state: TopicData) => T) => {
-  const rootState = RootStore.useContainer()
-  return selector(rootState.root)
-}
-
-export { defaultRoot, RootStore, useRootSelector }
+export { defaultRoot, Model }

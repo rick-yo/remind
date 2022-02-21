@@ -1,6 +1,6 @@
-import Mindmap from './Mindmap'
-import { defaultRoot, RootStore } from './store/root'
-import EditorStore from './store/editor'
+import Mindmap from './view/Mindmap'
+import { defaultRoot, Model } from './model'
+import { ViewModel } from './viewModel'
 import { ThemeContext, defaultTheme } from './context/theme'
 import { defaultLocale, LocaleContext } from './context/locale'
 import { normalizeTopicSide } from './utils/tree'
@@ -16,12 +16,12 @@ function EnhancedMindMap({
 }: MindmapProps) {
   const rootWithSide = normalizeTopicSide(value)
   return (
-    <EditorStore.Provider
+    <ViewModel.Provider
       initialState={{
         readonly,
       }}
     >
-      <RootStore.Provider
+      <Model.Provider
         initialState={{
           root: rootWithSide,
           onChange,
@@ -38,8 +38,8 @@ function EnhancedMindMap({
             <Mindmap />
           </LocaleContext.Provider>
         </ThemeContext.Provider>
-      </RootStore.Provider>
-    </EditorStore.Provider>
+      </Model.Provider>
+    </ViewModel.Provider>
   )
 }
 
