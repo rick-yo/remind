@@ -30,15 +30,18 @@ import {
 import { useLocale } from '../context/locale'
 import { ThemeContext } from '../context/theme'
 import { assert } from '../utils/assert'
+import { MindmapProps } from '../types'
+import { useContributions, ViewType } from '../contribute'
 import Toolbar from './Toolbar'
 import Links from './Links'
 import styles from './index.module.css'
 import Topic from './Topic'
 
-const Mindmap = () => {
+const Mindmap = (props: MindmapProps) => {
+  const { onChange, contributions = [] } = props
   const model = Model.useContainer()
-  const { root } = model
   const viewModel = ViewModel.useContainer()
+  const { root } = model
   const theme = useContext(ThemeContext)
   const { scale, translate, mode, selectedNodeId } = viewModel
   const id = `#topic-${selectedNodeId}`
@@ -65,10 +68,10 @@ const Mindmap = () => {
   const topics: JSX.Element[] = useMemo(() => {
     const nodes: JSX.Element[] = []
     mindMap.each((node) => {
-      nodes.push(<Topic key={node.data.id} {...node} />)
+      nodes.push(<Topic key={node.data.id} node={node} />)
     })
     return nodes
-  }, [mindMap])
+  }, [mindMap, contributions])
 
   // Regular mode
   useEffect(() => {
@@ -254,11 +257,19 @@ const Mindmap = () => {
     setIsDragging(false)
     setLastTouchPosition([0, 0])
   }, [])
+
+  useEffect(() => {
+    onChange?.(root)
+  }, [root])
+
+  useContributions({ view: editorRef })
+
   return (
     <div
       ref={editorRef}
       id={EDITOR_ID}
       className={styles.editorContainer}
+      data-type={ViewType.mindmap}
       style={{
         fontFamily: TopicStyle.fontFamily,
         width: `${canvasWidth}px`,
