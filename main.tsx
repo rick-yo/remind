@@ -1,4 +1,6 @@
 import { render } from 'preact'
+import { useEditTopic } from './contributions/useEditTopic'
+import { useSelection } from './contributions/useSelection'
 import { Mindmap } from './src'
 import { TopicData } from './src/types'
 
@@ -37,4 +39,7 @@ const customData: TopicData = {
   ],
 }
 
-render(<Mindmap value={customData} />, document.querySelector('#app')!)
+render(
+  <Mindmap value={customData} contributions={[useEditTopic, useSelection]} />,
+  document.querySelector('#app')!,
+)

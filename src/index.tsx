@@ -7,13 +7,14 @@ import { normalizeTopicSide } from './utils/tree'
 import { noop } from './utils/common'
 import { MindmapProps } from './types'
 
-function EnhancedMindMap({
-  readonly = false,
-  value = defaultRoot,
-  theme = defaultTheme,
-  locale = defaultLocale.locale,
-  onChange = noop,
-}: MindmapProps) {
+function EnhancedMindMap(props: MindmapProps) {
+  const {
+    readonly = false,
+    value = defaultRoot,
+    theme = defaultTheme,
+    locale = defaultLocale.locale,
+    onChange = noop,
+  } = props
   const rootWithSide = normalizeTopicSide(value)
   return (
     <ViewModel.Provider
@@ -35,7 +36,7 @@ function EnhancedMindMap({
           }}
         >
           <LocaleContext.Provider value={{ locale }}>
-            <Mindmap />
+            <Mindmap {...props} />
           </LocaleContext.Provider>
         </ThemeContext.Provider>
       </Model.Provider>

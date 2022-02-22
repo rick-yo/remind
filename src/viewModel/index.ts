@@ -4,7 +4,7 @@ import { LayoutTree } from '../utils/tree'
 import { EDITOR_MODE } from '../constant'
 import { LayoutNode, TopicData } from '../types'
 
-type IState = {
+type IViewModel = {
   mode: EDITOR_MODE
   selectedNodeId: string
   scale: number
@@ -13,7 +13,7 @@ type IState = {
   translate: [number, number]
 }
 
-export const defaultState: IState = {
+export const defaultState: IViewModel = {
   mode: EDITOR_MODE.regular,
   selectedNodeId: '',
   scale: 1,
@@ -22,7 +22,7 @@ export const defaultState: IState = {
   translate: [0, 0],
 }
 
-function useViewModel(initialState: Partial<IState> = {}) {
+function useViewModel(initialState: Partial<IViewModel> = {}) {
   const [state, setState] = useState({ ...defaultState, ...initialState })
   function setMode(mode: EDITOR_MODE) {
     if (state.readonly) return
@@ -112,3 +112,4 @@ function useViewModel(initialState: Partial<IState> = {}) {
 const ViewModel = createContainer(useViewModel)
 
 export { ViewModel }
+export type { IViewModel }

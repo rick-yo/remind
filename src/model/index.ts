@@ -1,19 +1,18 @@
 import { createContainer } from 'unstated-next'
-import { useEffect, useState } from 'preact/hooks'
+import { useState } from 'preact/hooks'
 import {
   normalizeTopicSide,
   createTopic,
   removeChild,
   TopicTree,
 } from '../utils/tree'
-import { MindmapProps, TopicData } from '../types'
+import { TopicData } from '../types'
 import { History } from '../utils/history'
 import { deepClone } from '../utils/common'
 import { ViewModel } from '../viewModel'
 
-interface IState {
+interface IModel {
   root: TopicData
-  onChange?: MindmapProps['onChange']
   readonly: boolean
 }
 
@@ -22,12 +21,12 @@ const defaultRoot: TopicData = normalizeTopicSide({
   children: [createTopic('main topic 1'), createTopic('main topic 2')],
 })
 
-export const defaultState: IState = {
+export const defaultState: IModel = {
   root: defaultRoot,
   readonly: false,
 }
 
-function useModel(initialState: Partial<IState> = {}) {
+function useModel(initialState: Partial<IModel> = {}) {
   const [state, setState] = useState({ ...defaultState, ...initialState })
   const viewModel = ViewModel.useContainer()
   const history = new History<TopicData>()
@@ -35,10 +34,6 @@ function useModel(initialState: Partial<IState> = {}) {
   const pushSync = (newRoot: TopicData): TopicData => {
     return history.pushSync(deepClone(newRoot)).get()
   }
-
-  useEffect(() => {
-    state.onChange?.(state.root)
-  }, [state])
 
   return {
     ...state,
@@ -117,3 +112,4 @@ function useModel(initialState: Partial<IState> = {}) {
 const Model = createContainer(useModel)
 
 export { defaultRoot, Model }
+export type { IModel }
