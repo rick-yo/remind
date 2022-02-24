@@ -2,13 +2,12 @@ import { createContainer } from 'unstated-next'
 import { useState } from 'preact/hooks'
 import { LayoutTree } from '../utils/tree'
 import { EDITOR_MODE } from '../constant'
-import { LayoutNode, TopicData } from '../types'
+import { LayoutNode } from '../types'
 
 type IViewModel = {
   mode: EDITOR_MODE
   selectedNodeId: string
   scale: number
-  dragingNode?: TopicData
   readonly: boolean
   translate: [number, number]
 }
@@ -17,7 +16,6 @@ export const defaultState: IViewModel = {
   mode: EDITOR_MODE.regular,
   selectedNodeId: '',
   scale: 1,
-  dragingNode: undefined,
   readonly: false,
   translate: [0, 0],
 }
@@ -31,12 +29,6 @@ function useViewModel(initialState: Partial<IViewModel> = {}) {
 
   function selectNode(selectedNodeId: string) {
     setState((previousState) => ({ ...previousState, selectedNodeId }))
-  }
-
-  function dragNode(payload: TopicData) {
-    // Remove TopicData's depth、side
-    const { side, depth, ...dragingNode } = payload
-    setState((previousState) => ({ ...previousState, dragingNode }))
   }
 
   function setScale(scale: number) {
@@ -99,7 +91,6 @@ function useViewModel(initialState: Partial<IViewModel> = {}) {
     ...state,
     setMode,
     selectNode,
-    dragNode,
     setScale,
     setTranslate,
     moveLeft,

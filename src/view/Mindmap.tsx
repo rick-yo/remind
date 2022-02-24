@@ -12,7 +12,6 @@ import {
   EDITOR_MODE,
   EDITOR_ID,
   CORE_EDITOR_ID,
-  TOPIC_CLASS,
   HOTKEYS,
   TopicStyle,
 } from '../constant'
@@ -29,7 +28,6 @@ import {
 } from '../utils/dom'
 import { useLocale } from '../context/locale'
 import { ThemeContext } from '../context/theme'
-import { assert } from '../utils/assert'
 import { MindmapProps } from '../types'
 import { useContributions, ViewType } from '../contribute'
 import Toolbar from './Toolbar'
@@ -188,18 +186,6 @@ const Mindmap = (props: MindmapProps) => {
     [mode, selectedNodeId, viewModel],
   )
 
-  useClickOutSide(
-    id,
-    (e) => {
-      if (!selectedNodeId) return
-      assert(e.target instanceof HTMLDivElement)
-      const isTopic = e.target?.closest(`.${TOPIC_CLASS}`)
-      if (isTopic) return
-      viewModel.selectNode('')
-    },
-    [selectedNodeId, viewModel],
-  )
-
   const handleWheel = useCallback(
     (e: WheelEvent) => {
       e.stopPropagation()
@@ -210,13 +196,6 @@ const Mindmap = (props: MindmapProps) => {
   )
 
   usePassiveWheelEvent(editorRef, handleWheel)
-
-  // Select root topic after initial render
-  useEffect(() => {
-    setTimeout(() => {
-      viewModel.selectNode(root.id)
-    }, 200)
-  }, [root.id])
 
   debug('mindMap', mindMap)
 

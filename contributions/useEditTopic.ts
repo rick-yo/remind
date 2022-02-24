@@ -10,8 +10,8 @@ const useEditTopic: Contribution = (api) => {
   function exitEditMode(e: KeyboardEvent) {
     if (!types.isTopic(e.target)) return
     if (
-      [KEY_MAPS.Enter, KEY_MAPS.Escape].includes(e.key)
-      // &&  mode === EDITOR_MODE.edit
+      [KEY_MAPS.Enter, KEY_MAPS.Escape].includes(e.key) &&
+      viewModel.mode === EDITOR_MODE.edit
     ) {
       viewModel.setMode(EDITOR_MODE.regular)
       assert(e.target instanceof HTMLDivElement)
@@ -30,10 +30,23 @@ const useEditTopic: Contribution = (api) => {
     viewModel.setMode(EDITOR_MODE.edit)
   }
 
+  // PreventDefault to prevent enter keyboard event create new html element
+  function handleKeyDown(e: KeyboardEvent) {
+    if (
+      [KEY_MAPS.Enter].includes(e.key) &&
+      viewModel.mode === EDITOR_MODE.edit
+    ) {
+      e.preventDefault()
+    }
+  }
+
   useEventListener('dblclick', editTopic, {
     target: view,
   })
   useEventListener('keyup', exitEditMode, {
+    target: view,
+  })
+  useEventListener('keydown', handleKeyDown, {
     target: view,
   })
 }

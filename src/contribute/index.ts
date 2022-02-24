@@ -2,8 +2,6 @@ import * as hooks from 'preact/hooks'
 import { RefObject } from 'preact'
 import { Model } from '../model'
 import { ViewModel } from '../viewModel'
-import { LayoutNode } from '../types'
-import { assert } from '../utils/assert'
 
 const { useMemo } = hooks
 
@@ -17,7 +15,6 @@ interface ContributionAPI {
   viewModel: ReturnType<typeof ViewModel.useContainer>
   view: RefObject<HTMLDivElement>
   hooks: typeof hooks
-  node?: LayoutNode
 }
 
 type Contribution = (api: ContributionAPI) => void
@@ -37,14 +34,26 @@ function useContributions(props: UseContributionProps) {
 }
 
 const types = {
-  isTopic(target: EventTarget) {
-    assert(target instanceof HTMLDivElement)
-    return target.closest(`[data-type="${ViewType.topic}"]`)
+  isTopic(target: EventTarget | null) {
+    return (
+      target instanceof HTMLDivElement &&
+      target.closest(`[data-type="${ViewType.topic}"]`)
+    )
   },
 
-  isMindmap(target: EventTarget) {
-    assert(target instanceof HTMLDivElement)
-    return target.closest(`[data-type="${ViewType.mindmap}"]`)
+  getTopicId(target: EventTarget | null) {
+    if (target instanceof HTMLDivElement) {
+      return target.dataset.id
+    }
+
+    return ''
+  },
+
+  isMindmap(target: EventTarget | null) {
+    return (
+      target instanceof HTMLDivElement &&
+      target.closest(`[data-type="${ViewType.mindmap}"]`)
+    )
   },
 }
 

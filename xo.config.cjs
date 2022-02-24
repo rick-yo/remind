@@ -4,6 +4,7 @@ module.exports = {
   space: 2,
   rules: {
     'import/extensions': 'off',
+    '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/no-unsafe-return': 'off',
     '@typescript-eslint/restrict-plus-operands': 'off',
     '@typescript-eslint/no-unsafe-call': 'off',

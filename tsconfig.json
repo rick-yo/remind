@@ -20,6 +20,6 @@
     // user define part
     "suppressImplicitAnyIndexErrors": true
   },
-  "include": ["src"],
+  "include": ["src", "contributions"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

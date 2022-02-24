@@ -1,6 +1,7 @@
-import { MutableRef, useEffect } from 'preact/hooks'
+import { RefObject } from 'preact'
+import { useEffect } from 'preact/hooks'
 
-type Options<T extends MutableRef<HTMLElement>> = {
+type Options<T extends RefObject<HTMLElement>> = {
   target?: T
   capture?: boolean
   once?: boolean
@@ -9,7 +10,7 @@ type Options<T extends MutableRef<HTMLElement>> = {
 
 function useEventListener<
   K extends keyof HTMLElementEventMap,
-  E extends MutableRef<HTMLElement>,
+  E extends RefObject<HTMLElement>,
 >(
   eventName: K,
   handler: (ev: HTMLElementEventMap[K]) => void,
@@ -17,6 +18,7 @@ function useEventListener<
 ): void {
   const targetElement = options.target?.current
   const { target, ...eventOptions } = options
+
   useEffect(() => {
     if (!targetElement) return
     targetElement.addEventListener(eventName, handler, eventOptions)
@@ -24,7 +26,7 @@ function useEventListener<
     return () => {
       targetElement.removeEventListener(eventName, handler, eventOptions)
     }
-  }, [targetElement])
+  }, [targetElement, handler, eventOptions])
 }
 
 export { useEventListener }
