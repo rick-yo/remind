@@ -1,6 +1,5 @@
 import { createContainer } from 'unstated-next'
 import { useState } from 'preact/hooks'
-import { LayoutTree } from '../utils/tree'
 import { EDITOR_MODE } from '../constant'
 import { LayoutNode } from '../types'
 
@@ -9,7 +8,7 @@ type IViewModel = {
   selectedNodeId: string
   scale: number
   readonly: boolean
-  translate: [number, number]
+  mindMap?: LayoutNode
 }
 
 export const defaultState: IViewModel = {
@@ -17,7 +16,7 @@ export const defaultState: IViewModel = {
   selectedNodeId: '',
   scale: 1,
   readonly: false,
-  translate: [0, 0],
+  mindMap: undefined,
 }
 
 function useViewModel(initialState: Partial<IViewModel> = {}) {
@@ -35,56 +34,8 @@ function useViewModel(initialState: Partial<IViewModel> = {}) {
     setState((previousState) => ({ ...previousState, scale }))
   }
 
-  function setTranslate(translate: [number, number]) {
-    setState((previousState) => ({ ...previousState, translate }))
-  }
-
-  function moveLeft(rootWithCoords: LayoutNode) {
-    const target = LayoutTree.from(rootWithCoords).getLeftNode(
-      state.selectedNodeId,
-    )
-    if (target) {
-      setState((previousState) => ({
-        ...previousState,
-        selectedNodeId: target.data.id,
-      }))
-    }
-  }
-
-  function moveRight(rootWithCoords: LayoutNode) {
-    const target = LayoutTree.from(rootWithCoords).getRighttNode(
-      state.selectedNodeId,
-    )
-    if (target) {
-      setState((previousState) => ({
-        ...previousState,
-        selectedNodeId: target.data.id,
-      }))
-    }
-  }
-
-  function moveTop(rootWithCoords: LayoutNode) {
-    const target = LayoutTree.from(rootWithCoords).getTopNode(
-      state.selectedNodeId,
-    )
-    if (target) {
-      setState((previousState) => ({
-        ...previousState,
-        selectedNodeId: target.data.id,
-      }))
-    }
-  }
-
-  function moveDown(rootWithCoords: LayoutNode) {
-    const target = LayoutTree.from(rootWithCoords).getBottomNode(
-      state.selectedNodeId,
-    )
-    if (target) {
-      setState((previousState) => ({
-        ...previousState,
-        selectedNodeId: target.data.id,
-      }))
-    }
+  function setMindmap(mindMap: LayoutNode) {
+    setState((previousState) => ({ ...previousState, mindMap }))
   }
 
   return {
@@ -92,11 +43,7 @@ function useViewModel(initialState: Partial<IViewModel> = {}) {
     setMode,
     selectNode,
     setScale,
-    setTranslate,
-    moveLeft,
-    moveRight,
-    moveTop,
-    moveDown,
+    setMindmap,
   }
 }
 

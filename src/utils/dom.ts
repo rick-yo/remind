@@ -1,7 +1,5 @@
 import { RefObject } from 'preact'
 import { useEffect } from 'preact/hooks'
-import { assert } from './assert'
-import { debug } from './debug'
 
 function selectText(element?: HTMLElement) {
   if (!element) return
@@ -17,28 +15,6 @@ function selectText(element?: HTMLElement) {
       }, 1)
     }
   }
-}
-
-function useClickOutSide(
-  selector: string,
-  callback: (e: MouseEvent) => void,
-  deps: any[],
-) {
-  useEffect(() => {
-    function handleDocumentClick(e: MouseEvent) {
-      assert(e.target instanceof HTMLDivElement)
-      const parent = e.target?.closest(selector)
-      debug('onClickOutSide event fired')
-      if (!parent) {
-        callback(e)
-      }
-    }
-
-    document.addEventListener('click', handleDocumentClick)
-    return () => {
-      document.removeEventListener('click', handleDocumentClick)
-    }
-  }, [selector, callback, ...deps])
 }
 
 function useIconFont() {
@@ -68,4 +44,4 @@ function usePassiveWheelEvent(
   }, [ref, callback])
 }
 
-export { selectText, useClickOutSide, useIconFont, usePassiveWheelEvent }
+export { selectText, useIconFont, usePassiveWheelEvent }
