@@ -79,7 +79,10 @@ export function normalizeTopicSide(root: TopicData): TopicData {
         }
       }
 
-      return node
+      return {
+        side: 'right',
+        ...node,
+      }
     }),
   }
 }

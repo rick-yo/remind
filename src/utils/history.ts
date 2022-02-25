@@ -22,6 +22,7 @@ class History<T> extends EventTarget {
     const { records, current } = this
     this.records = records.slice(0, current + 1)
     this.records.push(state)
+    this.current = this.records.length - 1
     this.dispatchEvent(new Event(History.EventTypes.change))
     return this
   }

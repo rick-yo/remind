@@ -36,6 +36,10 @@ function useModel(initialState: IModel = defaultModel) {
   }
 
   useEffect(() => {
+    pushSync(state.root)
+  }, [])
+
+  useEffect(() => {
     function updateRoot() {
       setState({ ...state, root: history.get() })
     }
@@ -103,16 +107,20 @@ function useModel(initialState: IModel = defaultModel) {
       setState({ ...state, root })
     },
     undo() {
-      setState((previousState) => ({
-        ...previousState,
-        root: history.undo().get(),
-      }))
+      if (history.canUndo) {
+        setState((previousState) => ({
+          ...previousState,
+          root: history.undo().get(),
+        }))
+      }
     },
     redo() {
-      setState((previousState) => ({
-        ...previousState,
-        root: history.redo().get(),
-      }))
+      if (history.canRedo) {
+        setState((previousState) => ({
+          ...previousState,
+          root: history.redo().get(),
+        }))
+      }
     },
   }
 }

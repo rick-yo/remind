@@ -21,19 +21,17 @@ class LayoutTree {
   }
 
   getClosedNode(
-    array: LayoutNode[],
+    nodes: LayoutNode[],
     target: LayoutNode,
   ): LayoutNode | undefined {
-    if (array.length === 0) return undefined
-    return array.reduce<LayoutNode | undefined>((previous, curr) => {
-      if (!previous) {
-        previous = curr
+    let closed: LayoutNode = nodes[0]
+    nodes.forEach((node) => {
+      if (getDistance(target, node) < getDistance(target, closed)) {
+        closed = node
       }
+    })
 
-      return getDistance(target, curr) < getDistance(target, previous)
-        ? curr
-        : previous
-    }, undefined)
+    return closed
   }
 
   getLeftNode(currentId: string) {
@@ -46,10 +44,11 @@ class LayoutTree {
 
     const currentNode = this.getNodeById(currentId)
     if (!currentNode) return
+    const [, ...children] = currentNode.descendants()
     const left =
       currentNode.data.side === 'right'
         ? this.getNodeById(currentNode.data.id)?.parent
-        : this.getClosedNode(currentNode.descendants(), currentNode)
+        : this.getClosedNode(children, currentNode)
     return left
   }
 
@@ -63,9 +62,10 @@ class LayoutTree {
 
     const currentNode = this.getNodeById(currentId)
     if (!currentNode) return
+    const [, ...des] = currentNode.descendants()
     const right =
       currentNode.data.side === 'right'
-        ? this.getClosedNode(currentNode.descendants(), currentNode)
+        ? this.getClosedNode(des, currentNode)
         : this.getNodeById(currentNode.data.id)?.parent
     return right
   }

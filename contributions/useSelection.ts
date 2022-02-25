@@ -11,17 +11,15 @@ const useSelection: Contribution = (api) => {
     viewModel.select(id)
   }
 
-  useEventListener(
-    'click',
-    (e) => {
-      if (!selection) return
-      if (types.isTopic(e.target)) return
-      viewModel.select('')
-    },
-    {
-      target: view,
-    },
-  )
+  function selectNone(e: MouseEvent) {
+    if (!selection) return
+    if (types.isTopic(e.target)) return
+    viewModel.select('')
+  }
+
+  useEventListener('click', selectNone, {
+    target: view,
+  })
 
   useEventListener('click', selectNode, {
     target: view,

@@ -1,13 +1,13 @@
-import { useState } from 'preact/hooks'
 import { Contribution, types } from '../src/contribute'
 import { assert } from '../src/utils/assert'
 import { TopicTree } from '../src/utils/tree'
 import { useEventListener } from '../src/utils/useEventListener'
 
+const dndDataFormat = 'text/plain'
+
 const useDndTopic: Contribution = (api) => {
   const { model, view } = api
   const { root } = model
-  const [dragNode, setDragNode] = useState<string | null>(null)
 
   function handleDragStart(e: DragEvent) {
     const id = types.getTopicId(e.target)
@@ -17,25 +17,22 @@ const useDndTopic: Contribution = (api) => {
       return
     }
 
-    assert(e.dataTransfer instanceof HTMLDivElement)
     // SetData dataTransfer to make drag and drop work in firefox
-    e.dataTransfer.setData('text/plain', '')
-    setDragNode(id)
+    e.dataTransfer?.setData(dndDataFormat, id)
   }
 
   function handleDrop(e: DragEvent) {
-    const id = types.getTopicId(e.target)
-    if (!dragNode || !id) return
-    if (dragNode === id) return
-    const node = TopicTree.from(root).getNodeById(id)
-    assert(node)
+    const fromId = e.dataTransfer?.getData(dndDataFormat)
+    const toId = types.getTopicId(e.target)
+    if (!fromId || !toId) return
+    const fromNode = TopicTree.from(root).getNodeById(fromId)
+    assert(fromNode)
     // Should not drop topic to it's descendants
-    const descendants = node?.descendants()
-    if (descendants?.some((node) => node.data.id === id)) {
+    if (fromNode.descendants().some((node) => node.data.id === toId)) {
       return
     }
 
-    model.appendChild(id, node?.data)
+    model.appendChild(toId, fromNode?.data)
   }
 
   // We need to prevent the default behavior

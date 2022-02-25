@@ -30,15 +30,20 @@ const useEditTopic: Contribution = (api) => {
     }
   }
 
-  function editTopic(e: MouseEvent) {
-    const element = e.target as HTMLDivElement
+  function doEditTopic(element: HTMLDivElement) {
     element?.focus()
     selectText(element)
     viewModel.setMode(EDITOR_MODE.edit)
   }
 
+  function editTopic(e: MouseEvent) {
+    if (!types.isTopic(e.target)) return
+    doEditTopic(e.target)
+  }
+
   // PreventDefault to prevent enter keyboard event create new html element
   function handleKeyDown(e: KeyboardEvent) {
+    if (!types.isTopic(e.target)) return
     if (
       [KEY_MAPS.Enter].includes(e.key) &&
       viewModel.mode === EDITOR_MODE.edit
@@ -48,17 +53,23 @@ const useEditTopic: Contribution = (api) => {
   }
 
   // Edit mode
-  useEventListener('click', (e) => {
-    if (!selection || mode !== EDITOR_MODE.edit || types.isTopic(e.target)) {
-      return
-    }
+  useEventListener(
+    'click',
+    (e) => {
+      if (!selection || mode !== EDITOR_MODE.edit || types.isTopic(e.target)) {
+        return
+      }
 
-    assert(e.target instanceof HTMLDivElement)
-    viewModel.setMode(EDITOR_MODE.none)
-    model.updateNode(selection, {
-      title: e.target?.innerText,
-    })
-  })
+      assert(e.target instanceof HTMLDivElement)
+      viewModel.setMode(EDITOR_MODE.none)
+      model.updateNode(selection, {
+        title: e.target?.textContent ?? '',
+      })
+    },
+    {
+      target: view,
+    },
+  )
   // Regular mode
   function appendChild(e: KeyboardEvent) {
     e.preventDefault()
@@ -67,13 +78,11 @@ const useEditTopic: Contribution = (api) => {
   }
 
   function handleSpaceKeydown(e: KeyboardEvent) {
-    const id = types.getTopicId(e.target)
     e.preventDefault()
-    if (!selection || !id) return
-    const element = document.querySelector<HTMLDivElement>(id)
-    element?.focus()
-    selectText(element!)
-    viewModel.setMode(EDITOR_MODE.edit)
+    if (!selection) return
+    const element = types.getTopicElementById(selection)
+    assert(element instanceof HTMLDivElement)
+    doEditTopic(element)
   }
 
   function deleteNode() {
@@ -92,7 +101,7 @@ const useEditTopic: Contribution = (api) => {
       hotkeys.unbind(HOTKEYS.space, handleSpaceKeydown)
       hotkeys.unbind(HOTKEYS.backspace, deleteNode)
     }
-  }, [mode, selection, locale.subTopic, hotkeyOptions, model, viewModel])
+  }, [mode, hotkeyOptions, appendChild, handleSpaceKeydown, deleteNode])
 
   useEventListener('dblclick', editTopic, {
     target: view,

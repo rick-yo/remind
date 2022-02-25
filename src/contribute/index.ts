@@ -68,6 +68,10 @@ const types = {
     return ''
   },
 
+  getTopicElementById(id: string) {
+    return document.querySelector(`[data-id="${id}"]`)
+  },
+
   isMindmap(target: EventTarget | null) {
     return (
       target instanceof HTMLDivElement &&

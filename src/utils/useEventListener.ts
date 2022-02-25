@@ -14,7 +14,7 @@ function useEventListener<
 >(
   eventName: K,
   handler: (ev: HTMLElementEventMap[K]) => void,
-  options: Options<E> = {},
+  options: Options<E>,
 ): void {
   const targetElement = options.target?.current
   const { target, ...eventOptions } = options
