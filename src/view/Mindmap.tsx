@@ -1,6 +1,6 @@
 import { useEffect, useRef, useMemo, useContext } from 'preact/hooks'
 import { JSX } from 'preact'
-import { EDITOR_ID, CORE_EDITOR_ID, TopicStyle } from '../constant'
+import { EDITOR_ID, TopicStyle } from '../constant'
 import { mindmap } from '../layout/mindmap'
 import { Model } from '../model'
 import { ViewModel } from '../viewModel'
@@ -66,7 +66,6 @@ const Mindmap = (props: MindmapProps) => {
       }}
     >
       <div
-        id={CORE_EDITOR_ID}
         className={styles.editor}
         style={{
           transform: `scale(${scale}, ${scale})`,

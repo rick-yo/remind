@@ -1,7 +1,8 @@
 import hotkeys from 'hotkeys-js'
 import { useEffect } from 'preact/hooks'
-import { EDITOR_MODE, HOTKEYS } from '../src/constant'
+import { EDITOR_MODE } from '../src/constant'
 import { Contribution } from '../src/contribute'
+import { HOTKEYS } from './utils'
 
 const useHistory: Contribution = (api) => {
   const { model, viewModel, view } = api

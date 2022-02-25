@@ -1,11 +1,11 @@
 import hotkeys from 'hotkeys-js'
 import { useEffect } from 'preact/hooks'
-import { EDITOR_MODE, HOTKEYS, KEY_MAPS } from '../src/constant'
+import { EDITOR_MODE } from '../src/constant'
 import { Contribution, types } from '../src/contribute'
 import { assert } from '../src/utils/assert'
-import { selectText } from '../src/utils/dom'
 import { createTopic } from '../src/utils/tree'
 import { useEventListener } from '../src/utils/useEventListener'
+import { HOTKEYS, KEY_MAPS, selectText } from './utils'
 
 const useEditTopic: Contribution = (api) => {
   const { model, viewModel, view, locale } = api

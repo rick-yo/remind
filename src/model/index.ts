@@ -1,5 +1,5 @@
 import { createContainer } from 'unstated-next'
-import { useState } from 'preact/hooks'
+import { useEffect, useMemo, useState } from 'preact/hooks'
 import {
   normalizeTopicSide,
   createTopic,
@@ -27,11 +27,24 @@ const defaultModel: IModel = {
 function useModel(initialState: IModel = defaultModel) {
   const [state, setState] = useState(initialState)
   const viewModel = ViewModel.useContainer()
-  const history = new History<TopicData>()
+  const history = useMemo(() => {
+    return new History<TopicData>()
+  }, [])
 
   const pushSync = (newRoot: TopicData): TopicData => {
     return history.pushSync(deepClone(newRoot)).get()
   }
+
+  useEffect(() => {
+    function updateRoot() {
+      setState({ ...state, root: history.get() })
+    }
+
+    history.addEventListener(History.EventTypes.change, updateRoot)
+    return () => {
+      history.removeEventListener(History.EventTypes.change, updateRoot)
+    }
+  }, [history])
 
   return {
     ...state,
@@ -41,7 +54,7 @@ function useModel(initialState: IModel = defaultModel) {
       const isNodeConnected = rootTopic.getNodeById(node.id)
       // If node already exist in node tree, delete it from it's old parent first
       if (isNodeConnected) {
-        const previousParentNode = rootTopic.getNodeById(node.id)?.parent?.data
+        const previousParentNode = rootTopic.getParentNode(node.id)?.data
         if (previousParentNode) {
           removeChild(previousParentNode, node.id)
         }
@@ -66,11 +79,11 @@ function useModel(initialState: IModel = defaultModel) {
       if (!id) return
       const root = pushSync(state.root)
       const rootTopic = TopicTree.from(root)
-      const parentNode = rootTopic.getNodeById(id)?.parent?.data
+      const parentNode = rootTopic.getParentNode(id)?.data
       if (parentNode?.children) {
         // When deleted a node, select deleted node's sibing or parent
         const sibling =
-          rootTopic.getPreviousNode(id) ?? rootTopic.getNextNode(id)
+          rootTopic.getPreviousSibling(id) ?? rootTopic.getNextSibling(id)
         removeChild(parentNode, id)
         const selectedNode = sibling ?? parentNode
         viewModel.selectNode(selectedNode.id)

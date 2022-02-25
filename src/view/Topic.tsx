@@ -1,14 +1,12 @@
 import { useContext } from 'preact/hooks'
 import { ThemeContext } from '../context/theme'
-import { EDITOR_MODE, TopicStyle, TOPIC_CLASS } from '../constant'
+import { EDITOR_MODE, TopicStyle } from '../constant'
 import { getTopicFontsize } from '../layout/mindmap'
 import { ViewModel } from '../viewModel'
 import { LayoutNode } from '../types'
-import { classNames, toPX } from '../utils/common'
+import { toPX } from '../utils/common'
 import { ViewType } from '../contribute'
 import styles from './index.module.css'
-
-const topicClass = classNames(TOPIC_CLASS, styles.topic)
 
 type TopicProps = {
   node: LayoutNode
@@ -36,7 +34,7 @@ const Topic = (props: TopicProps) => {
   return (
     <div
       id={`topic-${id}`}
-      className={topicClass}
+      className={styles.topic}
       data-id={id}
       data-type={ViewType.topic}
       contentEditable={isEditing}

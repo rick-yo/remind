@@ -1,8 +1,8 @@
 import hotkeys from 'hotkeys-js'
 import { useEffect } from 'preact/hooks'
-import { EDITOR_MODE, HOTKEYS } from '../src/constant'
+import { EDITOR_MODE } from '../src/constant'
 import { Contribution } from '../src/contribute'
-import { LayoutTree } from '../src/utils/tree'
+import { HOTKEYS, LayoutTree } from './utils'
 
 const useNavigate: Contribution = (api) => {
   const { viewModel, view } = api
