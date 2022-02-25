@@ -51,7 +51,7 @@ const Topic = (props: TopicProps) => {
         background: `${background}`,
         maxWidth: toPX(TopicStyle.maxWidth),
         padding: toPX(TopicStyle.padding),
-        fontSize: toPX(getTopicFontsize(node.data)),
+        fontSize: toPX(getTopicFontsize(node)),
         outline: `${outline}`,
         translate: `0 ${isEditing ? '2px' : 0}`,
       }}

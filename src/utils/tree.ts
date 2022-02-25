@@ -83,17 +83,3 @@ export function normalizeTopicSide(root: TopicData): TopicData {
     }),
   }
 }
-
-/**
- * Add depth to TopicData, this is used for local state, should not affect TopicData
- */
-export function normalizeTopicDepth(root: TopicData, depth = 0): TopicData {
-  return {
-    ...root,
-    depth,
-    children: root.children?.map((node) =>
-      normalizeTopicDepth(node, depth + 1),
-    ),
-    parent: undefined,
-  }
-}

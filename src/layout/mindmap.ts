@@ -1,19 +1,19 @@
-import { hierarchy, HierarchyPointNode, tree } from 'd3-hierarchy'
+import { hierarchy, tree } from 'd3-hierarchy'
 import { canvasContext, TopicStyle } from '../constant'
-import { TopicData } from '../types'
+import { LayoutNode, TopicData } from '../types'
 
-export function getTopicFontsize(node: TopicData) {
+export function getTopicFontsize(node: LayoutNode) {
   const fontSizeOffset = node.depth ?? 0 * 5
   const fontSize = `${Math.max(16, TopicStyle.fontSize - fontSizeOffset)}`
   return fontSize
 }
 
 // WARN fontSize is diffrent between topic, should fix this to get correct topic width and height
-function measureText(node: TopicData) {
+function measureText(node: LayoutNode) {
   const fontSize = getTopicFontsize(node)
   canvasContext.save()
   canvasContext.font = `${fontSize}px ${TopicStyle.fontFamily}`
-  const measure = canvasContext.measureText(node.title)
+  const measure = canvasContext.measureText(node.data.title)
   canvasContext.restore()
   return measure
 }
@@ -24,7 +24,7 @@ declare module 'd3-hierarchy' {
   }
 }
 
-function mindmap(root: TopicData): HierarchyPointNode<TopicData> {
+function mindmap(root: TopicData): LayoutNode {
   const rootNode = hierarchy(root)
   const layoutNode = tree<TopicData>()
     .nodeSize([150, 40])
@@ -38,7 +38,7 @@ function mindmap(root: TopicData): HierarchyPointNode<TopicData> {
     // Reduce margin
     node.x += depth * 140
     // Compute node size
-    const measure = measureText(node.data)
+    const measure = measureText(node)
     const width = Math.min(measure.width, TopicStyle.maxWidth)
     const lines = Math.ceil(width / TopicStyle.maxWidth)
     const height = Math.max(

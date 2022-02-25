@@ -54,7 +54,7 @@ function useModel(initialState: IModel = defaultModel) {
       const isNodeConnected = rootTopic.getNodeById(node.id)
       // If node already exist in node tree, delete it from it's old parent first
       if (isNodeConnected) {
-        const previousParentNode = rootTopic.getParentNode(node.id)?.data
+        const previousParentNode = rootTopic.getParentNode(node.id)
         if (previousParentNode) {
           removeChild(previousParentNode, node.id)
         }
@@ -79,7 +79,7 @@ function useModel(initialState: IModel = defaultModel) {
       if (!id) return
       const root = pushSync(state.root)
       const rootTopic = TopicTree.from(root)
-      const parentNode = rootTopic.getParentNode(id)?.data
+      const parentNode = rootTopic.getParentNode(id)
       if (parentNode?.children) {
         // When deleted a node, select deleted node's sibing or parent
         const sibling =
