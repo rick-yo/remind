@@ -6,7 +6,6 @@ import { LayoutNode } from '../types'
 type IViewModel = {
   mode: EDITOR_MODE
   selectedNodeId: string
-  scale: number
   mindMap?: LayoutNode
   globalState: Map<string, any>
 }
@@ -14,7 +13,6 @@ type IViewModel = {
 export const defaultViewModel: IViewModel = {
   mode: EDITOR_MODE.regular,
   selectedNodeId: '',
-  scale: 1,
   mindMap: undefined,
   globalState: new Map(),
 }
@@ -27,10 +25,6 @@ function useViewModel(initialState: IViewModel = defaultViewModel) {
 
   function selectNode(selectedNodeId: string) {
     setState((previousState) => ({ ...previousState, selectedNodeId }))
-  }
-
-  function setScale(scale: number) {
-    setState((previousState) => ({ ...previousState, scale }))
   }
 
   function setMindmap(mindMap: LayoutNode) {
@@ -48,7 +42,6 @@ function useViewModel(initialState: IViewModel = defaultViewModel) {
     ...state,
     setMode,
     selectNode,
-    setScale,
     setMindmap,
     setGlobalState,
   }

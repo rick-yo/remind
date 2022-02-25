@@ -135,4 +135,15 @@ const HOTKEYS = {
   redo: 'command+shift+z,ctrl+shift+z',
 }
 
-export { selectText, LayoutTree, KEY_MAPS, HOTKEYS }
+function createElement(tag: string, attrs?: Record<string, string>) {
+  const el = document.createElement(tag)
+  for (const name in attrs) {
+    if (Object.prototype.hasOwnProperty.call(attrs, name)) {
+      el.setAttribute(name, attrs[name])
+    }
+  }
+
+  return el
+}
+
+export { selectText, LayoutTree, KEY_MAPS, HOTKEYS, createElement }

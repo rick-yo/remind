@@ -1,26 +1,29 @@
-import * as hooks from 'preact/hooks'
-import { RefObject } from 'preact'
+import { JSX, RefObject } from 'preact'
+import { useMemo } from 'preact/hooks'
 import { Model } from '../model'
 import { ViewModel } from '../viewModel'
 import { useLocale } from '../context/locale'
 import { IntlValue } from '../utils/Intl'
 
-const { useMemo } = hooks
-
 enum ViewType {
   mindmap,
   topic,
+  link,
 }
+type Slot = JSX.Element & { viewType?: ViewType }
 
 interface ContributionAPI {
   model: ReturnType<typeof Model.useContainer>
   viewModel: ReturnType<typeof ViewModel.useContainer>
   view: RefObject<HTMLDivElement>
-  hooks: typeof hooks
   locale: IntlValue
 }
 
-type Contribution = (api: ContributionAPI) => void
+interface ContributionResult {
+  slots?: Slot[]
+}
+
+type Contribution = (api: ContributionAPI) => ContributionResult | void
 
 interface UseContributionProps {
   view: RefObject<HTMLDivElement>
@@ -33,12 +36,20 @@ function useContributions(props: UseContributionProps) {
   const locale = useLocale()
   const { view, contributions } = props
   const api = useMemo(() => {
-    return { model, viewModel, view, hooks, locale }
+    return { model, viewModel, view, locale }
   }, [model, viewModel, view])
 
-  contributions.forEach((contribution) => {
-    contribution(api)
-  })
+  const results = contributions.map((contribution) => contribution(api))
+  const slots = results.reduce<Slot[]>((p, c) => {
+    if (c?.slots) {
+      p.push(...c.slots)
+    }
+
+    return p
+  }, [])
+  return {
+    slots,
+  }
 }
 
 const types = {
@@ -66,4 +77,4 @@ const types = {
 }
 
 export { useContributions, ViewType, types }
-export type { Contribution }
+export type { Contribution, Slot }
