@@ -11,7 +11,7 @@ const TopicStyle = {
 const canvasContext = document.createElement('canvas').getContext('2d')!
 
 enum EDITOR_MODE {
-  regular,
+  none,
   drag,
   edit,
 }

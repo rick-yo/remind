@@ -5,14 +5,14 @@ import { LayoutNode } from '../types'
 
 type IViewModel = {
   mode: EDITOR_MODE
-  selectedNodeId: string
+  selection: string
   mindMap?: LayoutNode
   globalState: Map<string, any>
 }
 
 export const defaultViewModel: IViewModel = {
-  mode: EDITOR_MODE.regular,
-  selectedNodeId: '',
+  mode: EDITOR_MODE.none,
+  selection: '',
   mindMap: undefined,
   globalState: new Map(),
 }
@@ -23,8 +23,8 @@ function useViewModel(initialState: IViewModel = defaultViewModel) {
     setState((previousState) => ({ ...previousState, mode }))
   }
 
-  function selectNode(selectedNodeId: string) {
-    setState((previousState) => ({ ...previousState, selectedNodeId }))
+  function select(selection: string) {
+    setState((previousState) => ({ ...previousState, selection }))
   }
 
   function setMindmap(mindMap: LayoutNode) {
@@ -41,7 +41,7 @@ function useViewModel(initialState: IViewModel = defaultViewModel) {
   return {
     ...state,
     setMode,
-    selectNode,
+    select,
     setMindmap,
     setGlobalState,
   }

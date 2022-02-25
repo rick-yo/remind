@@ -4,19 +4,19 @@ import { useEventListener } from '../src/utils/useEventListener'
 
 const useSelection: Contribution = (api) => {
   const { model, viewModel, view } = api
-  const { selectedNodeId } = viewModel
+  const { selection } = viewModel
 
   function selectNode(e: MouseEvent) {
     const id = types.getTopicId(e.target) ?? ''
-    viewModel.selectNode(id)
+    viewModel.select(id)
   }
 
   useEventListener(
     'click',
     (e) => {
-      if (!selectedNodeId) return
+      if (!selection) return
       if (types.isTopic(e.target)) return
-      viewModel.selectNode('')
+      viewModel.select('')
     },
     {
       target: view,
@@ -30,7 +30,7 @@ const useSelection: Contribution = (api) => {
   // Select root topic after initial render
   useEffect(() => {
     setTimeout(() => {
-      viewModel.selectNode(model.root.id)
+      viewModel.select(model.root.id)
     }, 500)
   }, [])
 }

@@ -9,7 +9,7 @@ import { HOTKEYS, KEY_MAPS, selectText } from './utils'
 
 const useEditTopic: Contribution = (api) => {
   const { model, viewModel, view, locale } = api
-  const { mode, selectedNodeId } = viewModel
+  const { mode, selection } = viewModel
   const hotkeyOptions = {
     element: view.current,
   }
@@ -20,9 +20,9 @@ const useEditTopic: Contribution = (api) => {
       [KEY_MAPS.Enter, KEY_MAPS.Escape].includes(e.key) &&
       viewModel.mode === EDITOR_MODE.edit
     ) {
-      viewModel.setMode(EDITOR_MODE.regular)
+      viewModel.setMode(EDITOR_MODE.none)
       assert(e.target instanceof HTMLDivElement)
-      model.updateNode(viewModel.selectedNodeId, {
+      model.updateNode(viewModel.selection, {
         title: e.target.textContent ?? '',
       })
       // Fix selection exit after exit edit mode on firefox
@@ -49,31 +49,27 @@ const useEditTopic: Contribution = (api) => {
 
   // Edit mode
   useEventListener('click', (e) => {
-    if (
-      !selectedNodeId ||
-      mode !== EDITOR_MODE.edit ||
-      types.isTopic(e.target)
-    ) {
+    if (!selection || mode !== EDITOR_MODE.edit || types.isTopic(e.target)) {
       return
     }
 
     assert(e.target instanceof HTMLDivElement)
-    viewModel.setMode(EDITOR_MODE.regular)
-    model.updateNode(selectedNodeId, {
+    viewModel.setMode(EDITOR_MODE.none)
+    model.updateNode(selection, {
       title: e.target?.innerText,
     })
   })
   // Regular mode
   function appendChild(e: KeyboardEvent) {
     e.preventDefault()
-    if (!selectedNodeId) return
-    model.appendChild(selectedNodeId, createTopic(locale.subTopic))
+    if (!selection) return
+    model.appendChild(selection, createTopic(locale.subTopic))
   }
 
   function handleSpaceKeydown(e: KeyboardEvent) {
     const id = types.getTopicId(e.target)
     e.preventDefault()
-    if (!selectedNodeId || !id) return
+    if (!selection || !id) return
     const element = document.querySelector<HTMLDivElement>(id)
     element?.focus()
     selectText(element!)
@@ -81,11 +77,11 @@ const useEditTopic: Contribution = (api) => {
   }
 
   function deleteNode() {
-    model.deleteNode(selectedNodeId)
+    model.deleteNode(selection)
   }
 
   useEffect(() => {
-    if (mode === EDITOR_MODE.regular) {
+    if (mode === EDITOR_MODE.none) {
       hotkeys(HOTKEYS.tab, hotkeyOptions, appendChild)
       hotkeys(HOTKEYS.space, hotkeyOptions, handleSpaceKeydown)
       hotkeys(HOTKEYS.backspace, hotkeyOptions, deleteNode)
@@ -96,7 +92,7 @@ const useEditTopic: Contribution = (api) => {
       hotkeys.unbind(HOTKEYS.space, handleSpaceKeydown)
       hotkeys.unbind(HOTKEYS.backspace, deleteNode)
     }
-  }, [mode, selectedNodeId, locale.subTopic, hotkeyOptions, model, viewModel])
+  }, [mode, selection, locale.subTopic, hotkeyOptions, model, viewModel])
 
   useEventListener('dblclick', editTopic, {
     target: view,

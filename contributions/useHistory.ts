@@ -21,7 +21,7 @@ const useHistory: Contribution = (api) => {
       model.redo()
     }
 
-    if (mode === EDITOR_MODE.regular) {
+    if (mode === EDITOR_MODE.none) {
       hotkeys(HOTKEYS.undo, hotkeyOptions, undo)
       hotkeys(HOTKEYS.redo, hotkeyOptions, redo)
     }

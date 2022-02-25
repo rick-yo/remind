@@ -23,8 +23,8 @@ const Topic = (props: TopicProps) => {
 
   const $theme = useContext(ThemeContext)
   const viewModel = ViewModel.useContainer()
-  const { mode, selectedNodeId } = viewModel
-  const isSelected = id === selectedNodeId
+  const { mode, selection } = viewModel
+  const isSelected = id === selection
   const isEditing = isSelected && mode === EDITOR_MODE.edit
   const isMainTopic = depth <= 1
 

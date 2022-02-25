@@ -6,7 +6,7 @@ import { HOTKEYS, LayoutTree } from './utils'
 
 const useNavigate: Contribution = (api) => {
   const { viewModel, view } = api
-  const { selectedNodeId, mode, mindMap } = viewModel
+  const { selection, mode, mindMap } = viewModel
   const hotkeyOptions = {
     element: view.current,
   }
@@ -14,42 +14,42 @@ const useNavigate: Contribution = (api) => {
   function moveTop(e: KeyboardEvent) {
     e.preventDefault()
     if (!mindMap) return
-    const target = LayoutTree.from(mindMap).getTopNode(selectedNodeId)
+    const target = LayoutTree.from(mindMap).getTopNode(selection)
     if (target) {
-      viewModel.selectNode(target.data.id)
+      viewModel.select(target.data.id)
     }
   }
 
   function moveDown(e: KeyboardEvent) {
     e.preventDefault()
     if (!mindMap) return
-    const target = LayoutTree.from(mindMap).getBottomNode(selectedNodeId)
+    const target = LayoutTree.from(mindMap).getBottomNode(selection)
     if (target) {
-      viewModel.selectNode(target.data.id)
+      viewModel.select(target.data.id)
     }
   }
 
   function moveLeft(e: KeyboardEvent) {
     e.preventDefault()
     if (!mindMap) return
-    const target = LayoutTree.from(mindMap).getLeftNode(selectedNodeId)
+    const target = LayoutTree.from(mindMap).getLeftNode(selection)
     if (target) {
-      viewModel.selectNode(target.data.id)
+      viewModel.select(target.data.id)
     }
   }
 
   function moveRight(e: KeyboardEvent) {
     e.preventDefault()
     if (!mindMap) return
-    const target = LayoutTree.from(mindMap).getRighttNode(selectedNodeId)
+    const target = LayoutTree.from(mindMap).getRighttNode(selection)
     if (target) {
-      viewModel.selectNode(target.data.id)
+      viewModel.select(target.data.id)
     }
   }
 
   // Regular mode, bind navigate shortcut
   useEffect(() => {
-    if (mode === EDITOR_MODE.regular) {
+    if (mode === EDITOR_MODE.none) {
       hotkeys(HOTKEYS.left, hotkeyOptions, moveLeft)
       hotkeys(HOTKEYS.right, hotkeyOptions, moveRight)
       hotkeys(HOTKEYS.up, hotkeyOptions, moveTop)

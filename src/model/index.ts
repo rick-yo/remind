@@ -86,7 +86,7 @@ function useModel(initialState: IModel = defaultModel) {
           rootTopic.getPreviousSibling(id) ?? rootTopic.getNextSibling(id)
         removeChild(parentNode, id)
         const selectedNode = sibling ?? parentNode
-        viewModel.selectNode(selectedNode.id)
+        viewModel.select(selectedNode.id)
       }
 
       setState({ ...state, root })
