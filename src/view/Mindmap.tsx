@@ -1,5 +1,5 @@
 import { useEffect, useRef, useMemo, useContext } from 'preact/hooks'
-import { EDITOR_ID, TopicStyle } from '../constant'
+import { TopicStyle } from '../constant'
 import { mindmap } from '../layout/mindmap'
 import { Model } from '../model'
 import { ViewModel } from '../viewModel'
@@ -7,7 +7,7 @@ import { debug } from '../utils/debug'
 import { ThemeContext } from '../context/theme'
 import { LayoutNode, MindmapProps } from '../types'
 import { useContributions, ViewType } from '../contribute'
-import Links from './Links'
+import { Links } from './Links'
 import styles from './index.module.css'
 import Topic from './Topic'
 
@@ -47,7 +47,6 @@ const Mindmap = (props: MindmapProps) => {
   return (
     <div
       ref={editorRef}
-      id={EDITOR_ID}
       data-type={ViewType.mindmap}
       className={styles.editor}
       style={{
@@ -72,12 +71,12 @@ const Mindmap = (props: MindmapProps) => {
 
 function Topics({ mindMap }: { mindMap: LayoutNode }) {
   return (
-    <>
+    <div className="topics">
       {mindMap.descendants().map((node) => {
         return <Topic key={node.data.id} node={node} />
       })}
-    </>
+    </div>
   )
 }
 
-export default Mindmap
+export { Mindmap }

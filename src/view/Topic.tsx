@@ -33,7 +33,6 @@ const Topic = (props: TopicProps) => {
 
   return (
     <div
-      id={`topic-${id}`}
       className={styles.topic}
       data-id={id}
       data-type={ViewType.topic}

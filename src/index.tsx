@@ -1,4 +1,5 @@
-import Mindmap from './view/Mindmap'
+import { render } from 'preact'
+import { Mindmap } from './view/Mindmap'
 import { defaultRoot, Model } from './model'
 import { ViewModel } from './viewModel'
 import { ThemeContext, defaultTheme } from './context/theme'
@@ -6,7 +7,7 @@ import { defaultLocale, LocaleContext } from './context/locale'
 import { normalizeTopicSide } from './utils/tree'
 import { MindmapProps } from './types'
 
-function EnhancedMindMap(props: MindmapProps) {
+function MindmapApp(props: MindmapProps) {
   const {
     value = defaultRoot,
     theme = defaultTheme,
@@ -35,4 +36,8 @@ function EnhancedMindMap(props: MindmapProps) {
   )
 }
 
-export { EnhancedMindMap as Mindmap }
+function createMindmap(el: HTMLElement, options: MindmapProps) {
+  render(<MindmapApp {...options} />, el)
+}
+
+export { createMindmap }

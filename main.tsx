@@ -1,5 +1,4 @@
-import { render } from 'preact'
-import { Mindmap } from './src'
+import { createMindmap } from './src'
 import { TopicData } from './src/types'
 import { contributions } from './contributions'
 
@@ -38,7 +37,7 @@ const customData: TopicData = {
   ],
 }
 
-render(
-  <Mindmap value={customData} contributions={contributions} />,
-  document.querySelector('#app')!,
-)
+createMindmap(document.querySelector('#app'), {
+  value: customData,
+  contributions,
+})

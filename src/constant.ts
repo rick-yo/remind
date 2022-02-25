@@ -16,6 +16,4 @@ enum EDITOR_MODE {
   edit,
 }
 
-const EDITOR_ID = 'remind-editor'
-
-export { canvasContext, EDITOR_MODE, EDITOR_ID, TopicStyle }
+export { canvasContext, EDITOR_MODE, TopicStyle }

@@ -6,18 +6,6 @@ interface LinksProps {
   mindmap: LayoutNode
 }
 
-function getMainTopicLinkPosition(root: LayoutNode, child: LayoutNode) {
-  const x1Offset = child.data.side === 'right' ? root.size[0] - 50 : 50
-  const x3Offset = child.data.side === 'right' ? 0 : child.size[0]
-  const x1 = root.x + x1Offset
-  const y1 = root.y + root.height / 2
-  const x2 = child.data.side === 'right' ? x1 + 20 : x1 - 20
-  const y2 = child.y + child.height / 2
-  const x3 = child.x + x3Offset
-  const y3 = y2
-  return `${x1},${y1} ${x2},${y2} ${x3},${y3}`
-}
-
 const Links = (props: LinksProps) => {
   const { mindmap } = props
   const linkTheme = useContext(ThemeContext).link
@@ -26,23 +14,16 @@ const Links = (props: LinksProps) => {
   mindmap.each((node) => {
     if (node.depth === 0) {
       node.children?.forEach((child) => {
-        links.push(getMainTopicLinkPosition(node, child))
+        links.push(getMainTopicLink(node, child))
       })
-      return
+    } else {
+      node.children?.forEach((child) => {
+        links.push(getSubTopicLink(node, child))
+      })
     }
-
-    node.children?.forEach((child) => {
-      const x1 = node.x + (child.data.side === 'right' ? node.size[0] : 0)
-      const y1 = node.y + node.height / 2
-      const x2 = x1 + (child.data.side === 'right' ? 10 : -10)
-      const y2 = y1
-      const x3 = child.x + (child.data.side === 'right' ? 0 : child.size[0])
-      const y3 = child.y + child.height / 2
-      links.push(`${x1},${y1} ${x2},${y2} ${x3},${y3}`)
-    })
   })
   return (
-    <g>
+    <g className="links">
       {links.map((link) => {
         return (
           <polyline
@@ -58,4 +39,27 @@ const Links = (props: LinksProps) => {
   )
 }
 
-export default Links
+function getMainTopicLink(parent: LayoutNode, child: LayoutNode) {
+  const [parentWidth, parentHeight] = parent.size
+  const [, childHeight] = child.size
+  const x1_offset = child.data.side === 'right' ? parentWidth - 50 : 50
+
+  const x1 = parent.x + x1_offset
+  const y1 = parent.y + parentHeight / 2
+  const x2 = child.x
+  const y2 = child.y + childHeight / 2
+
+  return `${x1},${y1} ${x2},${y2}`
+}
+
+function getSubTopicLink(parent: LayoutNode, child: LayoutNode) {
+  const [parentWidth, parentHeight] = parent.size
+  const [, childHeight] = child.size
+  const x1 = parent.x + (child.data.side === 'right' ? parentWidth : 0)
+  const y1 = parent.y + parentHeight / 2
+  const x2 = child.x
+  const y2 = child.y + childHeight / 2
+  return `${x1},${y1} ${x2},${y2}`
+}
+
+export { Links }
