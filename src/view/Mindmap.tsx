@@ -36,12 +36,10 @@ const Mindmap = (props: MindmapProps) => {
   useIconFont()
 
   const topics: JSX.Element[] = useMemo(() => {
-    const nodes: JSX.Element[] = []
-    mindMap.each((node) => {
-      nodes.push(<Topic key={node.data.id} node={node} />)
+    return mindMap.descendants().map((node) => {
+      return <Topic key={node.data.id} node={node} />
     })
-    return nodes
-  }, [mindMap, contributions])
+  }, [mindMap])
 
   debug('mindMap', mindMap)
 
@@ -53,7 +51,7 @@ const Mindmap = (props: MindmapProps) => {
     viewModel.setMindmap(mindMap)
   }, [mindMap])
 
-  useContributions({ view: editorRef })
+  useContributions({ view: editorRef, contributions })
 
   return (
     <div

@@ -3,7 +3,7 @@ import { ViewModel } from '../viewModel'
 import styles from './index.module.css'
 
 const Toolbar = () => {
-  const { scale, setScale, setTranslate } = ViewModel.useContainer()
+  const { scale, setScale } = ViewModel.useContainer()
   async function requestFullScreen() {
     await document.querySelector(`#${EDITOR_ID}`)?.requestFullscreen()
   }
@@ -15,7 +15,6 @@ const Toolbar = () => {
         className="iconfont icon-location"
         onClick={() => {
           setScale(1)
-          setTranslate([0, 0])
         }}
       />
       <i

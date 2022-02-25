@@ -17,7 +17,6 @@ interface MindmapProps {
   theme?: Partial<Theme>
   locale?: IntlKey
   value?: TopicData
-  readonly?: boolean
   onChange?: (value: TopicData) => void
   contributions?: Contribution[]
 }

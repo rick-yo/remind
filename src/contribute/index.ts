@@ -24,17 +24,21 @@ type Contribution = (api: ContributionAPI) => void
 
 interface UseContributionProps {
   view: RefObject<HTMLDivElement>
+  contributions: Contribution[]
 }
 
 function useContributions(props: UseContributionProps) {
   const model = Model.useContainer()
   const viewModel = ViewModel.useContainer()
   const locale = useLocale()
-  const { view } = props
+  const { view, contributions } = props
   const api = useMemo(() => {
     return { model, viewModel, view, hooks, locale }
   }, [model, viewModel, view])
-  return api
+
+  contributions.forEach((contribution) => {
+    contribution(api)
+  })
 }
 
 const types = {

@@ -13,7 +13,6 @@ import { ViewModel } from '../viewModel'
 
 interface IModel {
   root: TopicData
-  readonly: boolean
 }
 
 const defaultRoot: TopicData = normalizeTopicSide({
@@ -21,13 +20,12 @@ const defaultRoot: TopicData = normalizeTopicSide({
   children: [createTopic('main topic 1'), createTopic('main topic 2')],
 })
 
-export const defaultState: IModel = {
+const defaultModel: IModel = {
   root: defaultRoot,
-  readonly: false,
 }
 
-function useModel(initialState: Partial<IModel> = {}) {
-  const [state, setState] = useState({ ...defaultState, ...initialState })
+function useModel(initialState: IModel = defaultModel) {
+  const [state, setState] = useState(initialState)
   const viewModel = ViewModel.useContainer()
   const history = new History<TopicData>()
 
@@ -38,7 +36,6 @@ function useModel(initialState: Partial<IModel> = {}) {
   return {
     ...state,
     appendChild(parentId: string, node: TopicData) {
-      if (state.readonly) return
       const root = pushSync(state.root)
       const rootTopic = TopicTree.from(root)
       const isNodeConnected = rootTopic.getNodeById(node.id)
@@ -67,7 +64,6 @@ function useModel(initialState: Partial<IModel> = {}) {
     },
     deleteNode(id: string) {
       if (!id) return
-      if (state.readonly) return
       const root = pushSync(state.root)
       const rootTopic = TopicTree.from(root)
       const parentNode = rootTopic.getNodeById(id)?.parent?.data
@@ -84,7 +80,6 @@ function useModel(initialState: Partial<IModel> = {}) {
     },
     updateNode(id: string, node: Partial<TopicData>) {
       if (!id) return
-      if (state.readonly) return
       const root = pushSync(state.root)
       const rootTopic = TopicTree.from(root)
       const currentNode = rootTopic.getNodeById(id)

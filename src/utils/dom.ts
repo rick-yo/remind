@@ -1,4 +1,3 @@
-import { RefObject } from 'preact'
 import { useEffect } from 'preact/hooks'
 
 function selectText(element?: HTMLElement) {
@@ -30,18 +29,4 @@ function useIconFont() {
   }, [])
 }
 
-function usePassiveWheelEvent(
-  ref: RefObject<HTMLElement> | undefined,
-  callback: (e: WheelEvent) => void,
-) {
-  useEffect(() => {
-    ref?.current?.addEventListener('wheel', callback, {
-      passive: false,
-    })
-    return () => {
-      ref?.current?.removeEventListener('wheel', callback)
-    }
-  }, [ref, callback])
-}
-
-export { selectText, useIconFont, usePassiveWheelEvent }
+export { selectText, useIconFont }

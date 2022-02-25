@@ -7,22 +7,21 @@ type IViewModel = {
   mode: EDITOR_MODE
   selectedNodeId: string
   scale: number
-  readonly: boolean
   mindMap?: LayoutNode
+  globalState: Map<string, any>
 }
 
-export const defaultState: IViewModel = {
+export const defaultViewModel: IViewModel = {
   mode: EDITOR_MODE.regular,
   selectedNodeId: '',
   scale: 1,
-  readonly: false,
   mindMap: undefined,
+  globalState: new Map(),
 }
 
-function useViewModel(initialState: Partial<IViewModel> = {}) {
-  const [state, setState] = useState({ ...defaultState, ...initialState })
+function useViewModel(initialState: IViewModel = defaultViewModel) {
+  const [state, setState] = useState(initialState)
   function setMode(mode: EDITOR_MODE) {
-    if (state.readonly) return
     setState((previousState) => ({ ...previousState, mode }))
   }
 
@@ -38,12 +37,20 @@ function useViewModel(initialState: Partial<IViewModel> = {}) {
     setState((previousState) => ({ ...previousState, mindMap }))
   }
 
+  function setGlobalState(key: string, value: any) {
+    setState((previousState) => {
+      previousState.globalState.set(key, value)
+      return previousState
+    })
+  }
+
   return {
     ...state,
     setMode,
     selectNode,
     setScale,
     setMindmap,
+    setGlobalState,
   }
 }
 
