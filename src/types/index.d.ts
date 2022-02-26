@@ -7,7 +7,6 @@ interface TopicData {
   id: string
   title: string
   children?: TopicData[]
-  side?: 'left' | 'right'
   depth?: number
 }
 

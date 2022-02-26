@@ -62,14 +62,6 @@ function useModel(initialState: IModel = defaultModel) {
       const parentNode = rootTopic.getNodeById(parentId)?.data
       if (!parentNode) return
       parentNode.children = parentNode.children ?? []
-      if (parentNode === root) {
-        const leftNodes = parentNode.children.filter(
-          (node) => node.side === 'left',
-        )
-        node.side =
-          parentNode.children.length / 2 > leftNodes.length ? 'left' : 'right'
-      }
-
       parentNode.children = parentNode.children || []
       parentNode.children.push(node)
       setState({ ...state, root })
@@ -96,7 +88,7 @@ function useModel(initialState: IModel = defaultModel) {
       const rootTopic = TopicTree.from(root)
       const currentNode = rootTopic.getNodeById(id)
       if (currentNode) {
-        Object.assign(currentNode, node)
+        Object.assign(currentNode.data, node)
       }
 
       setState({ ...state, root })

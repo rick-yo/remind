@@ -42,7 +42,7 @@ const Links = (props: LinksProps) => {
 function getMainTopicLink(parent: LayoutNode, child: LayoutNode) {
   const [parentWidth, parentHeight] = parent.size
   const [, childHeight] = child.size
-  const x1_offset = child.data.side === 'right' ? parentWidth - 50 : 50
+  const x1_offset = parentWidth - 50
 
   const x1 = parent.x + x1_offset
   const y1 = parent.y + parentHeight / 2
@@ -55,7 +55,7 @@ function getMainTopicLink(parent: LayoutNode, child: LayoutNode) {
 function getSubTopicLink(parent: LayoutNode, child: LayoutNode) {
   const [parentWidth, parentHeight] = parent.size
   const [, childHeight] = child.size
-  const x1 = parent.x + (child.data.side === 'right' ? parentWidth : 0)
+  const x1 = parent.x + parentWidth
   const y1 = parent.y + parentHeight / 2
   const x2 = child.x
   const y2 = child.y + childHeight / 2

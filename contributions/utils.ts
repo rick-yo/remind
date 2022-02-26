@@ -44,12 +44,7 @@ class LayoutTree {
 
     const currentNode = this.getNodeById(currentId)
     if (!currentNode) return
-    const [, ...children] = currentNode.descendants()
-    const left =
-      currentNode.data.side === 'right'
-        ? this.getNodeById(currentNode.data.id)?.parent
-        : this.getClosedNode(children, currentNode)
-    return left
+    return currentNode?.parent
   }
 
   getRighttNode(currentId: string) {
@@ -63,11 +58,7 @@ class LayoutTree {
     const currentNode = this.getNodeById(currentId)
     if (!currentNode) return
     const [, ...des] = currentNode.descendants()
-    const right =
-      currentNode.data.side === 'right'
-        ? this.getClosedNode(des, currentNode)
-        : this.getNodeById(currentNode.data.id)?.parent
-    return right
+    return this.getClosedNode(des, currentNode)
   }
 
   getTopNode(currentId: string) {

@@ -62,33 +62,7 @@ export function createTopic(title: string, options: Partial<TopicData> = {}) {
 }
 
 export function normalizeTopic(root: TopicData): TopicData {
-  return normalizeTopicSide(normalizeTopicDepth(root))
-}
-
-/**
- * Add side to TopicData, this will mutate TopicData and can be serialize to localStorage or database
- */
-function normalizeTopicSide(root: TopicData): TopicData {
-  const { children } = root
-  if (!children) return root
-  if (children.length < 4) return root
-  const mid = Math.ceil(children.length / 2)
-  return {
-    ...root,
-    children: children.map((node, index) => {
-      if (index < mid) {
-        return {
-          side: 'left',
-          ...node,
-        }
-      }
-
-      return {
-        side: 'right',
-        ...node,
-      }
-    }),
-  }
+  return normalizeTopicDepth(root)
 }
 
 /**
