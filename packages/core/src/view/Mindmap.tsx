@@ -27,6 +27,7 @@ const Mindmap = (props: MindmapProps) => {
   }, [root])
 
   debug('mindMap', layoutRoot)
+  console.count('mindMap rerender')
 
   useEffect(() => {
     onChange?.(root)

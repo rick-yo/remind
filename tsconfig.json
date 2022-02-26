@@ -18,8 +18,7 @@
     "jsxFactory": "h",
     "jsxFragmentFactory": "Fragment",
     // user define part
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
   },
-  "include": ["src", "contributions"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["**/src/**/*"],
 }

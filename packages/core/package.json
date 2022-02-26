@@ -1,0 +1,29 @@
+{
+  "version": "0.2.2",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "src/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "name": "remindjs-core",
+  "author": "luvsic3",
+  "devDependencies": {
+    "@types/d3-hierarchy": "^3.0.2"
+  },
+  "dependencies": {
+    "d3-hierarchy": "^3.1.1",
+    "hotkeys-js": "^3.8.7",
+    "preact": "^10.5.15",
+    "unstated-next": "^1.1.0"
+  }
+}

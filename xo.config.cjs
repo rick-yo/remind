@@ -15,4 +15,5 @@ module.exports = {
     'unicorn/no-array-for-each': 'off',
     '@typescript-eslint/naming-convention': 'off',
   },
+  ignores: ['vite.config.ts'],
 }

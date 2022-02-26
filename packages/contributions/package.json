@@ -1,0 +1,21 @@
+{
+  "version": "0.2.2",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "name": "remindjs-contributions",
+  "author": "luvsic3",
+  "dependencies": {
+    "hotkeys-js": "^3.8.7",
+    "remindjs-core": "*"
+  }
+}

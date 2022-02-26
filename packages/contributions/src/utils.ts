@@ -1,4 +1,4 @@
-import { LayoutNode } from '../src/types'
+import { LayoutNode } from 'remindjs-core'
 
 function getDistance(a: LayoutNode, b: LayoutNode) {
   const xDiff = Math.abs(a.x - b.x)

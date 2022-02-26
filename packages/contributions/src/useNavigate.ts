@@ -1,7 +1,5 @@
 import hotkeys from 'hotkeys-js'
-import { useEffect } from 'preact/hooks'
-import { EDITOR_MODE } from '../src/constant'
-import { Contribution } from '../src/contribute'
+import { Contribution, useEffect, EDITOR_MODE } from 'remindjs-core'
 import { HOTKEYS, LayoutTree } from './utils'
 
 const useNavigate: Contribution = (api) => {

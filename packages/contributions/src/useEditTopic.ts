@@ -1,10 +1,13 @@
 import hotkeys from 'hotkeys-js'
-import { useEffect } from 'preact/hooks'
-import { EDITOR_MODE } from '../src/constant'
-import { Contribution, types } from '../src/contribute'
-import { assert } from '../src/utils/assert'
-import { createTopic } from '../src/utils/tree'
-import { useEventListener } from '../src/utils/useEventListener'
+import {
+  Contribution,
+  types,
+  assert,
+  useEventListener,
+  useEffect,
+  createTopic,
+  EDITOR_MODE,
+} from 'remindjs-core'
 import { HOTKEYS, KEY_MAPS, selectText } from './utils'
 
 const useEditTopic: Contribution = (api) => {

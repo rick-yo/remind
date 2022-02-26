@@ -1,43 +1,21 @@
 {
-  "version": "0.2.2",
   "license": "MIT",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "src"
-  ],
-  "engines": {
-    "node": ">=10"
-  },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
     "lint:fix": "xo --fix",
     "release": "release-it",
-    "pre-commit": "npm run lint:fix && npm run build"
+    "pre-commit": "npm run lint:fix"
   },
   "husky": {
     "hooks": {
       "pre-commit": "npm run pre-commit"
     }
   },
-  "name": "remindjs",
-  "author": "luvsic3",
   "devDependencies": {
     "@preact/preset-vite": "^2.1.5",
-    "@types/d3-hierarchy": "^3.0.2",
     "husky": "^7.0.1",
     "release-it": "^14.11.3",
     "typescript": "^4.5.4",
     "vite": "^2.8.0",
     "xo": "^0.48.0"
-  },
-  "dependencies": {
-    "d3-hierarchy": "^3.1.1",
-    "hotkeys-js": "^3.8.7",
-    "preact": "^10.5.15",
-    "unstated-next": "^1.1.0"
   }
 }

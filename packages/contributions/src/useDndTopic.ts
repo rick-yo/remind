@@ -1,7 +1,10 @@
-import { Contribution, types } from '../src/contribute'
-import { assert } from '../src/utils/assert'
-import { TopicTree } from '../src/utils/tree'
-import { useEventListener } from '../src/utils/useEventListener'
+import {
+  Contribution,
+  types,
+  assert,
+  TopicTree,
+  useEventListener,
+} from 'remindjs-core'
 
 const dndDataFormat = 'text/plain'
 

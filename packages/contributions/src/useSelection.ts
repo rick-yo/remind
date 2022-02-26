@@ -1,6 +1,4 @@
-import { useEffect } from 'preact/hooks'
-import { Contribution, types } from '../src/contribute'
-import { useEventListener } from '../src/utils/useEventListener'
+import { Contribution, types, useEventListener, useEffect } from 'remindjs-core'
 
 const useSelection: Contribution = (api) => {
   const { model, viewModel, view } = api

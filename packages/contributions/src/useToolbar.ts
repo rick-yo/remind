@@ -1,6 +1,11 @@
-import { h } from 'preact'
-import { useEffect, useState } from 'preact/hooks'
-import { Contribution, Slot, ViewType } from '../src/contribute'
+import {
+  Contribution,
+  useEffect,
+  h,
+  useState,
+  Slot,
+  ViewType,
+} from 'remindjs-core'
 import { createElement } from './utils'
 
 const href = 'https://at.alicdn.com/t/font_1924427_4b37bvd5e4o.css'
