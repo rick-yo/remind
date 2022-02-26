@@ -1,6 +1,8 @@
 {
   "license": "MIT",
   "scripts": {
+    "build:all": "pnpm -r run build",
+    "dev": "pnpm --parallel run dev",
     "lint:fix": "xo --fix",
     "release": "release-it",
     "pre-commit": "npm run lint:fix"
