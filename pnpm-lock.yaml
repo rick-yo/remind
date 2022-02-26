@@ -20,14 +20,11 @@ importers:
 
   packages/contributions:
     specifiers:
-      '@types/d3-hierarchy': ^3.0.2
       hotkeys-js: ^3.8.7
       remindjs-core: '*'
     dependencies:
       hotkeys-js: registry.npmmirror.com/hotkeys-js/3.8.7
       remindjs-core: link:../core
-    devDependencies:
-      '@types/d3-hierarchy': registry.npmmirror.com/@types/d3-hierarchy/3.0.2
 
   packages/core:
     specifiers:
@@ -44,18 +41,13 @@ importers:
     devDependencies:
       '@types/d3-hierarchy': registry.npmmirror.com/@types/d3-hierarchy/3.0.2
 
-  packages/core/src:
+  packages/example:
     specifiers:
-      '@types/d3-hierarchy': ^3.0.2
-      d3-hierarchy: ^3.1.1
-      preact: ^10.5.15
-      unstated-next: ^1.1.0
+      remindjs-contributions: '*'
+      remindjs-core: '*'
     dependencies:
-      d3-hierarchy: registry.npmmirror.com/d3-hierarchy/3.1.1
-      preact: registry.npmmirror.com/preact/10.6.6
-      unstated-next: registry.npmmirror.com/unstated-next/1.1.0
-    devDependencies:
-      '@types/d3-hierarchy': registry.npmmirror.com/@types/d3-hierarchy/3.0.2
+      remindjs-contributions: link:../contributions
+      remindjs-core: link:../core
 
 packages:
 

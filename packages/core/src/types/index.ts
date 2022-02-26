@@ -1,7 +1,7 @@
-import { HierarchyPointNode } from 'd3-hierarchy'
 import { Theme } from '../context/theme'
 import { Contribution } from '../contribute'
 import { IntlKey } from '../utils/Intl'
+import { HierarchyPointNode } from 'd3-hierarchy'
 
 interface TopicData {
   id: string

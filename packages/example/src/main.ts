@@ -1,6 +1,6 @@
-import { createMindmap } from './src'
-import { TopicData } from './src/types'
-import { contributions } from './contributions'
+import { createMindmap, TopicData } from 'remindjs-core'
+import 'remindjs-core/dist/style.css'
+import { contributions } from 'remindjs-contributions'
 
 const customData: TopicData = {
   id: '545be2df-3fe3-43d8-8038-7bf8fd567273',
@@ -37,7 +37,7 @@ const customData: TopicData = {
   ],
 }
 
-createMindmap(document.querySelector('#app'), {
+createMindmap(document.querySelector('#app')!, {
   value: customData,
   contributions,
 })
