@@ -3,9 +3,9 @@ import { ThemeContext } from '../context/theme'
 import { EDITOR_MODE, TopicStyle } from '../constant'
 import { getTopicFontsize } from '../layout/mindmap'
 import { ViewModel } from '../viewModel'
-import { LayoutNode } from '../types'
 import { toPX } from '../utils/common'
-import { ViewType } from '../contribute'
+import { LayoutNode } from '../interface/topic'
+import { ViewType } from '../interface/contribute'
 import styles from './index.module.css'
 
 type TopicProps = {

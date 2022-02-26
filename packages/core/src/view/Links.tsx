@@ -1,6 +1,6 @@
 import { useContext } from 'preact/hooks'
 import { ThemeContext } from '../context/theme'
-import { LayoutNode } from '../types'
+import { LayoutNode } from '../interface/topic'
 
 interface LinksProps {
   mindmap: LayoutNode

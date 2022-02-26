@@ -1,34 +1,8 @@
-import { JSX, RefObject } from 'preact'
 import { useMemo } from 'preact/hooks'
+import { useLocale } from '../context/locale'
 import { Model } from '../model'
 import { ViewModel } from '../viewModel'
-import { useLocale } from '../context/locale'
-import { IntlValue } from '../utils/Intl'
-
-enum ViewType {
-  mindmap,
-  topic,
-  link,
-}
-type Slot = JSX.Element & { viewType?: ViewType }
-
-interface ContributionAPI {
-  model: ReturnType<typeof Model.useContainer>
-  viewModel: ReturnType<typeof ViewModel.useContainer>
-  view: RefObject<HTMLDivElement>
-  locale: IntlValue
-}
-
-interface ContributionResult {
-  slots?: Slot[]
-}
-
-type Contribution = (api: ContributionAPI) => ContributionResult | void
-
-interface UseContributionProps {
-  view: RefObject<HTMLDivElement>
-  contributions: Contribution[]
-}
+import { Slot, UseContributionProps, ViewType } from '../interface/contribute'
 
 function useContributions(props: UseContributionProps) {
   const model = Model.useContainer()
@@ -80,5 +54,4 @@ const types = {
   },
 }
 
-export { useContributions, ViewType, types }
-export type { Contribution, Slot }
+export { useContributions, types }

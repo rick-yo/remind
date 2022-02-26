@@ -1,5 +1,5 @@
 import { hierarchy, HierarchyNode } from 'd3-hierarchy'
-import { TopicData } from '../types'
+import { TopicData } from '../interface/topic'
 
 function uuidv4() {
   return URL.createObjectURL(new Blob([])).slice(-12)

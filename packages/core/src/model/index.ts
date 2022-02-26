@@ -1,27 +1,24 @@
 import { createContainer } from 'unstated-next'
 import { useEffect, useMemo, useState } from 'preact/hooks'
 import { createTopic, removeChild, TopicTree } from '../utils/tree'
-import { TopicData } from '../types'
 import { History } from '../utils/history'
 import { deepClone } from '../utils/common'
-import { ViewModel } from '../viewModel'
-
-interface IModel {
-  root: TopicData
-}
+import { TopicData } from '../interface/topic'
+import { IModelStructure, IModelTrait } from '../interface/model'
 
 const defaultRoot: TopicData = {
   ...createTopic('Central Topic'),
   children: [createTopic('main topic 1'), createTopic('main topic 2')],
 }
 
-const defaultModel: IModel = {
+const defaultModel: IModelStructure = {
   root: defaultRoot,
 }
 
-function useModel(initialState: IModel = defaultModel) {
+function useModel(
+  initialState: IModelStructure = defaultModel,
+): IModelStructure & IModelTrait {
   const [state, setState] = useState(initialState)
-  const viewModel = ViewModel.useContainer()
   const history = useMemo(() => {
     return new History<TopicData>()
   }, [])
@@ -72,12 +69,7 @@ function useModel(initialState: IModel = defaultModel) {
       const rootTopic = TopicTree.from(root)
       const parentNode = rootTopic.getParentNode(id)
       if (parentNode?.children) {
-        // When deleted a node, select deleted node's sibing or parent
-        const sibling =
-          rootTopic.getPreviousSibling(id) ?? rootTopic.getNextSibling(id)
         removeChild(parentNode, id)
-        const selectedNode = sibling ?? parentNode
-        viewModel.select(selectedNode.id)
       }
 
       setState({ ...state, root })
@@ -115,4 +107,3 @@ function useModel(initialState: IModel = defaultModel) {
 const Model = createContainer(useModel)
 
 export { defaultRoot, Model }
-export type { IModel }

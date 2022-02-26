@@ -1,6 +1,6 @@
 import { hierarchy, HierarchyNode, tree } from 'd3-hierarchy'
 import { canvasContext, TopicStyle } from '../constant'
-import { TopicData } from '../types'
+import { TopicData } from '../interface/topic'
 import { sum } from '../utils/common'
 
 export function getTopicFontsize(node: TopicData) {

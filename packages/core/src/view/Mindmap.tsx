@@ -3,13 +3,24 @@ import { mindmap } from '../layout/mindmap'
 import { Model } from '../model'
 import { ViewModel } from '../viewModel'
 import { debug } from '../utils/debug'
-import { LayoutNode, MindmapProps } from '../types'
-import { useContributions, ViewType } from '../contribute'
+import { useContributions } from '../contribute'
 import { toPX } from '../utils/common'
 import { normalizeTopic } from '../utils/tree'
+import { Theme } from '../interface/theme'
+import { IntlLanguage } from '../interface/intl'
+import { LayoutNode, TopicData } from '../interface/topic'
+import { Contribution, ViewType } from '../interface/contribute'
 import { Links } from './Links'
-import styles from './index.module.css'
 import Topic from './Topic'
+import styles from './index.module.css'
+
+interface MindmapProps {
+  theme?: Partial<Theme>
+  locale?: IntlLanguage
+  value?: TopicData
+  onChange?: (value: TopicData) => void
+  contributions?: Contribution[]
+}
 
 const Mindmap = (props: MindmapProps) => {
   const { onChange, contributions = [] } = props
@@ -72,3 +83,4 @@ function Topics({ mindMap }: { mindMap: LayoutNode }) {
 }
 
 export { Mindmap }
+export type { MindmapProps }

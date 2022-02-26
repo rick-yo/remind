@@ -1,10 +1,9 @@
 import { render } from 'preact'
-import { Mindmap } from './view/Mindmap'
+import { Mindmap, MindmapProps } from './view/Mindmap'
 import { defaultRoot, Model } from './model'
 import { ViewModel } from './viewModel'
 import { ThemeContext, defaultTheme } from './context/theme'
 import { defaultLocale, LocaleContext } from './context/locale'
-import { MindmapProps } from './types'
 
 function MindmapApp(props: MindmapProps) {
   const {

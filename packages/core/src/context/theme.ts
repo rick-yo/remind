@@ -1,13 +1,5 @@
 import { createContext } from 'preact'
-
-interface Theme {
-  link: {
-    stroke: string
-    strokeWidth: number
-  }
-  topic: Record<string, unknown>
-  mainColor: string
-}
+import { Theme } from '../interface/theme'
 
 const defaultTheme: Theme = {
   link: {
@@ -21,4 +13,3 @@ const defaultTheme: Theme = {
 const ThemeContext = createContext(defaultTheme)
 
 export { ThemeContext, defaultTheme }
-export type { Theme }
