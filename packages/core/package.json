@@ -1,7 +1,7 @@
 {
   "version": "0.2.2",
   "license": "MIT",
-  "main": "dist/remindjs-core.es.js",
+  "main": "dist/remind-core.es.js",
   "typings": "src/index.d.ts",
   "files": [
     "dist",
@@ -9,10 +9,9 @@
   ],
   "scripts": {
     "dev": "vite build -w",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "tsc && vite build"
   },
-  "name": "remindjs-core",
+  "name": "remind-core",
   "author": "luvsic3",
   "devDependencies": {
     "@types/d3-hierarchy": "^3.0.2"

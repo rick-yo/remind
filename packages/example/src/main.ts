@@ -1,6 +1,6 @@
-import { createMindmap, TopicData } from 'remindjs-core'
-import 'remindjs-core/dist/style.css'
-import { contributions } from 'remindjs-contributions'
+import { createMindmap, TopicData } from 'remind-core'
+import 'remind-core/dist/style.css'
+import { contributions } from 'remind-contributions'
 
 const customData: TopicData = {
   id: '545be2df-3fe3-43d8-8038-7bf8fd567273',

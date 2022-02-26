@@ -1,4 +1,4 @@
-import { Contribution, types, useEventListener, useEffect } from 'remindjs-core'
+import { Contribution, types, useEventListener, useEffect } from 'remind-core'
 
 const useSelection: Contribution = (api) => {
   const { model, viewModel, view } = api

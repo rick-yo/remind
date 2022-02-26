@@ -1,5 +1,5 @@
 import hotkeys from 'hotkeys-js'
-import { Contribution, useEffect, EDITOR_MODE } from 'remindjs-core'
+import { Contribution, useEffect, EDITOR_MODE } from 'remind-core'
 import { HOTKEYS } from './utils'
 
 const useHistory: Contribution = (api) => {

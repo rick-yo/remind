@@ -7,7 +7,7 @@ import {
   useEffect,
   createTopic,
   EDITOR_MODE,
-} from 'remindjs-core'
+} from 'remind-core'
 import { HOTKEYS, KEY_MAPS, selectText } from './utils'
 
 const useEditTopic: Contribution = (api) => {

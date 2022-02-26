@@ -9,10 +9,10 @@
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
-  "name": "remindjs-example",
+  "name": "remind-example",
   "author": "luvsic3",
   "dependencies": {
-    "remindjs-core": "*",
-    "remindjs-contributions": "*"
+    "remind-core": "*",
+    "remind-contributions": "*"
   }
 }

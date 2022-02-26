@@ -4,7 +4,7 @@ import {
   assert,
   TopicTree,
   useEventListener,
-} from 'remindjs-core'
+} from 'remind-core'
 
 const dndDataFormat = 'text/plain'
 

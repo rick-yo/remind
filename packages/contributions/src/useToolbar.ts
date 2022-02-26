@@ -5,7 +5,7 @@ import {
   useState,
   Slot,
   ViewType,
-} from 'remindjs-core'
+} from 'remind-core'
 import { createElement } from './utils'
 
 const href = 'https://at.alicdn.com/t/font_1924427_4b37bvd5e4o.css'

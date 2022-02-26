@@ -1,7 +1,7 @@
 {
   "version": "0.2.2",
   "license": "MIT",
-  "main": "dist/remindjs-contributions.es.js",
+  "main": "dist/remind-contributions.es.js",
   "typings": "src/index.d.ts",
   "files": [
     "dist",
@@ -9,13 +9,12 @@
   ],
   "scripts": {
     "dev": "vite build -w",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "tsc && vite build"
   },
-  "name": "remindjs-contributions",
+  "name": "remind-contributions",
   "author": "luvsic3",
   "dependencies": {
     "hotkeys-js": "^3.8.7",
-    "remindjs-core": "*"
+    "remind-core": "*"
   }
 }
