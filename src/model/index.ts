@@ -1,11 +1,6 @@
 import { createContainer } from 'unstated-next'
 import { useEffect, useMemo, useState } from 'preact/hooks'
-import {
-  normalizeTopicSide,
-  createTopic,
-  removeChild,
-  TopicTree,
-} from '../utils/tree'
+import { createTopic, removeChild, TopicTree } from '../utils/tree'
 import { TopicData } from '../types'
 import { History } from '../utils/history'
 import { deepClone } from '../utils/common'
@@ -15,10 +10,10 @@ interface IModel {
   root: TopicData
 }
 
-const defaultRoot: TopicData = normalizeTopicSide({
+const defaultRoot: TopicData = {
   ...createTopic('Central Topic'),
   children: [createTopic('main topic 1'), createTopic('main topic 2')],
-})
+}
 
 const defaultModel: IModel = {
   root: defaultRoot,

@@ -1,8 +1,6 @@
 .editor {
   position: relative;
   transition: all 0.2s;
-  background: #eef8fa;
-  overflow: hidden;
 }
 
 .svgCanvas {
@@ -13,6 +11,7 @@
 
 .topic {
   display: inline-block;
+  box-sizing: border-box;
   position: absolute;
   top: 0;
   left: 0;

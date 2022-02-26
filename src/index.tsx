@@ -4,7 +4,6 @@ import { defaultRoot, Model } from './model'
 import { ViewModel } from './viewModel'
 import { ThemeContext, defaultTheme } from './context/theme'
 import { defaultLocale, LocaleContext } from './context/locale'
-import { normalizeTopicSide } from './utils/tree'
 import { MindmapProps } from './types'
 
 function MindmapApp(props: MindmapProps) {
@@ -13,12 +12,11 @@ function MindmapApp(props: MindmapProps) {
     theme = defaultTheme,
     locale = defaultLocale.locale,
   } = props
-  const rootWithSide = normalizeTopicSide(value)
   return (
     <ViewModel.Provider>
       <Model.Provider
         initialState={{
-          root: rootWithSide,
+          root: value,
         }}
       >
         <ThemeContext.Provider

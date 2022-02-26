@@ -8,6 +8,7 @@ interface TopicData {
   title: string
   children?: TopicData[]
   side?: 'left' | 'right'
+  depth?: number
 }
 
 interface MindmapProps {

@@ -1,12 +1,12 @@
-import { useEffect, useRef, useMemo, useContext } from 'preact/hooks'
-import { TopicStyle } from '../constant'
+import { useEffect, useRef, useMemo } from 'preact/hooks'
 import { mindmap } from '../layout/mindmap'
 import { Model } from '../model'
 import { ViewModel } from '../viewModel'
 import { debug } from '../utils/debug'
-import { ThemeContext } from '../context/theme'
 import { LayoutNode, MindmapProps } from '../types'
 import { useContributions, ViewType } from '../contribute'
+import { toPX } from '../utils/common'
+import { normalizeTopic } from '../utils/tree'
 import { Links } from './Links'
 import styles from './index.module.css'
 import Topic from './Topic'
@@ -16,33 +16,25 @@ const Mindmap = (props: MindmapProps) => {
   const model = Model.useContainer()
   const viewModel = ViewModel.useContainer()
   const editorRef = useRef<HTMLDivElement>(null)
-  const theme = useContext(ThemeContext)
   const { root } = model
-  const { canvasWidth, canvasHeight } = theme
   const { slots } = useContributions({ view: editorRef, contributions })
   const mindmapSlots = slots.filter(
     (slot) => slot?.viewType === ViewType.mindmap,
   )
 
-  const mindMap = useMemo(() => {
-    const map = mindmap(root)
-    // Move mindmap to canvas central positon
-    map.each((node) => {
-      node.x += canvasWidth / 2 - TopicStyle.maxWidth
-      node.y += canvasHeight / 2
-    })
-    return map
-  }, [root, canvasWidth, canvasHeight])
+  const { layoutRoot, canvasWidth, canvasHeight } = useMemo(() => {
+    return mindmap(normalizeTopic(root))
+  }, [root])
 
-  debug('mindMap', mindMap)
+  debug('mindMap', layoutRoot)
 
   useEffect(() => {
     onChange?.(root)
   }, [root])
 
   useEffect(() => {
-    viewModel.setMindmap(mindMap)
-  }, [mindMap])
+    viewModel.setMindmap(layoutRoot)
+  }, [layoutRoot])
 
   return (
     <div
@@ -50,20 +42,19 @@ const Mindmap = (props: MindmapProps) => {
       data-type={ViewType.mindmap}
       className={styles.editor}
       style={{
-        fontFamily: TopicStyle.fontFamily,
-        width: `${canvasWidth}px`,
-        height: `${canvasHeight}px`,
+        width: toPX(canvasWidth),
+        height: toPX(canvasHeight),
       }}
     >
       <svg
-        width={10_000}
-        height={10_000}
+        width={canvasWidth}
+        height={canvasHeight}
         xmlns="http://www.w3.org/2000/svg"
         className={styles.svgCanvas}
       >
-        <Links mindmap={mindMap} />
+        <Links mindmap={layoutRoot} />
       </svg>
-      <Topics mindMap={mindMap} />
+      <Topics mindMap={layoutRoot} />
       {mindmapSlots}
     </div>
   )

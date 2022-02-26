@@ -1,11 +1,11 @@
 const TopicStyle = {
-  fontSize: 22,
-  fontFamily: '微软雅黑,-apple-system',
-  radius: 5,
-  padding: 5,
   maxWidth: 240,
   minHeight: 30,
-  defaultSize: [150, 40],
+  padding: 8,
+  margin: 150,
+  fontSize: 20,
+  fontFamily: `"Microsoft Yahei", "PingFang SC"`,
+  lineHeight: 1.2,
 }
 
 const canvasContext = document.createElement('canvas').getContext('2d')!

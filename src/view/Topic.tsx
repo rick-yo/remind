@@ -38,22 +38,18 @@ const Topic = (props: TopicProps) => {
       data-type={ViewType.topic}
       contentEditable={isEditing}
       draggable
-      // StopPropagation to prevent invoke Mindmap's event
-      onMouseDown={(e) => {
-        e.stopPropagation()
-      }}
-      onTouchStart={(e) => {
-        e.stopPropagation()
-      }}
       style={{
-        borderRadius: `${TopicStyle.radius}px`,
-        transform: `translate(${x}px, ${y}px)`,
-        background: `${background}`,
+        transform: `translate(${toPX(x)}, ${toPX(y)}) scale(${
+          isEditing ? '1.05' : 1
+        })`,
         maxWidth: toPX(TopicStyle.maxWidth),
         padding: toPX(TopicStyle.padding),
-        fontSize: toPX(getTopicFontsize(node)),
+        background: `${background}`,
+        fontSize: toPX(getTopicFontsize(node.data)),
+        fontFamily: TopicStyle.fontFamily,
+        lineHeight: TopicStyle.lineHeight,
         outline: `${outline}`,
-        translate: `0 ${isEditing ? '2px' : 0}`,
+        borderRadius: toPX(5),
       }}
     >
       {title}
