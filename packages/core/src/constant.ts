@@ -2,7 +2,7 @@ const TopicStyle = {
   maxWidth: 240,
   minHeight: 30,
   padding: 8,
-  margin: 150,
+  margin: 120,
   fontSize: 20,
   fontFamily: `"Microsoft Yahei", "PingFang SC"`,
   lineHeight: 1.2,

@@ -1,16 +1,13 @@
 import { hierarchy, HierarchyNode, tree } from 'd3-hierarchy'
 import { canvasContext, TopicStyle } from '../constant'
 import { TopicData } from '../interface/topic'
-import { sum } from '../utils/common'
+import { average } from '../utils/common'
 
 export function getTopicFontsize(node: TopicData) {
   const offset = (node.depth ?? 0) * 2
   return `${Math.max(14, TopicStyle.fontSize - offset)}`
 }
 
-const canvasPadding = 10
-
-// WARN fontSize is diffrent between topic, should fix this to get correct topic width and height
 function measureText(node: TopicData) {
   const fontSize = getTopicFontsize(node)
   canvasContext.save()
@@ -42,7 +39,6 @@ declare module 'd3-hierarchy' {
      */
     data: Datum
     size: [number, number]
-    canvasWidth: number
   }
 }
 
@@ -55,29 +51,27 @@ function mindmap(root: TopicData) {
   })
 
   const sizes = hierarchyRoot.descendants().map((node) => node.size)
-  const averageNodeSize: [number, number] = [
-    sum(
-      sizes.map((size) => {
-        return size[0]
-      }),
-    ) / sizes.length,
-    sum(
-      sizes.map((size) => {
-        return size[1]
-      }),
-    ) / sizes.length,
-  ]
+  const aw = average(
+    sizes.map((size) => {
+      return size[0]
+    }),
+  )
+  const ah = average(
+    sizes.map((size) => {
+      return size[1]
+    }),
+  )
 
   const layoutRoot = tree<TopicData>()
-    .nodeSize(averageNodeSize)
-    .separation((a, b) => (a.parent === b.parent ? 0.8 : 1))(hierarchyRoot)
+    .nodeSize([ah, aw])
+    .separation((a, b) => (a.parent === b.parent ? 1.5 : 2))(hierarchyRoot)
 
   layoutRoot.each((node) => {
     // Rotate entire tree
     const { x, y, depth } = node
     node.x = y
     node.y = x
-    // Reduce margin
+    // Add horizontal margin
     node.x += depth * TopicStyle.margin
   })
 
@@ -85,19 +79,18 @@ function mindmap(root: TopicData) {
   const nodes = layoutRoot.descendants()
   const xs = nodes.map((node) => node.x)
   const ys = nodes.map((node) => node.y)
-  const heights = nodes.map((node) => node.size[1])
   const x0 = Math.min(...xs)
   const x1 = Math.max(...xs)
   const y0 = Math.min(...ys)
   const y1 = Math.max(...ys)
-  const maxHeight = Math.max(...heights)
+  const maxHeight = Math.max(...nodes.map((node) => node.size[1]))
   const canvasWidth = x1 - x0 + TopicStyle.maxWidth
-  const canvasHeight = y1 - y0 + maxHeight
+  const canvasHeight = y1 - y0 + maxHeight * 2
 
-  // Move mindmap to canvas central positon
+  // Move layoutRoot to canvas center
   layoutRoot.each((node) => {
-    node.x += canvasPadding
-    node.y += canvasHeight / 2 - TopicStyle.minHeight / 2
+    node.x += TopicStyle.padding
+    node.y -= y0 - TopicStyle.padding
   })
 
   return {

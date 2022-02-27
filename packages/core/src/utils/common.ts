@@ -11,8 +11,8 @@ function classNames(...strs: string[]) {
 
 const toPX = (length: number | string) => `${length}px`
 
-function sum(nums: number[]) {
-  return nums.reduce((p, c) => p + c, 0)
+function average(nums: number[]) {
+  return nums.reduce((p, c) => p + c, 0) / nums.length
 }
 
-export { noop, deepClone, classNames, toPX, sum }
+export { noop, deepClone, classNames, toPX, average }

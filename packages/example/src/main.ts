@@ -1,24 +1,39 @@
-import { createMindmap, TopicData } from 'remind-core'
+import { createMindmap, createTopic, TopicData } from 'remind-core'
 import 'remind-core/dist/style.css'
 import { contributions } from 'remind-contributions'
 
 const customData: TopicData = {
-  id: '7bf8fd567273',
-  title: 'Central Topic',
+  ...createTopic('How to use Remind 🤔'),
   children: [
     {
-      title: 'main topic 1',
-      id: 'f4cb61397246',
+      ...createTopic('Basic shortcut 🍩'),
+      children: [
+        createTopic('tab - Create a child topic'),
+        createTopic('del - Remove a topic'),
+        createTopic('space or doubleclick - Edit a topic'),
+        createTopic('Enter - Save edited topic'),
+      ],
     },
     {
-      title: 'main topic 2',
-      id: 'fa4df6c9708c',
+      ...createTopic('Advanced shortcut 🏂'),
       children: [
-        {
-          title: 'sub topic 1',
-          id: 'f4cb61397241',
-        },
+        createTopic('command+z - Undo'),
+        createTopic('command+shift+z - Redo'),
+        createTopic('up, down, left, right - navigate between topics'),
       ],
+    },
+    {
+      ...createTopic('Bottom menu 🥙'),
+      children: [
+        createTopic('Full screen'),
+        createTopic('Return to Center'),
+        createTopic('Zoom in'),
+        createTopic('Zoom out'),
+      ],
+    },
+    {
+      ...createTopic('Draggable 🏑'),
+      children: [createTopic('Drag a node to target one and append to it')],
     },
   ],
 }
