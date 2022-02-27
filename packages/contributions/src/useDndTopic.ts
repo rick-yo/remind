@@ -35,7 +35,9 @@ const useDndTopic: Contribution = (api) => {
       return
     }
 
-    model.appendChild(toId, fromNode?.data)
+    model.update(() => {
+      model.appendChild(toId, fromNode?.data)
+    })
   }
 
   // We need to prevent the default behavior

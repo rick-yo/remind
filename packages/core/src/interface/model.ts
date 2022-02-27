@@ -5,6 +5,7 @@ interface IModelStructure {
 }
 
 interface IModelTrait {
+  update: (updater: (root: IModelStructure) => void) => void
   appendChild(parentId: string, node: TopicData): void
   deleteNode(id: string): void
   updateNode(id: string, node: Partial<TopicData>): void

@@ -1,5 +1,5 @@
 import { useDndTopic } from './useDndTopic'
-import { useEditTopic } from './useEditTopic'
+import { useUpdateTopic } from './useUpdateTopic'
 import { useHistory } from './useHistory'
 import { useNavigate } from './useNavigate'
 import { useSelection } from './useSelection'
@@ -7,7 +7,7 @@ import { useToolbar } from './useToolbar'
 
 const contributions = [
   useDndTopic,
-  useEditTopic,
+  useUpdateTopic,
   useHistory,
   useNavigate,
   useSelection,
