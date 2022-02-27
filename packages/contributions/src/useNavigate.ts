@@ -4,15 +4,15 @@ import { HOTKEYS, LayoutTree } from './utils'
 
 const useNavigate: Contribution = (api) => {
   const { viewModel, view } = api
-  const { selection, mode, mindMap } = viewModel
+  const { selection, mode, layoutRoot } = viewModel
   const hotkeyOptions = {
     element: view.current,
   }
 
   function moveTop(e: KeyboardEvent) {
     e.preventDefault()
-    if (!mindMap) return
-    const target = LayoutTree.from(mindMap).getTopNode(selection)
+    if (!layoutRoot) return
+    const target = LayoutTree.from(layoutRoot).getTopNode(selection)
     if (target) {
       viewModel.select(target.data.id)
     }
@@ -20,8 +20,8 @@ const useNavigate: Contribution = (api) => {
 
   function moveDown(e: KeyboardEvent) {
     e.preventDefault()
-    if (!mindMap) return
-    const target = LayoutTree.from(mindMap).getBottomNode(selection)
+    if (!layoutRoot) return
+    const target = LayoutTree.from(layoutRoot).getBottomNode(selection)
     if (target) {
       viewModel.select(target.data.id)
     }
@@ -29,8 +29,8 @@ const useNavigate: Contribution = (api) => {
 
   function moveLeft(e: KeyboardEvent) {
     e.preventDefault()
-    if (!mindMap) return
-    const target = LayoutTree.from(mindMap).getLeftNode(selection)
+    if (!layoutRoot) return
+    const target = LayoutTree.from(layoutRoot).getLeftNode(selection)
     if (target) {
       viewModel.select(target.data.id)
     }
@@ -38,8 +38,8 @@ const useNavigate: Contribution = (api) => {
 
   function moveRight(e: KeyboardEvent) {
     e.preventDefault()
-    if (!mindMap) return
-    const target = LayoutTree.from(mindMap).getRighttNode(selection)
+    if (!layoutRoot) return
+    const target = LayoutTree.from(layoutRoot).getRighttNode(selection)
     if (target) {
       viewModel.select(target.data.id)
     }
@@ -60,7 +60,7 @@ const useNavigate: Contribution = (api) => {
       hotkeys.unbind(HOTKEYS.up, moveTop)
       hotkeys.unbind(HOTKEYS.down, moveDown)
     }
-  }, [mindMap, hotkeyOptions, mode, viewModel])
+  }, [layoutRoot, hotkeyOptions, mode, viewModel])
 }
 
 export { useNavigate }

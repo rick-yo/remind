@@ -45,6 +45,10 @@ function useModel(
   }, [history])
 
   const update = (updater: (root: IModelStructure) => void): void => {
+    assert(
+      nextStateRef.current === null,
+      'Do not call update inside an updater',
+    )
     nextStateRef.current = deepClone(state)
     updater(nextStateRef.current)
     history.pushSync(nextStateRef.current)

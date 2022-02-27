@@ -37,15 +37,15 @@ const Mindmap = (props: MindmapProps) => {
     return mindmap(normalizeTopic(root))
   }, [root])
 
-  debug('mindMap', layoutRoot)
-  console.count('mindMap rerender')
+  debug('layoutRoot', layoutRoot)
+  console.count('MindMap rerender')
 
   useEffect(() => {
     onChange?.(root)
   }, [root])
 
   useEffect(() => {
-    viewModel.setMindmap(layoutRoot)
+    viewModel.setLayoutRoot(layoutRoot)
   }, [layoutRoot])
 
   return (
@@ -64,18 +64,18 @@ const Mindmap = (props: MindmapProps) => {
         xmlns="http://www.w3.org/2000/svg"
         className={styles.svgCanvas}
       >
-        <Links mindmap={layoutRoot} />
+        <Links layoutRoot={layoutRoot} />
       </svg>
-      <Topics mindMap={layoutRoot} />
+      <Topics layoutRoot={layoutRoot} />
       {mindmapSlots}
     </div>
   )
 }
 
-function Topics({ mindMap }: { mindMap: LayoutNode }) {
+function Topics({ layoutRoot }: { layoutRoot: LayoutNode }) {
   return (
     <div className="topics">
-      {mindMap.descendants().map((node) => {
+      {layoutRoot.descendants().map((node) => {
         return <Topic key={node.data.id} node={node} />
       })}
     </div>

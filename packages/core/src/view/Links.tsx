@@ -3,15 +3,15 @@ import { ThemeContext } from '../context/theme'
 import { LayoutNode } from '../interface/topic'
 
 interface LinksProps {
-  mindmap: LayoutNode
+  layoutRoot: LayoutNode
 }
 
 const Links = (props: LinksProps) => {
-  const { mindmap } = props
+  const { layoutRoot } = props
   const linkTheme = useContext(ThemeContext).link
   const links: string[] = []
 
-  mindmap.each((node) => {
+  layoutRoot.each((node) => {
     if (node.depth === 0) {
       node.children?.forEach((child) => {
         links.push(getMainTopicLink(node, child))

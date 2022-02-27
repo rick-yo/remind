@@ -8,7 +8,12 @@ enum ViewType {
   topic,
   link,
 }
-type Slot = JSX.Element & { viewType?: ViewType }
+type Slot = JSX.Element & {
+  /**
+   * Define slot's render position in editor
+   */
+  viewType?: ViewType
+}
 
 interface ContributionAPI {
   model: IModelStructure & IModelTrait
@@ -18,9 +23,17 @@ interface ContributionAPI {
 }
 
 interface ContributionResult {
+  /**
+   * Placeholder in editor, that render custom content
+   */
   slots?: Slot[]
 }
 
+/**
+ * Contribution let you extend editor's functionality, custom editor's behavior or add custom render content.
+ * Contribution is custom preact hooks, so it's reactive and efficient
+ * @param api expose editor's core api
+ */
 type Contribution = (api: ContributionAPI) => ContributionResult | void
 
 interface UseContributionProps {

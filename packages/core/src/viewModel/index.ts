@@ -7,7 +7,8 @@ import { LayoutNode } from '../interface/topic'
 export const defaultViewModel: IViewModelStructure = {
   mode: EDITOR_MODE.none,
   selection: '',
-  mindMap: undefined,
+  selections: [],
+  layoutRoot: undefined,
   globalState: new Map(),
 }
 
@@ -15,16 +16,30 @@ function useViewModel(
   initialState: IViewModelStructure = defaultViewModel,
 ): IViewModelStructure & IViewModelTrait {
   const [state, setState] = useState(initialState)
+
   function setMode(mode: EDITOR_MODE) {
     setState((previousState) => ({ ...previousState, mode }))
   }
 
-  function select(selection: string) {
-    setState((previousState) => ({ ...previousState, selection }))
+  function select(ids: string | string[]) {
+    if (Array.isArray(ids)) {
+      const [selection = ''] = ids
+      setState((previousState) => ({
+        ...previousState,
+        selections: ids,
+        selection,
+      }))
+    } else {
+      setState((previousState) => ({
+        ...previousState,
+        selections: [ids],
+        selection: ids,
+      }))
+    }
   }
 
-  function setMindmap(mindMap: LayoutNode) {
-    setState((previousState) => ({ ...previousState, mindMap }))
+  function setLayoutRoot(layoutRoot: LayoutNode) {
+    setState((previousState) => ({ ...previousState, layoutRoot }))
   }
 
   function setGlobalState(key: string, value: any) {
@@ -38,7 +53,7 @@ function useViewModel(
     ...state,
     setMode,
     select,
-    setMindmap,
+    setLayoutRoot,
     setGlobalState,
   }
 }
