@@ -1,0 +1,18 @@
+{
+  "version": "0.2.2",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "name": "remind-example",
+  "author": "luvsic3",
+  "dependencies": {
+    "remind-core": "*",
+    "remind-contributions": "*"
+  }
+}

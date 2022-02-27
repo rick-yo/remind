@@ -1,0 +1,20 @@
+.editor {
+  position: relative;
+  transition: all 0.2s;
+}
+
+.svgCanvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.topic {
+  display: inline-block;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: default;
+  user-select: none;
+}
