@@ -2,7 +2,6 @@ import { useEffect, useRef, useMemo } from 'preact/hooks'
 import { mindmap } from '../layout/mindmap'
 import { Model } from '../model'
 import { ViewModel } from '../viewModel'
-import { debug } from '../utils/debug'
 import { useContributions } from '../contribute'
 import { toPX } from '../utils/common'
 import { normalizeTopic } from '../utils/tree'
@@ -37,7 +36,7 @@ const Mindmap = (props: MindmapProps) => {
     return mindmap(normalizeTopic(root))
   }, [root])
 
-  debug('layoutRoot', layoutRoot)
+  console.log('layoutRoot', layoutRoot)
   console.count('MindMap rerender')
 
   useEffect(() => {

@@ -9,7 +9,9 @@
   ],
   "scripts": {
     "dev": "vite build -w",
-    "build": "tsc && vite build"
+    "build": "tsc && vite build",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "name": "remind-core",
   "author": "luvsic3",

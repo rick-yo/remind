@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 import { resolve } from 'path';
 import { defineConfig } from 'vite'
 import preact from '@preact/preset-vite'
@@ -12,5 +14,12 @@ export default defineConfig({
     },
     target: 'esnext',
     minify: false
+  },
+  test: {
+    environment: 'jsdom', // or 'jsdom', 'node'
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+      include: ['src']
+    }
   },
 })

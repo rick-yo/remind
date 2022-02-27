@@ -20,5 +20,5 @@
     // user define part
     "suppressImplicitAnyIndexErrors": true,
   },
-  "include": ["**/src/**/*"],
+  "include": ["**/src/**/*", "**/test/**/*"],
 }

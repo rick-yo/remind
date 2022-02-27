@@ -4,6 +4,8 @@ node_modules
 .cache
 dist
 yarn.lock
+package-lock.json
+coverage
+
 # Local Netlify folder
 .netlify
-package-lock.json
