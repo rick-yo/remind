@@ -9,6 +9,7 @@ import { assert } from '../utils/assert'
 
 const updateTip =
   'Do not update model outside of update function, and updater should be sync'
+const undoRedoTip = 'Do not call undo,redo inside updater'
 
 const defaultRoot: TopicData = {
   ...createTopic('Central Topic'),
@@ -59,6 +60,7 @@ function useModel(
     parentId: string,
     node: Omit<TopicData, 'id' | 'depth'>,
   ) {
+    assert(nextStateRef.current, updateTip)
     const parentNode = getNodeById(parentId)
     if (!parentNode) return
     parentNode.children = parentNode.children ?? []
@@ -66,6 +68,7 @@ function useModel(
   }
 
   function deleteNode(id: string) {
+    assert(nextStateRef.current, updateTip)
     if (!id) return
     const parentNode = getParentNodeById(id)
     if (parentNode?.children) {
@@ -74,33 +77,39 @@ function useModel(
   }
 
   function updateNode(id: string, node: Partial<TopicData>) {
+    assert(nextStateRef.current, updateTip)
     if (!id) return
-    const root = nextStateRef.current?.root
-    assert(root, updateTip)
-    const rootTopic = TopicTree.from(root)
-    const currentNode = rootTopic.getNodeById(id)
+    const currentNode = getNodeById(id)
     if (currentNode) {
-      Object.assign(currentNode.data, node)
+      Object.assign(currentNode, node)
     }
+  }
+
+  function getRoot() {
+    // To make deleteNode() work as expected
+    // if call getParentNodeById() inside an updater, get root from nextStateRef
+    return nextStateRef.current?.root ?? state.root
   }
 
   function getParentNodeById(id: string) {
     if (!id) return
-    const rootTopic = TopicTree.from(state.root)
+    const rootTopic = TopicTree.from(getRoot())
     return rootTopic.getNodeById(id)?.parent?.data
   }
 
   function getNodeById(id: string) {
     if (!id) return
-    const rootTopic = TopicTree.from(state.root)
+    const rootTopic = TopicTree.from(getRoot())
     return rootTopic.getNodeById(id)?.data
   }
 
   function undo() {
+    assert(!nextStateRef.current, undoRedoTip)
     history.undo()
   }
 
   function redo() {
+    assert(!nextStateRef.current, undoRedoTip)
     history.redo()
   }
 
@@ -119,4 +128,4 @@ function useModel(
 
 const Model = createContainer(useModel)
 
-export { defaultRoot, Model }
+export { defaultRoot, Model, useModel }
