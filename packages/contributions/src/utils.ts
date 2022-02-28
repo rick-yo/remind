@@ -47,7 +47,7 @@ class LayoutTree {
     return currentNode?.parent
   }
 
-  getRighttNode(currentId: string) {
+  getRightNode(currentId: string) {
     if (this.root.data.id === currentId) {
       return this.getClosedNode(
         this.root.descendants().filter((node) => node.x > this.root.x),

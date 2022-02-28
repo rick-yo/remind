@@ -1,10 +1,4 @@
-import {
-  Contribution,
-  types,
-  assert,
-  TopicTree,
-  useEventListener,
-} from 'remind-core'
+import { Contribution, types, assert, useEventListener } from 'remind-core'
 
 const dndDataFormat = 'text/plain'
 
@@ -27,16 +21,18 @@ const useDndTopic: Contribution = (api) => {
   function handleDrop(e: DragEvent) {
     const fromId = e.dataTransfer?.getData(dndDataFormat)
     const toId = types.getTopicId(e.target)
-    if (!fromId || !toId) return
-    const fromNode = TopicTree.from(root).getNodeById(fromId)
+    if (!fromId || !toId || fromId === toId) return
+    const fromNode = model.getNodeById(fromId)
     assert(fromNode)
     // Should not drop topic to it's descendants
-    if (fromNode.descendants().some((node) => node.data.id === toId)) {
+    if (fromNode.children?.some((node) => node.id === toId)) {
       return
     }
 
     model.update(() => {
-      model.appendChild(toId, fromNode?.data)
+      // If node already exist in node tree, delete it from it's old parent first
+      model.deleteNode(fromId)
+      model.appendChild(toId, fromNode)
     })
   }
 

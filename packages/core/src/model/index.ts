@@ -1,6 +1,6 @@
 import { createContainer } from 'unstated-next'
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
-import { createTopic, removeChild, TopicTree } from '../utils/tree'
+import { createTopic, TopicTree } from '../utils/tree'
 import { History } from '../utils/history'
 import { deepClone } from '../utils/common'
 import { TopicData } from '../interface/topic'
@@ -55,34 +55,21 @@ function useModel(
     nextStateRef.current = null
   }
 
-  function appendChild(parentId: string, node: TopicData) {
-    const root = nextStateRef.current?.root
-    assert(root, updateTip)
-    const rootTopic = TopicTree.from(root)
-    const isNodeConnected = rootTopic.getNodeById(node.id)
-    // If node already exist in node tree, delete it from it's old parent first
-    if (isNodeConnected) {
-      const previousParentNode = rootTopic.getParentNode(node.id)
-      if (previousParentNode) {
-        removeChild(previousParentNode, node.id)
-      }
-    }
-
-    const parentNode = rootTopic.getNodeById(parentId)?.data
+  function appendChild(
+    parentId: string,
+    node: Omit<TopicData, 'id' | 'depth'>,
+  ) {
+    const parentNode = getNodeById(parentId)
     if (!parentNode) return
     parentNode.children = parentNode.children ?? []
-    parentNode.children = parentNode.children || []
-    parentNode.children.push(node)
+    parentNode.children.push(createTopic(node.title, node))
   }
 
   function deleteNode(id: string) {
     if (!id) return
-    const root = nextStateRef.current?.root
-    assert(root, updateTip)
-    const rootTopic = TopicTree.from(root)
-    const parentNode = rootTopic.getParentNode(id)
+    const parentNode = getParentNodeById(id)
     if (parentNode?.children) {
-      removeChild(parentNode, id)
+      parentNode.children = parentNode.children.filter((item) => item.id !== id)
     }
   }
 
@@ -95,6 +82,18 @@ function useModel(
     if (currentNode) {
       Object.assign(currentNode.data, node)
     }
+  }
+
+  function getParentNodeById(id: string) {
+    if (!id) return
+    const rootTopic = TopicTree.from(state.root)
+    return rootTopic.getNodeById(id)?.parent?.data
+  }
+
+  function getNodeById(id: string) {
+    if (!id) return
+    const rootTopic = TopicTree.from(state.root)
+    return rootTopic.getNodeById(id)?.data
   }
 
   function undo() {
@@ -110,6 +109,8 @@ function useModel(
     appendChild,
     deleteNode,
     updateNode,
+    getNodeById,
+    getParentNodeById,
     undo,
     redo,
     update,

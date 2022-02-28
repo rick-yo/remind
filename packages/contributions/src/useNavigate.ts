@@ -39,7 +39,7 @@ const useNavigate: Contribution = (api) => {
   function moveRight(e: KeyboardEvent) {
     e.preventDefault()
     if (!layoutRoot) return
-    const target = LayoutTree.from(layoutRoot).getRighttNode(selection)
+    const target = LayoutTree.from(layoutRoot).getRightNode(selection)
     if (target) {
       viewModel.select(target.data.id)
     }

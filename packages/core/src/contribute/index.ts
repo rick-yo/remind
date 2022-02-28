@@ -34,6 +34,13 @@ const types = {
     )
   },
 
+  isMindmap(target: EventTarget | null) {
+    return (
+      target instanceof HTMLDivElement &&
+      target.closest(`[data-type="${ViewType.mindmap}"]`)
+    )
+  },
+
   getTopicId(target: EventTarget | null) {
     if (target instanceof HTMLDivElement) {
       return target.dataset.id
@@ -44,13 +51,6 @@ const types = {
 
   getTopicElementById(id: string) {
     return document.querySelector(`[data-id="${id}"]`)
-  },
-
-  isMindmap(target: EventTarget | null) {
-    return (
-      target instanceof HTMLDivElement &&
-      target.closest(`[data-type="${ViewType.mindmap}"]`)
-    )
   },
 }
 

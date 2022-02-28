@@ -20,7 +20,7 @@ interface IModelTrait {
    * @param parentId
    * @param node
    */
-  appendChild(parentId: string, node: TopicData): void
+  appendChild(parentId: string, node: Partial<TopicData>): void
   /**
    * Delete node by id
    * @param id
@@ -32,6 +32,16 @@ interface IModelTrait {
    * @param node
    */
   updateNode(id: string, node: Partial<TopicData>): void
+  /**
+   * Get node by id
+   * @param id
+   */
+  getNodeById(id: string): Partial<TopicData> | undefined
+  /**
+   * Get parent node by id
+   * @param id
+   */
+  getParentNodeById(id: string): Partial<TopicData> | undefined
   /**
    * Undo history
    */

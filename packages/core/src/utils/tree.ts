@@ -1,7 +1,7 @@
 import { hierarchy, HierarchyNode } from 'd3-hierarchy'
 import { TopicData } from '../interface/topic'
 
-function uuidv4() {
+function uuid() {
   return URL.createObjectURL(new Blob([])).slice(-12)
 }
 
@@ -30,8 +30,6 @@ export class TopicTree {
       const index = children.findIndex((node) => node.id === id)
       return children[index - 1]
     }
-
-    return undefined
   }
 
   getNextSibling(id: string) {
@@ -41,21 +39,13 @@ export class TopicTree {
       const index = children.findIndex((node) => node.id === id)
       return children[index + 1]
     }
-
-    return undefined
-  }
-}
-
-export function removeChild(parentNode: TopicData, id: string) {
-  if (parentNode.children) {
-    parentNode.children = parentNode.children.filter((item) => item.id !== id)
   }
 }
 
 export function createTopic(title: string, options: Partial<TopicData> = {}) {
   const topic: TopicData = {
     ...options,
-    id: uuidv4(),
+    id: uuid(),
     title,
   }
   return topic

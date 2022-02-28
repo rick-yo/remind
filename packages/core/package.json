@@ -11,7 +11,8 @@
     "dev": "vite build -w",
     "build": "tsc && vite build",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "test:run": "vitest run"
   },
   "name": "remind-core",
   "author": "luvsic3",
