@@ -1,7 +1,6 @@
 .editor {
   position: relative;
   transition: all 0.2s;
-  overflow: hidden;
 }
 
 .svgCanvas {

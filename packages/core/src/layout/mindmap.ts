@@ -19,17 +19,14 @@ function measureText(node: TopicData) {
 
 function setNodeSize(node: HierarchyNode<TopicData>) {
   const measure = measureText(node.data)
-  const width = Math.min(
-    measure.width + TopicStyle.padding * 2,
-    TopicStyle.maxWidth,
-  )
-  const lines = Math.ceil(width / TopicStyle.maxWidth)
+  const noWrapTextWidth = measure.width + TopicStyle.padding * 2
+  const lines = Math.ceil(noWrapTextWidth / TopicStyle.maxWidth)
   const height = Math.max(
     TopicStyle.minHeight,
     TopicStyle.fontSize * lines * TopicStyle.lineHeight +
       TopicStyle.padding * 2,
   )
-  node.size = [width, height]
+  node.size = [Math.min(noWrapTextWidth, TopicStyle.maxWidth), height]
 }
 
 declare module 'd3-hierarchy' {
@@ -64,7 +61,10 @@ function mindmap(root: TopicData) {
 
   const layoutRoot = tree<TopicData>()
     .nodeSize([ah, aw])
-    .separation((a, b) => (a.parent === b.parent ? 1.5 : 2))(hierarchyRoot)
+    .separation((a, b) => {
+      const sep = Math.ceil(b.size[1] / ah)
+      return a.parent === b.parent ? sep : sep + 0.5
+    })(hierarchyRoot)
 
   layoutRoot.each((node) => {
     // Rotate entire tree
