@@ -5,12 +5,8 @@
     "dev": "pnpm --parallel run dev",
     "lint:fix": "xo --fix",
     "release": "release-it",
-    "pre-commit": "npm run lint:fix"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run pre-commit"
-    }
+    "pre-commit": "pnpm run lint:fix && pnpm run test:run --dir packages/core",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.1.5",
@@ -18,7 +14,7 @@
     "@testing-library/preact-hooks": "^1.1.0",
     "c8": "^7.11.0",
     "canvas": "^2.9.0",
-    "husky": "^7.0.1",
+    "husky": "^7.0.0",
     "jsdom": "^19.0.0",
     "react": "npm:@preact/compat@^17.0.3",
     "release-it": "^14.11.3",

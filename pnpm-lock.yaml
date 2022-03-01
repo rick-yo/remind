@@ -9,7 +9,7 @@ importers:
       '@testing-library/preact-hooks': ^1.1.0
       c8: ^7.11.0
       canvas: ^2.9.0
-      husky: ^7.0.1
+      husky: ^7.0.0
       jsdom: ^19.0.0
       react: npm:@preact/compat@^17.0.3
       release-it: ^14.11.3
@@ -23,7 +23,7 @@ importers:
       '@testing-library/preact-hooks': 1.1.0_@testing-library+preact@2.0.1
       c8: 7.11.0
       canvas: 2.9.0
-      husky: registry.npmmirror.com/husky/7.0.4
+      husky: 7.0.4
       jsdom: 19.0.0_canvas@2.9.0
       react: /@preact/compat/17.0.3
       release-it: registry.npmmirror.com/release-it/14.12.5
@@ -930,6 +930,12 @@ packages:
       debug: 4.3.3
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /husky/7.0.4:
+    resolution: {integrity: sha512-vbaCKN2QLtP/vD4yvs6iz6hBEo6wkSzs8HpRah1Z6aGmF2KW5PdYuAd7uX5a+OyBZHBhd+TFLqgjUgytQr4RvQ==}
+    engines: {node: '>=12'}
+    hasBin: true
     dev: true
 
   /iconv-lite/0.6.3:
@@ -4424,14 +4430,6 @@ packages:
     name: human-signals
     version: 2.1.0
     engines: {node: '>=10.17.0'}
-    dev: true
-
-  registry.npmmirror.com/husky/7.0.4:
-    resolution: {integrity: sha512-vbaCKN2QLtP/vD4yvs6iz6hBEo6wkSzs8HpRah1Z6aGmF2KW5PdYuAd7uX5a+OyBZHBhd+TFLqgjUgytQr4RvQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/husky/-/husky-7.0.4.tgz}
-    name: husky
-    version: 7.0.4
-    engines: {node: '>=12'}
-    hasBin: true
     dev: true
 
   registry.npmmirror.com/iconv-lite/0.4.24:
