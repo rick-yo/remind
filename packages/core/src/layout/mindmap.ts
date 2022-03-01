@@ -62,7 +62,7 @@ function mindmap(root: TopicData) {
   const layoutRoot = tree<TopicData>()
     .nodeSize([ah, aw])
     .separation((a, b) => {
-      const sep = Math.ceil(b.size[1] / ah)
+      const sep = Math.ceil(b.size[1] / ah) + 0.5
       return a.parent === b.parent ? sep : sep + 0.5
     })(hierarchyRoot)
 

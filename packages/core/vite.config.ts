@@ -20,6 +20,9 @@ export default defineConfig({
     coverage: {
       reporter: ['text', 'json', 'html'],
       include: ['src']
-    }
+    },
+    // Disable multi-threading, to make jsdom + canvas work.
+    // see https://github.com/vitest-dev/vitest/issues/740
+    threads: false,
   },
 })
