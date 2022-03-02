@@ -36,12 +36,14 @@ interface IModelTrait {
    * Get node by id
    * @param id
    */
-  getNodeById(id: string): Partial<TopicData> | undefined
+  getNodeById(id: string): TopicData | undefined
   /**
    * Get parent node by id
    * @param id
    */
-  getParentNodeById(id: string): Partial<TopicData> | undefined
+  getParentNodeById(id: string): TopicData | undefined
+  getPreviousSibling(id: string): TopicData | undefined
+  getNextSibling(id: string): TopicData | undefined
   /**
    * Undo history
    */

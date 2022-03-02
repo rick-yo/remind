@@ -82,15 +82,23 @@ const useUpdateTopic: Contribution = (api) => {
   function appendChild(e: KeyboardEvent) {
     e.preventDefault()
     if (!selection) return
+    const child = createTopic(locale.subTopic)
     model.update(() => {
-      model.appendChild(selection, createTopic(locale.subTopic))
+      model.appendChild(selection, child)
     })
+    viewModel.select(child.id)
   }
 
   function deleteNode() {
+    const nextSibling = model.getNextSibling(selection)
+    const previousSibling = model.getPreviousSibling(selection)
+    const parentNode = model.getParentNodeById(selection)
     model.update(() => {
       model.deleteNode(selection)
     })
+    viewModel.select(
+      previousSibling?.id ?? nextSibling?.id ?? parentNode?.id ?? '',
+    )
   }
 
   useEffect(() => {

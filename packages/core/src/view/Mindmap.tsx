@@ -10,6 +10,7 @@ import { IntlLanguage } from '../interface/intl'
 import { LayoutNode, TopicData } from '../interface/topic'
 import { Contribution } from '../interface/contribute'
 import { ViewType } from '../constant'
+import { debug } from '../utils/debug'
 import { Links } from './Links'
 import Topic from './Topic'
 import styles from './index.module.css'
@@ -37,8 +38,7 @@ const Mindmap = (props: MindmapProps) => {
     return mindmap(normalizeTopic(root))
   }, [root])
 
-  console.log('layoutRoot', layoutRoot)
-  console.count('MindMap rerender')
+  debug('layoutRoot', layoutRoot)
 
   useEffect(() => {
     onChange?.(root)

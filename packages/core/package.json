@@ -8,7 +8,7 @@
     "src"
   ],
   "scripts": {
-    "dev": "vite build -w",
+    "dev": "vite build -w --mode development",
     "build": "tsc && vite build",
     "test": "vitest",
     "coverage": "vitest run --coverage",

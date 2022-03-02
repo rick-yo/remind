@@ -1,5 +1,4 @@
-const isProd = import.meta.env.PROD
-const isDev = !isProd
+const isDev = import.meta.env.DEV
 
 function debug(key: string, value?: unknown) {
   if (isDev) {
@@ -7,4 +6,4 @@ function debug(key: string, value?: unknown) {
   }
 }
 
-export { isProd, debug }
+export { debug }

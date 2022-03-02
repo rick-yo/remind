@@ -103,6 +103,18 @@ function useModel(
     return rootTopic.getNodeById(id)?.data
   }
 
+  function getNextSibling(id: string) {
+    if (!id) return
+    const rootTopic = TopicTree.from(getRoot())
+    return rootTopic.getNextSibling(id)
+  }
+
+  function getPreviousSibling(id: string) {
+    if (!id) return
+    const rootTopic = TopicTree.from(getRoot())
+    return rootTopic.getPreviousSibling(id)
+  }
+
   function undo() {
     assert(!nextStateRef.current, undoRedoTip)
     history.undo()
@@ -120,6 +132,8 @@ function useModel(
     updateNode,
     getNodeById,
     getParentNodeById,
+    getNextSibling,
+    getPreviousSibling,
     undo,
     redo,
     update,

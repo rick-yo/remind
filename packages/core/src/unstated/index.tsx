@@ -1,5 +1,5 @@
 // Fork https://github.com/jamiebuilds/unstated-next
-// to avoid complex build/test tool configure and wierd error on hooks/context
+// to avoid complex build/test tool configure and weird error on hooks/context
 import { ComponentType, createContext, JSX } from 'preact'
 import { useContext } from 'preact/hooks'
 
