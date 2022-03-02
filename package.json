@@ -9,6 +9,7 @@
     "prepare": "husky install"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.21.0",
     "@preact/preset-vite": "^2.1.5",
     "@testing-library/preact": "^2.0.1",
     "@testing-library/preact-hooks": "^1.1.0",
