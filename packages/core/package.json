@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "d3-hierarchy": "^3.1.1",
-    "preact": "^10.5.15",
-    "unstated-next": "^1.1.0"
+    "preact": "^10.5.15"
   }
 }

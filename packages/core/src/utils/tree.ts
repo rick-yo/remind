@@ -60,6 +60,7 @@ export function normalizeTopic(root: TopicData): TopicData {
  * Add depth to TopicData, this is used for local state, should not affect TopicData
  */
 function normalizeTopicDepth(root: TopicData, depth = 0): TopicData {
+  if (!root) return root
   return {
     ...root,
     depth,

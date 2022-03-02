@@ -2,7 +2,8 @@ import { useMemo } from 'preact/hooks'
 import { useLocale } from '../context/locale'
 import { Model } from '../model'
 import { ViewModel } from '../viewModel'
-import { Slot, UseContributionProps, ViewType } from '../interface/contribute'
+import { Slot, UseContributionProps } from '../interface/contribute'
+import { ViewType } from '../constant'
 
 function useContributions(props: UseContributionProps) {
   const model = Model.useContainer()
@@ -34,10 +35,10 @@ const types = {
     )
   },
 
-  isMindmap(target: EventTarget | null) {
-    return (
+  isMindmap(target: EventTarget | null): target is HTMLDivElement {
+    return Boolean(
       target instanceof HTMLDivElement &&
-      target.closest(`[data-type="${ViewType.mindmap}"]`)
+        target.closest(`[data-type="${ViewType.mindmap}"]`),
     )
   },
 

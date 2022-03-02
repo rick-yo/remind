@@ -1,5 +1,5 @@
-import { createContainer } from 'unstated-next'
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
+import { createContainer } from '../unstated'
 import { createTopic, TopicTree } from '../utils/tree'
 import { History } from '../utils/history'
 import { deepClone } from '../utils/common'

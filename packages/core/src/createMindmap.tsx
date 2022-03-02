@@ -33,7 +33,7 @@ function MindmapApp(props: MindmapProps) {
   )
 }
 
-function createMindmap(el: HTMLElement, options: MindmapProps) {
+function createMindmap(el: HTMLElement, options?: MindmapProps) {
   render(<MindmapApp {...options} />, el)
 }
 

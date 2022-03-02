@@ -9,7 +9,7 @@ export default defineConfig({
   plugins: [preact()],
   build: {
     lib: {
-      entry: resolve(__dirname, './src/index.tsx'),
+      entry: resolve(__dirname, './src/index.ts'),
       formats: ['es']
     },
     target: 'esnext',

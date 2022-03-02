@@ -1,11 +1,10 @@
 import { useContext } from 'preact/hooks'
 import { ThemeContext } from '../context/theme'
-import { EDITOR_MODE, TopicStyle } from '../constant'
+import { EDITOR_MODE, TopicStyle, ViewType } from '../constant'
 import { getTopicFontsize } from '../layout/mindmap'
 import { ViewModel } from '../viewModel'
 import { toPX } from '../utils/common'
 import { LayoutNode } from '../interface/topic'
-import { ViewType } from '../interface/contribute'
 import styles from './index.module.css'
 
 type TopicProps = {

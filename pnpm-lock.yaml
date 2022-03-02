@@ -11,11 +11,10 @@ importers:
       canvas: ^2.9.0
       husky: ^7.0.0
       jsdom: ^19.0.0
-      react: npm:@preact/compat@^17.0.3
       release-it: ^14.11.3
       typescript: ^4.5.4
       vite: ^2.8.0
-      vitest: ^0.5.7
+      vitest: ^0.5.9
       xo: ^0.48.0
     devDependencies:
       '@preact/preset-vite': registry.npmmirror.com/@preact/preset-vite/2.1.7_vite@2.8.4
@@ -25,11 +24,10 @@ importers:
       canvas: 2.9.0
       husky: 7.0.4
       jsdom: 19.0.0_canvas@2.9.0
-      react: /@preact/compat/17.0.3
       release-it: registry.npmmirror.com/release-it/14.12.5
       typescript: registry.npmmirror.com/typescript/4.5.5
       vite: registry.npmmirror.com/vite/2.8.4
-      vitest: 0.5.7_c8@7.11.0+jsdom@19.0.0
+      vitest: 0.5.9_c8@7.11.0+jsdom@19.0.0
       xo: registry.npmmirror.com/xo/0.48.0
 
   packages/contributions:
@@ -45,11 +43,9 @@ importers:
       '@types/d3-hierarchy': ^3.0.2
       d3-hierarchy: ^3.1.1
       preact: ^10.5.15
-      unstated-next: ^1.1.0
     dependencies:
       d3-hierarchy: registry.npmmirror.com/d3-hierarchy/3.1.1
       preact: registry.npmmirror.com/preact/10.6.6
-      unstated-next: registry.npmmirror.com/unstated-next/1.1.0
     devDependencies:
       '@types/d3-hierarchy': registry.npmmirror.com/@types/d3-hierarchy/3.0.2
 
@@ -135,12 +131,6 @@ packages:
     transitivePeerDependencies:
       - encoding
       - supports-color
-    dev: true
-
-  /@preact/compat/17.0.3:
-    resolution: {integrity: sha512-lzkui97aQ00hxzUwfRfZm7jUXE1bjWyOXiqm8DeWYhkD+G9ZaY1wso/itqyg60wGnP9DRlM4PDn2blIOnh1yeg==}
-    peerDependencies:
-      preact: '*'
     dev: true
 
   /@testing-library/dom/7.31.2:
@@ -1558,8 +1548,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitest/0.5.7_c8@7.11.0+jsdom@19.0.0:
-    resolution: {integrity: sha512-keLLxLGi+dkXFUuKxCXnBw5MkSZ03cynlG6+LVLaKoyUuW8Xu6NzX1oC6dVNm6Ig7mw6gX9OHV+Lpmcc3tu/mQ==}
+  /vitest/0.5.9_c8@7.11.0+jsdom@19.0.0:
+    resolution: {integrity: sha512-R8lRP9Q1yIbwr8pDf2gvw4PFe8H5YMyHhBcdyfnUh6toLfCR10jrdI/WkNxdo5I4H/9XrMX9t+SAavdJExNdKg==}
     engines: {node: '>=14.14.0'}
     hasBin: true
     peerDependencies:
@@ -6747,12 +6737,6 @@ packages:
     name: universal-user-agent
     version: 6.0.0
     dev: true
-
-  registry.npmmirror.com/unstated-next/1.1.0:
-    resolution: {integrity: sha512-AAn47ZncPvgBGOvMcn8tSRxsrqwf2VdAPxLASTuLJvZt4rhKfDvUkmYZLGfclImSfTVMv7tF4ynaVxin0JjDCA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/unstated-next/-/unstated-next-1.1.0.tgz}
-    name: unstated-next
-    version: 1.1.0
-    dev: false
 
   registry.npmmirror.com/update-notifier/5.1.0:
     resolution: {integrity: sha512-ItnICHbeMh9GqUy31hFPrD1kcuZ3rpxDZbf4KUDavXwS0bW5m7SLbDQpGX3UYr072cbrF5hFUs3r5tUsPwjfHw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/update-notifier/-/update-notifier-5.1.0.tgz}

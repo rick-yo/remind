@@ -16,4 +16,10 @@ enum EDITOR_MODE {
   edit,
 }
 
-export { canvasContext, EDITOR_MODE, TopicStyle }
+enum ViewType {
+  mindmap,
+  topic,
+  link,
+}
+
+export { canvasContext, EDITOR_MODE, TopicStyle, ViewType }

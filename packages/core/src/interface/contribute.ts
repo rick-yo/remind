@@ -1,13 +1,9 @@
 import { RefObject } from 'preact'
+import { ViewType } from '../constant'
 import { IntlContent } from './intl'
 import { IModelStructure, IModelTrait } from './model'
 import { IViewModelStructure, IViewModelTrait } from './viewModel'
 
-enum ViewType {
-  mindmap,
-  topic,
-  link,
-}
 type Slot = JSX.Element & {
   /**
    * Define slot's render position in editor
@@ -41,5 +37,4 @@ interface UseContributionProps {
   contributions: Contribution[]
 }
 
-export { ViewType }
 export type { UseContributionProps, Contribution, Slot }

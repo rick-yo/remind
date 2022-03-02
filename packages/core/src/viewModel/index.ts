@@ -1,5 +1,5 @@
-import { createContainer } from 'unstated-next'
 import { useState } from 'preact/hooks'
+import { createContainer } from '../unstated'
 import { EDITOR_MODE } from '../constant'
 import { IViewModelStructure, IViewModelTrait } from '../interface/viewModel'
 import { LayoutNode } from '../interface/topic'
