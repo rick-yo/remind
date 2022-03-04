@@ -9,13 +9,14 @@ A headless, framework-agnostic and extendable mindmap editor.
 ![](./demo.jpg)
 
 Try on https://remind.applet.ink
+
 Play on https://stackblitz.com/edit/typescript-nwp9sk?file=index.ts
 
 ## Feature
 
  * Highly extendable, take full control over styling and behavior
  * With default undo, redo, navigation, drag, CRUD, shortcut implementation (but can be replaced)
- * Framework-agnostic, remind can work with vanilla javaScript, vue, react or any other framework
+ * Framework-agnostic, remind can work with vanilla javascript, vue, react or any other framework
  * TypeScript, remind is written is typescript and has great typescript support
 
 ## Installation
@@ -59,16 +60,34 @@ createMindmap(document.querySelector('#app')!, {
 ```
 
 ## API
-Mindmap options
 
-| option   | type                         | description                    | default | optional |
-| -------- | ---------------------------- | ------------------------------ | ------- | -------- |
-| value    | TopicData                    | control mindmap value          | -       | true     |
-| onChange | (value: TopicData) => void   | listen to mindmap value change | -       | true     |
-| locale   | 'en' &#124; 'cn' &#124; 'ja' | language localization          | en      | true     |
-| theme    | Theme                        | custom theme                   | -       | true     |
+### instance: ContributionAPI = createMindmap(containerNode, options)
 
-TopicData
+Render mindmap into containerNode, and return a instance.
+
+### options
+
+| option        | type                         | description                    | default | optional |
+| ------------- | ---------------------------- | ------------------------------ | ------- | -------- |
+| value         | TopicData                    | set mindmap value          | -       | true     |
+| onChange      | (value: TopicData) => void   | listen to value change | -       | true     |
+| locale        | 'en' &#124; 'cn' &#124; 'ja' | language localization          | en      | true     |
+| theme         | Theme                        | custom theme                   | -       | true     |
+| contributions | Function                     | extend editor's functionality  | []      | true     |
+
+Contribution let you extend editor's functionality, custom editor's behavior or add custom render content.
+For more information, see `packages/contributions/src` 
+
+### types
+
+```typescript
+interface ContributionAPI {
+  model: IModelStructure & IModelTrait
+  viewModel: IViewModelStructure & IViewModelTrait
+  view: RefObject<HTMLDivElement>
+  locale: IntlContent
+}
+```
 
 ```typescript
 interface TopicData {
@@ -78,8 +97,6 @@ interface TopicData {
   depth?: number
 }
 ```
-
-Theme
 
 ```typescript
 interface Theme {
