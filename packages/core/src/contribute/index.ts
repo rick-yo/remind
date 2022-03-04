@@ -2,18 +2,26 @@ import { useMemo } from 'preact/hooks'
 import { useLocale } from '../context/locale'
 import { Model } from '../model'
 import { ViewModel } from '../viewModel'
-import { Slot, UseContributionProps } from '../interface/contribute'
+import {
+  Contribution,
+  ContributionAPI,
+  Slot,
+  UseContributionProps,
+} from '../interface/contribute'
 import { ViewType } from '../constant'
 
-function useContributions(props: UseContributionProps) {
+function useContributionAPI(props: UseContributionProps) {
   const model = Model.useContainer()
   const viewModel = ViewModel.useContainer()
   const locale = useLocale()
-  const { view, contributions } = props
+  const { view } = props
   const api = useMemo(() => {
     return { model, viewModel, view, locale }
   }, [model, viewModel, view])
+  return api
+}
 
+function useContributions(api: ContributionAPI, contributions: Contribution[]) {
   const results = contributions.map((contribution) => contribution(api))
   const slots = results.reduce<Slot[]>((p, c) => {
     if (c?.slots) {
@@ -55,4 +63,4 @@ const types = {
   },
 }
 
-export { useContributions, types }
+export { useContributions, types, useContributionAPI }

@@ -1,14 +1,16 @@
-import { useEffect, useRef, useMemo } from 'preact/hooks'
+import { useEffect, useRef, useMemo, useImperativeHandle } from 'preact/hooks'
+import { RefObject } from 'preact'
+import { forwardRef } from 'preact/compat'
 import { mindmap } from '../layout/mindmap'
 import { Model } from '../model'
 import { ViewModel } from '../viewModel'
-import { useContributions } from '../contribute'
+import { useContributions, useContributionAPI } from '../contribute'
 import { toPX } from '../utils/common'
 import { normalizeTopic } from '../utils/tree'
 import { Theme } from '../interface/theme'
 import { IntlLanguage } from '../interface/intl'
 import { LayoutNode, TopicData } from '../interface/topic'
-import { Contribution } from '../interface/contribute'
+import { Contribution, ContributionAPI } from '../interface/contribute'
 import { ViewType } from '../constant'
 import { debug } from '../utils/debug'
 import { Links } from './Links'
@@ -23,54 +25,61 @@ interface MindmapProps {
   contributions?: Contribution[]
 }
 
-const Mindmap = (props: MindmapProps) => {
-  const { onChange, contributions = [] } = props
-  const model = Model.useContainer()
-  const viewModel = ViewModel.useContainer()
-  const editorRef = useRef<HTMLDivElement>(null)
-  const { root } = model
-  const { slots } = useContributions({ view: editorRef, contributions })
-  const mindmapSlots = slots.filter(
-    (slot) => slot?.viewType === ViewType.mindmap,
-  )
+const Mindmap = forwardRef(
+  (props: MindmapProps, ref: RefObject<ContributionAPI>) => {
+    const { onChange, contributions = [] } = props
+    const model = Model.useContainer()
+    const viewModel = ViewModel.useContainer()
+    const editorRef = useRef<HTMLDivElement>(null)
+    const { root } = model
+    const contributionAPI = useContributionAPI({
+      view: editorRef,
+    })
+    const { slots } = useContributions(contributionAPI, contributions)
+    const mindmapSlots = slots.filter(
+      (slot) => slot?.viewType === ViewType.mindmap,
+    )
 
-  const { layoutRoot, canvasWidth, canvasHeight } = useMemo(() => {
-    return mindmap(normalizeTopic(root))
-  }, [root])
+    const { layoutRoot, canvasWidth, canvasHeight } = useMemo(() => {
+      return mindmap(normalizeTopic(root))
+    }, [root])
 
-  debug('layoutRoot', layoutRoot)
+    debug('layoutRoot', layoutRoot)
 
-  useEffect(() => {
-    onChange?.(root)
-  }, [root])
+    useEffect(() => {
+      onChange?.(root)
+    }, [root])
 
-  useEffect(() => {
-    viewModel.setLayoutRoot(layoutRoot)
-  }, [layoutRoot])
+    useEffect(() => {
+      viewModel.setLayoutRoot(layoutRoot)
+    }, [layoutRoot])
 
-  return (
-    <div
-      ref={editorRef}
-      data-type={ViewType.mindmap}
-      className={styles.editor}
-      style={{
-        width: toPX(canvasWidth),
-        height: toPX(canvasHeight),
-      }}
-    >
-      <svg
-        width={canvasWidth}
-        height={canvasHeight}
-        xmlns="http://www.w3.org/2000/svg"
-        className={styles.svgCanvas}
+    useImperativeHandle(ref, () => contributionAPI, [contributionAPI])
+
+    return (
+      <div
+        ref={editorRef}
+        data-type={ViewType.mindmap}
+        className={styles.editor}
+        style={{
+          width: toPX(canvasWidth),
+          height: toPX(canvasHeight),
+        }}
       >
-        <Links layoutRoot={layoutRoot} />
-      </svg>
-      <Topics layoutRoot={layoutRoot} />
-      {mindmapSlots}
-    </div>
-  )
-}
+        <svg
+          width={canvasWidth}
+          height={canvasHeight}
+          xmlns="http://www.w3.org/2000/svg"
+          className={styles.svgCanvas}
+        >
+          <Links layoutRoot={layoutRoot} />
+        </svg>
+        <Topics layoutRoot={layoutRoot} />
+        {mindmapSlots}
+      </div>
+    )
+  },
+)
 
 function Topics({ layoutRoot }: { layoutRoot: LayoutNode }) {
   return (

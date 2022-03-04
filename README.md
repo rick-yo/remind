@@ -8,12 +8,13 @@ A headless, framework-agnostic and extendable mindmap editor.
 
 ![](./demo.jpg)
 
-Try it on https://remind.applet.ink
+Try on https://remind.applet.ink
+Play on https://stackblitz.com/edit/typescript-nwp9sk?file=index.ts
 
 ## Feature
 
- * Highly extendable, take full control over styling and behaviour
- * With default undo, redo, navigation, drag, CRUD, shortcut implemention (but can be replaced)
+ * Highly extendable, take full control over styling and behavior
+ * With default undo, redo, navigation, drag, CRUD, shortcut implementation (but can be replaced)
  * Framework-agnostic, remind can work with vanilla javaScript, vue, react or any other framework
  * TypeScript, remind is written is typescript and has great typescript support
 

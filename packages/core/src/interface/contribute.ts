@@ -34,7 +34,6 @@ type Contribution = (api: ContributionAPI) => ContributionResult | void
 
 interface UseContributionProps {
   view: RefObject<HTMLDivElement>
-  contributions: Contribution[]
 }
 
-export type { UseContributionProps, Contribution, Slot }
+export type { UseContributionProps, Contribution, Slot, ContributionAPI }
