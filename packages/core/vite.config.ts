@@ -24,5 +24,6 @@ export default defineConfig({
     // Disable multi-threading, to make jsdom + canvas work.
     // see https://github.com/vitest-dev/vitest/issues/740
     threads: false,
+    setupFiles: ['./test/setup.js']
   },
 })

@@ -1,11 +1,6 @@
 import { hierarchy, HierarchyNode } from 'd3-hierarchy'
 import { TopicData } from '../interface/topic'
 
-function uuid() {
-  // URL.createObjectURL is not implement in jsdom, use Math.random instead
-  return Math.random().toString(36).slice(3)
-}
-
 export class TopicTree {
   static from(root: TopicData) {
     return new TopicTree(root)
@@ -45,7 +40,7 @@ export class TopicTree {
 
 export function createTopic(title: string, options: Partial<TopicData> = {}) {
   const topic: TopicData = {
-    id: uuid(),
+    id: crypto.randomUUID(),
     title,
     ...options,
   }
