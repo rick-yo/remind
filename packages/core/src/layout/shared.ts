@@ -54,16 +54,6 @@ function getCanvasSize(layoutRoot: HierarchyPointNode<TopicData>) {
   return [canvasWidth, canvasHeight]
 }
 
-function move2Center(layoutRoot: HierarchyPointNode<TopicData>) {
-  const nodes = layoutRoot.descendants()
-  const minY = Math.min(...nodes.map((node) => node.y))
-  // Move layoutRoot to canvas center
-  layoutRoot.each((node) => {
-    node.x += TopicStyle.padding
-    node.y -= minY - TopicStyle.padding
-  })
-}
-
 function averageNodeSize(hierarchyRoot: HierarchyNode<TopicData>) {
   const sizes = hierarchyRoot.descendants().map((node) => node.size)
   const aw = average(
@@ -84,6 +74,5 @@ export {
   measureText,
   setNodeSize,
   getCanvasSize,
-  move2Center,
   averageNodeSize,
 }

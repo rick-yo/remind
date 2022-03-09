@@ -67,13 +67,14 @@ Render mindmap into containerNode, and return a instance.
 
 ### options
 
-| option        | type                         | description                    | default | optional |
-| ------------- | ---------------------------- | ------------------------------ | ------- | -------- |
-| value         | TopicData                    | set mindmap value          | -       | true     |
-| onChange      | (value: TopicData) => void   | listen to value change | -       | true     |
-| locale        | 'en' &#124; 'cn' &#124; 'ja' | language localization          | en      | true     |
-| theme         | Theme                        | custom theme                   | -       | true     |
-| contributions | Function                     | extend editor's functionality  | []      | true     |
+| option        | type                         | description                   | default | optional |
+| ------------- | ---------------------------- | ----------------------------- | ------- | -------- |
+| value         | TopicData                    | set mindmap value             | -       | true     |
+| onChange      | (value: TopicData) => void   | listen to value change        | -       | true     |
+| layout        | 'mindmap' &#124; 'structure' | set mindmap layout            | mindmap | true     |
+| locale        | 'en' &#124; 'cn' &#124; 'ja' | language localization         | en      | true     |
+| theme         | Theme                        | custom theme                  | -       | true     |
+| contributions | Function                     | extend editor's functionality | []      | true     |
 
 Contribution let you extend editor's functionality, custom editor's behavior or add custom render content.
 For more information, see `packages/contributions/src` 

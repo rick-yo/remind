@@ -39,13 +39,13 @@ const complexRoot: TopicData = {
 }
 
 test('simple data', () => {
-  const { layoutRoot } = mindmap(simpleRoot)
+  const layoutRoot = mindmap(simpleRoot)
   expectTreeFlowToRight(layoutRoot)
   expectNodesNotIntersect(layoutRoot)
 })
 
 test('complex data', () => {
-  const { layoutRoot } = mindmap(complexRoot)
+  const layoutRoot = mindmap(complexRoot)
   expectTreeFlowToRight(layoutRoot)
   expectNodesNotIntersect(layoutRoot)
 })

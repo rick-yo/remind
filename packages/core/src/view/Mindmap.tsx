@@ -1,7 +1,6 @@
 import { useEffect, useRef, useMemo, useImperativeHandle } from 'preact/hooks'
 import { RefObject } from 'preact'
 import { forwardRef } from 'preact/compat'
-import { mindmap } from '../layout/mindmap'
 import { Model } from '../model'
 import { ViewModel } from '../viewModel'
 import { useContributions, useContributionAPI } from '../contribute'
@@ -13,6 +12,7 @@ import { LayoutNode, TopicData } from '../interface/topic'
 import { Contribution, ContributionAPI } from '../interface/contribute'
 import { ViewType } from '../constant'
 import { debug } from '../utils/debug'
+import { doLayout, LayoutType } from '../layout'
 import { Links } from './Links'
 import Topic from './Topic'
 import styles from './index.module.css'
@@ -23,11 +23,12 @@ interface MindmapProps {
   value?: TopicData
   onChange?: (value: TopicData) => void
   contributions?: Contribution[]
+  layout?: LayoutType
 }
 
 const Mindmap = forwardRef(
   (props: MindmapProps, ref: RefObject<ContributionAPI>) => {
-    const { onChange, contributions = [] } = props
+    const { onChange, contributions = [], layout = 'structure' } = props
     const model = Model.useContainer()
     const viewModel = ViewModel.useContainer()
     const editorRef = useRef<HTMLDivElement>(null)
@@ -41,7 +42,7 @@ const Mindmap = forwardRef(
     )
 
     const { layoutRoot, canvasWidth, canvasHeight } = useMemo(() => {
-      return mindmap(normalizeTopic(root))
+      return doLayout(normalizeTopic(root), layout)
     }, [root])
 
     debug('layoutRoot', layoutRoot)
@@ -72,7 +73,7 @@ const Mindmap = forwardRef(
           xmlns="http://www.w3.org/2000/svg"
           className={styles.svgCanvas}
         >
-          <Links layoutRoot={layoutRoot} />
+          <Links layoutRoot={layoutRoot} layout={layout} />
         </svg>
         <Topics layoutRoot={layoutRoot} />
         {mindmapSlots}

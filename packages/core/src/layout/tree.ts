@@ -3,7 +3,7 @@ import { TopicStyle } from '../constant'
 import { TopicData } from '../interface/topic'
 import { averageNodeSize, setNodeSize } from './shared'
 
-function mindmap(root: TopicData) {
+function structure(root: TopicData) {
   const hierarchyRoot = hierarchy(root)
 
   // Compute node size
@@ -14,30 +14,25 @@ function mindmap(root: TopicData) {
   const [aw, ah] = averageNodeSize(hierarchyRoot)
 
   const layoutRoot = tree<TopicData>()
-    .nodeSize([ah, aw])
+    .nodeSize([aw, ah])
     .separation((a, b) => {
-      const sep = Math.ceil(b.size[1] / ah) + 0.5
-      return a.parent === b.parent ? sep : sep + 0.5
+      const sep = (a.size[0] + b.size[0]) / aw / 2 + 0.2
+      return a.parent === b.parent ? sep : sep + 0.2
     })(hierarchyRoot)
 
   layoutRoot.each((node) => {
-    // Rotate entire tree
-    const { x, y, depth } = node
-    node.x = y
-    node.y = x
-    // Add horizontal margin
-    node.x += depth * TopicStyle.margin
+    node.y += node.depth * TopicStyle.margin
   })
 
   const nodes = layoutRoot.descendants()
-  const minY = Math.min(...nodes.map((node) => node.y))
+  const minX = Math.min(...nodes.map((node) => node.x))
   // Move layoutRoot to canvas center
   layoutRoot.each((node) => {
-    node.x += TopicStyle.padding
-    node.y -= minY - TopicStyle.padding
+    node.x -= minX - TopicStyle.padding
+    node.y += TopicStyle.padding
   })
 
   return layoutRoot
 }
 
-export { mindmap }
+export { structure }
