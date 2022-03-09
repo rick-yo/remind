@@ -1,7 +1,7 @@
 import { useContext } from 'preact/hooks'
 import { ThemeContext } from '../context/theme'
 import { EDITOR_MODE, TopicStyle, ViewType } from '../constant'
-import { getTopicFontsize } from '../layout/mindmap'
+import { getTopicFontsize } from '../layout/shared'
 import { ViewModel } from '../viewModel'
 import { toPX } from '../utils/common'
 import { LayoutNode } from '../interface/topic'

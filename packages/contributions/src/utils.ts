@@ -126,10 +126,14 @@ const HOTKEYS = {
   redo: 'command+shift+z,ctrl+shift+z',
 }
 
+function hasOwn(obj: Object, key: PropertyKey) {
+  return Object.prototype.hasOwnProperty.call(obj, key)
+}
+
 function createElement(tag: string, attrs?: Record<string, string>) {
   const el = document.createElement(tag)
   for (const name in attrs) {
-    if (Object.prototype.hasOwnProperty.call(attrs, name)) {
+    if (hasOwn(attrs, name)) {
       el.setAttribute(name, attrs[name])
     }
   }
