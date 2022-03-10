@@ -1,6 +1,7 @@
 import { RefObject } from 'preact'
 import { ViewType } from '../constant'
 import { IntlContent } from './intl'
+import { LayoutType } from './layout'
 import { IModelStructure, IModelTrait } from './model'
 import { IViewModelStructure, IViewModelTrait } from './viewModel'
 
@@ -16,6 +17,7 @@ interface ContributionAPI {
   viewModel: IViewModelStructure & IViewModelTrait
   view: RefObject<HTMLDivElement>
   locale: IntlContent
+  layout: LayoutType
 }
 
 interface ContributionResult {
@@ -34,6 +36,7 @@ type Contribution = (api: ContributionAPI) => ContributionResult | void
 
 interface UseContributionProps {
   view: RefObject<HTMLDivElement>
+  layout: LayoutType
 }
 
 export type { UseContributionProps, Contribution, Slot, ContributionAPI }

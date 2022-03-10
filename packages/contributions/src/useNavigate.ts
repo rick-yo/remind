@@ -1,18 +1,42 @@
 import hotkeys from 'hotkeys-js'
-import { Contribution, useEffect, EDITOR_MODE } from 'remind-core'
-import { HOTKEYS, LayoutTree } from './utils'
+import { Contribution, useEffect, EDITOR_MODE, LayoutNode } from 'remind-core'
+import { HOTKEYS, LayoutTreeWalker } from './utils'
+
+const navigatorStrategy = {
+  mindmap: {
+    left: (root: LayoutNode, id: string) =>
+      LayoutTreeWalker.from(root).getParentNode(id),
+    right: (root: LayoutNode, id: string) =>
+      LayoutTreeWalker.from(root).getNearestChildNode(id),
+    top: (root: LayoutNode, id: string) =>
+      LayoutTreeWalker.from(root).getNearestTopNode(id),
+    bottom: (root: LayoutNode, id: string) =>
+      LayoutTreeWalker.from(root).getNearestBottomNode(id),
+  },
+  structure: {
+    left: (root: LayoutNode, id: string) =>
+      LayoutTreeWalker.from(root).getLeftNeighborNode(id),
+    right: (root: LayoutNode, id: string) =>
+      LayoutTreeWalker.from(root).getRightNeighborNode(id),
+    top: (root: LayoutNode, id: string) =>
+      LayoutTreeWalker.from(root).getParentNode(id),
+    bottom: (root: LayoutNode, id: string) =>
+      LayoutTreeWalker.from(root).getNearestChildNode(id),
+  },
+}
 
 const useNavigate: Contribution = (api) => {
-  const { viewModel, view } = api
+  const { viewModel, view, layout } = api
   const { selection, mode, layoutRoot } = viewModel
   const hotkeyOptions = {
     element: view.current,
   }
+  const navigate = navigatorStrategy[layout]
 
   function moveTop(e: KeyboardEvent) {
     e.preventDefault()
     if (!layoutRoot) return
-    const target = LayoutTree.from(layoutRoot).getTopNode(selection)
+    const target = navigate.top(layoutRoot, selection)
     if (target) {
       viewModel.select(target.data.id)
     }
@@ -21,7 +45,7 @@ const useNavigate: Contribution = (api) => {
   function moveDown(e: KeyboardEvent) {
     e.preventDefault()
     if (!layoutRoot) return
-    const target = LayoutTree.from(layoutRoot).getBottomNode(selection)
+    const target = navigate.bottom(layoutRoot, selection)
     if (target) {
       viewModel.select(target.data.id)
     }
@@ -30,7 +54,7 @@ const useNavigate: Contribution = (api) => {
   function moveLeft(e: KeyboardEvent) {
     e.preventDefault()
     if (!layoutRoot) return
-    const target = LayoutTree.from(layoutRoot).getLeftNode(selection)
+    const target = navigate.left(layoutRoot, selection)
     if (target) {
       viewModel.select(target.data.id)
     }
@@ -39,7 +63,7 @@ const useNavigate: Contribution = (api) => {
   function moveRight(e: KeyboardEvent) {
     e.preventDefault()
     if (!layoutRoot) return
-    const target = LayoutTree.from(layoutRoot).getRightNode(selection)
+    const target = navigate.right(layoutRoot, selection)
     if (target) {
       viewModel.select(target.data.id)
     }

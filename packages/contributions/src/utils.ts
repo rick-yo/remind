@@ -6,9 +6,9 @@ function getDistance(a: LayoutNode, b: LayoutNode) {
   return Math.sqrt(xDiff ** 2 + yDiff ** 2)
 }
 
-class LayoutTree {
+export class LayoutTreeWalker {
   static from(root: LayoutNode) {
-    return new LayoutTree(root)
+    return new LayoutTreeWalker(root)
   }
 
   root: LayoutNode
@@ -16,15 +16,20 @@ class LayoutTree {
     this.root = root
   }
 
-  getNodeById(targetId: string) {
-    return this.root.descendants().find((node) => node.data.id === targetId)
+  getNodeById(id: string) {
+    return this.root.descendants().find((node) => node.data.id === id)
   }
 
-  getClosedNode(
-    nodes: LayoutNode[],
-    target: LayoutNode,
-  ): LayoutNode | undefined {
+  getParentNode(id: string) {
+    const currentNode = this.getNodeById(id)
+    if (!currentNode) return
+    return currentNode?.parent
+  }
+
+  getNearestNode(nodes: LayoutNode[], id: string): LayoutNode | undefined {
+    const target = this.getNodeById(id)
     let closed: LayoutNode = nodes[0]
+    if (!target) return closed
     nodes.forEach((node) => {
       if (getDistance(target, node) < getDistance(target, closed)) {
         closed = node
@@ -34,55 +39,55 @@ class LayoutTree {
     return closed
   }
 
-  getLeftNode(currentId: string) {
-    if (this.root.data.id === currentId) {
-      return this.getClosedNode(
-        this.root.descendants().filter((node) => node.x < this.root.x),
-        this.root,
-      )
-    }
-
-    const currentNode = this.getNodeById(currentId)
-    if (!currentNode) return
-    return currentNode?.parent
-  }
-
-  getRightNode(currentId: string) {
-    if (this.root.data.id === currentId) {
-      return this.getClosedNode(
-        this.root.descendants().filter((node) => node.x > this.root.x),
-        this.root,
-      )
-    }
-
-    const currentNode = this.getNodeById(currentId)
+  getNearestChildNode(id: string) {
+    const currentNode = this.getNodeById(id)
     if (!currentNode) return
     const [, ...des] = currentNode.descendants()
-    return this.getClosedNode(des, currentNode)
+    return this.getNearestNode(des, id)
   }
 
-  getTopNode(currentId: string) {
-    const array: LayoutNode[] = []
-    const currentNode = this.getNodeById(currentId)
+  getNearestTopNode(id: string) {
+    const currentNode = this.getNodeById(id)
     if (!currentNode) return undefined
-    this.root.eachBefore((node) => {
-      if (node.y < currentNode.y) {
-        array.push(node)
-      }
-    })
-    return this.getClosedNode(array, currentNode)
+    const array = this.root
+      .descendants()
+      .filter((node) => node.y < currentNode.y)
+    return this.getNearestNode(array, id)
   }
 
-  getBottomNode(currentId: string) {
-    const array: LayoutNode[] = []
-    const currentNode = this.getNodeById(currentId)
+  getNearestBottomNode(id: string) {
+    const currentNode = this.getNodeById(id)
     if (!currentNode) return undefined
-    this.root.eachBefore((node) => {
-      if (node.y > currentNode.y) {
-        array.push(node)
-      }
-    })
-    return this.getClosedNode(array, currentNode)
+    const array = this.root
+      .descendants()
+      .filter((node) => node.y > currentNode.y)
+    return this.getNearestNode(array, id)
+  }
+
+  getNeighborNodes(id: string) {
+    const currentNode = this.getNodeById(id)
+    if (!currentNode) return []
+    return this.root
+      .descendants()
+      .filter((node) => node.depth === currentNode?.depth)
+  }
+
+  getRightNeighborNode(id: string) {
+    const currentNode = this.getNodeById(id)
+    if (!currentNode) return
+    const neighbors = this.getNeighborNodes(id).filter(
+      (node) => node.x > currentNode.x,
+    )
+    return this.getNearestNode(neighbors, id)
+  }
+
+  getLeftNeighborNode(id: string) {
+    const currentNode = this.getNodeById(id)
+    if (!currentNode) return
+    const neighbors = this.getNeighborNodes(id).filter(
+      (node) => node.x < currentNode.x,
+    )
+    return this.getNearestNode(neighbors, id)
   }
 }
 
@@ -141,4 +146,4 @@ function createElement(tag: string, attrs?: Record<string, string>) {
   return el
 }
 
-export { selectText, LayoutTree, KEY_MAPS, HOTKEYS, createElement }
+export { selectText, KEY_MAPS, HOTKEYS, createElement }

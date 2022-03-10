@@ -1,9 +1,8 @@
+import { LayoutType } from '../interface/layout'
 import { LayoutNode, TopicData } from '../interface/topic'
 import { mindmap } from './mindmap'
 import { getCanvasSize } from './shared'
 import { structure } from './tree'
-
-type LayoutType = 'mindmap' | 'structure'
 
 function doLayout(root: TopicData, layout: LayoutType) {
   let layoutRoot: LayoutNode
@@ -27,5 +26,3 @@ function doLayout(root: TopicData, layout: LayoutType) {
 }
 
 export { doLayout }
-
-export type { LayoutType }

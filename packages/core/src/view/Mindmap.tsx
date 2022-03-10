@@ -12,7 +12,8 @@ import { LayoutNode, TopicData } from '../interface/topic'
 import { Contribution, ContributionAPI } from '../interface/contribute'
 import { ViewType } from '../constant'
 import { debug } from '../utils/debug'
-import { doLayout, LayoutType } from '../layout'
+import { doLayout } from '../layout'
+import { LayoutType } from '../interface/layout'
 import { Links } from './Links'
 import Topic from './Topic'
 import styles from './index.module.css'
@@ -28,13 +29,14 @@ interface MindmapProps {
 
 const Mindmap = forwardRef(
   (props: MindmapProps, ref: RefObject<ContributionAPI>) => {
-    const { onChange, contributions = [], layout = 'structure' } = props
+    const { onChange, contributions = [], layout = 'mindmap' } = props
     const model = Model.useContainer()
     const viewModel = ViewModel.useContainer()
     const editorRef = useRef<HTMLDivElement>(null)
     const { root } = model
     const contributionAPI = useContributionAPI({
       view: editorRef,
+      layout,
     })
     const { slots } = useContributions(contributionAPI, contributions)
     const mindmapSlots = slots.filter(

@@ -1,7 +1,7 @@
 import { useContext } from 'preact/hooks'
 import { ThemeContext } from '../context/theme'
+import { LayoutType } from '../interface/layout'
 import { LayoutNode } from '../interface/topic'
-import { LayoutType } from '../layout'
 
 interface LinksProps {
   layoutRoot: LayoutNode

@@ -1,4 +1,3 @@
-import { useMemo } from 'preact/hooks'
 import { useLocale } from '../context/locale'
 import { Model } from '../model'
 import { ViewModel } from '../viewModel'
@@ -14,11 +13,8 @@ function useContributionAPI(props: UseContributionProps) {
   const model = Model.useContainer()
   const viewModel = ViewModel.useContainer()
   const locale = useLocale()
-  const { view } = props
-  const api = useMemo(() => {
-    return { model, viewModel, view, locale }
-  }, [model, viewModel, view])
-  return api
+  const { view, layout } = props
+  return { model, viewModel, view, locale, layout }
 }
 
 function useContributions(api: ContributionAPI, contributions: Contribution[]) {

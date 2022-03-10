@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { createContainer } from '../unstated'
-import { createTopic, TopicTree } from '../utils/tree'
+import { createTopic, TopicWalker } from '../utils/tree'
 import { History } from '../utils/history'
 import { deepClone } from '../utils/common'
 import { TopicData } from '../interface/topic'
@@ -93,25 +93,25 @@ function useModel(
 
   function getParentNodeById(id: string) {
     if (!id) return
-    const rootTopic = TopicTree.from(getRoot())
+    const rootTopic = TopicWalker.from(getRoot())
     return rootTopic.getNodeById(id)?.parent?.data
   }
 
   function getNodeById(id: string) {
     if (!id) return
-    const rootTopic = TopicTree.from(getRoot())
+    const rootTopic = TopicWalker.from(getRoot())
     return rootTopic.getNodeById(id)?.data
   }
 
   function getNextSibling(id: string) {
     if (!id) return
-    const rootTopic = TopicTree.from(getRoot())
+    const rootTopic = TopicWalker.from(getRoot())
     return rootTopic.getNextSibling(id)
   }
 
   function getPreviousSibling(id: string) {
     if (!id) return
-    const rootTopic = TopicTree.from(getRoot())
+    const rootTopic = TopicWalker.from(getRoot())
     return rootTopic.getPreviousSibling(id)
   }
 

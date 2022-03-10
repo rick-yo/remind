@@ -1,9 +1,9 @@
 import { hierarchy, HierarchyNode } from 'd3-hierarchy'
 import { TopicData } from '../interface/topic'
 
-export class TopicTree {
+export class TopicWalker {
   static from(root: TopicData) {
-    return new TopicTree(root)
+    return new TopicWalker(root)
   }
 
   root: HierarchyNode<TopicData>
