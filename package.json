@@ -4,7 +4,6 @@
     "build:all": "pnpm -r run build",
     "dev": "pnpm --parallel run dev",
     "lint:fix": "xo --fix",
-    "release": "release-it",
     "pre-commit": "pnpm run lint:fix && pnpm run test:run --dir packages/core",
     "prepare": "husky install"
   },
@@ -17,7 +16,6 @@
     "canvas": "^2.9.0",
     "husky": "^7.0.0",
     "jsdom": "^19.0.0",
-    "release-it": "^14.11.3",
     "typescript": "^4.6.2",
     "vite": "^2.8.0",
     "vitest": "^0.5.9",
