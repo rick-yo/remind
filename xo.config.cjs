@@ -4,6 +4,7 @@ module.exports = {
   space: 2,
   rules: {
     'import/extensions': 'off',
+    'no-multi-assign': 'off',
     'capitalized-comments': 'off',
     '@typescript-eslint/no-loop-func': 'off',
     'import/no-extraneous-dependencies': 'off',
