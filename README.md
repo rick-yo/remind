@@ -8,9 +8,9 @@ A headless, framework-agnostic and extendable mindmap editor.
 
 ![](./demo.jpg)
 
-Try on https://remind.applet.ink
-
-Play on https://stackblitz.com/edit/typescript-nwp9sk?file=index.ts
+- [Try remind](https://remind.applet.ink)
+- [Play online](https://stackblitz.com/edit/typescript-nwp9sk?file=index.ts)
+- [See roadmap](https://github.com/luvsic3/remind/projects/1)
 
 ## Feature
 

@@ -10,7 +10,7 @@ const customData: TopicData = {
       children: [
         createTopic('tab - Create a child topic'),
         createTopic('del - Remove a topic'),
-        createTopic('space or doubleclick - Edit a topic'),
+        createTopic('space or double click - Edit a topic'),
         createTopic('Enter - Save edited topic'),
       ],
     },
@@ -41,4 +41,5 @@ const customData: TopicData = {
 createMindmap(document.querySelector('#app')!, {
   value: customData,
   contributions,
+  // layout: 'structure',
 })
