@@ -1,5 +1,6 @@
 import { hierarchy, HierarchyNode } from 'd3-hierarchy'
 import { TopicData } from '../interface/topic'
+import { uuid } from './uuid'
 
 export class TopicWalker {
   static from(root: TopicData) {
@@ -40,7 +41,7 @@ export class TopicWalker {
 
 export function createTopic(title: string, options: Partial<TopicData> = {}) {
   const topic: TopicData = {
-    id: crypto.randomUUID(),
+    id: uuid(),
     title,
     ...options,
   }

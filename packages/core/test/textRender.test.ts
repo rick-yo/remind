@@ -11,6 +11,7 @@ const shortText = 'How to use Remind 🤔'
 const longText =
   'long text long text long text long text long text long text 中文中文中文中文中文中文中文中文'
 
+// jsdom not support svg, skip textRender
 test.skip('empty text', () => {
   const { lines, dimensions } = createText(emptyText, {
     style: {

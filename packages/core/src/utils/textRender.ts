@@ -1,3 +1,6 @@
+/**
+ * fork from https://github.com/bpmn-io/diagram-js
+ */
 import { assert } from './assert'
 import { isObject } from './is'
 
