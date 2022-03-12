@@ -27,7 +27,7 @@ interface TextLine extends TextRect {
   y: number
 }
 
-interface TextOption {
+interface TextRenderOption {
   /**
    * bounding box that text rendered
    */
@@ -273,7 +273,7 @@ const defaultOptions = {
  * @param options
  *
  */
-function createText(text: string, options: TextOption) {
+export function renderText(text: string, options: TextRenderOption) {
   const { box, style, fitBox = false } = options
   const align = parseAlign(options.align ?? defaultOptions.align)
   const padding = parsePadding(options.padding ?? defaultOptions.padding)
@@ -369,7 +369,7 @@ function createText(text: string, options: TextOption) {
   }
 }
 
-function getLineHeight(style: TextOption['style']) {
+function getLineHeight(style: TextRenderOption['style']) {
   if (style.fontSize && style.lineHeight) {
     return (
       Number.parseInt(style.fontSize, 10) * Number.parseFloat(style.lineHeight)
@@ -377,4 +377,4 @@ function getLineHeight(style: TextOption['style']) {
   }
 }
 
-export { createText }
+export type { TextRenderOption }

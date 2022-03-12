@@ -76,8 +76,8 @@ const Mindmap = forwardRef(
           className={styles.svgCanvas}
         >
           <Links layoutRoot={layoutRoot} layout={layout} />
+          <Topics layoutRoot={layoutRoot} />
         </svg>
-        <Topics layoutRoot={layoutRoot} />
         {mindmapSlots}
       </div>
     )
@@ -86,11 +86,11 @@ const Mindmap = forwardRef(
 
 function Topics({ layoutRoot }: { layoutRoot: LayoutNode }) {
   return (
-    <div className="topics">
+    <g className="topics">
       {layoutRoot.descendants().map((node) => {
         return <Topic key={node.data.id} node={node} />
       })}
-    </div>
+    </g>
   )
 }
 

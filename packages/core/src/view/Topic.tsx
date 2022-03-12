@@ -1,10 +1,10 @@
 import { useContext } from 'preact/hooks'
 import { ThemeContext } from '../context/theme'
-import { EDITOR_MODE, TopicStyle, ViewType } from '../constant'
-import { getTopicFontsize } from '../layout/shared'
+import { EDITOR_MODE, TopicTextRenderOptions, ViewType } from '../constant'
+import { getTopicTextStyle } from '../layout/shared'
 import { ViewModel } from '../viewModel'
-import { toPX } from '../utils/common'
 import { LayoutNode } from '../interface/topic'
+import { renderText } from '../utils/textRender'
 import styles from './index.module.css'
 
 type TopicProps = {
@@ -12,47 +12,62 @@ type TopicProps = {
 }
 
 const Topic = (props: TopicProps) => {
+  const viewModel = ViewModel.useContainer()
+  const $theme = useContext(ThemeContext)
   const { node } = props
   const {
     data: { title, id },
     x,
     y,
     depth,
+    size,
   } = node
-
-  const $theme = useContext(ThemeContext)
-  const viewModel = ViewModel.useContainer()
   const { mode, selection } = viewModel
   const isSelected = id === selection
   const isEditing = isSelected && mode === EDITOR_MODE.edit
   const isMainTopic = depth <= 1
+  const [width, height] = size
 
-  const outline = isSelected ? `2px solid ${$theme.mainColor}` : 'none'
+  const outline = isSelected
+    ? {
+        stroke: $theme.mainColor,
+        strokeWidth: 1.5,
+      }
+    : {}
   const background = isMainTopic || isEditing ? '#fff' : 'transparent'
 
+  const textStyle = getTopicTextStyle(node.data)
+  const { lines } = renderText(title, {
+    ...TopicTextRenderOptions,
+    style: textStyle,
+  })
+
   return (
-    <div
+    <g
       className={styles.topic}
       data-id={id}
       data-type={ViewType.topic}
-      contentEditable={isEditing}
-      draggable
-      style={{
-        transform: `translate(${toPX(x)}, ${toPX(y)}) scale(${
-          isEditing ? '1.05' : 1
-        })`,
-        maxWidth: toPX(TopicStyle.maxWidth),
-        padding: toPX(TopicStyle.padding),
-        background: `${background}`,
-        fontSize: toPX(getTopicFontsize(node.data)),
-        fontFamily: TopicStyle.fontFamily,
-        lineHeight: TopicStyle.lineHeight,
-        outline: `${outline}`,
-        borderRadius: toPX(5),
-      }}
+      transform={`translate(${x} ${y})`}
     >
-      {title}
-    </div>
+      <rect
+        width={width}
+        height={height}
+        fill={background}
+        radius={5}
+        {...outline}
+      ></rect>
+      <text
+        // contentEditable={isEditing}
+        // draggable
+        style={textStyle}
+      >
+        {lines.map((line) => (
+          <tspan x={line.x} y={line.y}>
+            {line.text}
+          </tspan>
+        ))}
+      </text>
+    </g>
   )
 }
 

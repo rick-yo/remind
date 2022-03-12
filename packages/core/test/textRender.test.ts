@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import { createText } from '../src/utils/textRender'
+import { renderText } from '../src/utils/textRender'
 
 const defaultBox = {
   width: 150,
@@ -13,7 +13,7 @@ const longText =
 
 // jsdom not support svg, skip textRender
 test.skip('empty text', () => {
-  const { lines, dimensions } = createText(emptyText, {
+  const { lines, dimensions } = renderText(emptyText, {
     style: {
       fontSize: '12px',
       lineHeight: '1.2',
@@ -26,7 +26,7 @@ test.skip('empty text', () => {
 })
 
 test.skip('short text', () => {
-  const { lines } = createText(shortText, {
+  const { lines } = renderText(shortText, {
     style: {
       fontSize: '14px',
       lineHeight: '1.2',
@@ -37,7 +37,7 @@ test.skip('short text', () => {
 })
 
 test.skip('long text', () => {
-  const { lines } = createText(longText, {
+  const { lines } = renderText(longText, {
     style: {
       fontSize: '20px',
       lineHeight: '1.2',

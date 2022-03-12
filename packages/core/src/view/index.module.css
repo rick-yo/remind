@@ -10,11 +10,6 @@
 }
 
 .topic {
-  display: inline-block;
-  box-sizing: border-box;
-  position: absolute;
-  top: 0;
-  left: 0;
   cursor: default;
   user-select: none;
 }

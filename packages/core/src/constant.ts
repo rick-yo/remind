@@ -1,14 +1,24 @@
+import type { TextRenderOption } from './utils/textRender'
+
 const TopicStyle = {
   maxWidth: 240,
-  minHeight: 30,
+  get minHeight() {
+    return this.rootTopicFontSize * this.lineHeight + this.padding * 2
+  },
   padding: 8,
-  margin: 120,
-  fontSize: 20,
+  margin: 80,
+  rootTopicFontSize: 18,
   fontFamily: `"Microsoft Yahei", "PingFang SC"`,
   lineHeight: 1.2,
 }
 
-const canvasContext = document.createElement('canvas').getContext('2d')!
+const TopicTextRenderOptions: Omit<TextRenderOption, 'style'> = {
+  box: {
+    width: TopicStyle.maxWidth,
+    height: 10_000,
+  },
+  padding: TopicStyle.padding,
+}
 
 enum EDITOR_MODE {
   none,
@@ -22,4 +32,4 @@ enum ViewType {
   link,
 }
 
-export { canvasContext, EDITOR_MODE, TopicStyle, ViewType }
+export { EDITOR_MODE, TopicStyle, ViewType, TopicTextRenderOptions }

@@ -1,7 +1,8 @@
 import { HierarchyNode, HierarchyPointNode } from 'd3-hierarchy'
-import { canvasContext, TopicStyle } from '../constant'
+import { TopicStyle, TopicTextRenderOptions } from '../constant'
 import { TopicData } from '../interface/topic'
-import { average } from '../utils/common'
+import { average, toPX } from '../utils/common'
+import { renderText } from '../utils/textRender'
 
 declare module 'd3-hierarchy' {
   export interface HierarchyNode<Datum> {
@@ -15,28 +16,30 @@ declare module 'd3-hierarchy' {
 
 function getTopicFontsize(node: TopicData) {
   const offset = (node.depth ?? 0) * 2
-  return `${Math.max(14, TopicStyle.fontSize - offset)}`
+  return Math.max(14, TopicStyle.rootTopicFontSize - offset)
 }
 
-function measureText(node: TopicData) {
-  const fontSize = getTopicFontsize(node)
-  canvasContext.save()
-  canvasContext.font = `${fontSize}px ${TopicStyle.fontFamily}`
-  const measure = canvasContext.measureText(node.title)
-  canvasContext.restore()
-  return measure
+function getTopicTextStyle(node: TopicData) {
+  const fontSize = toPX(getTopicFontsize(node))
+  const textStyle = {
+    fontSize,
+    fontFamily: TopicStyle.fontFamily,
+    lineHeight: `${TopicStyle.lineHeight}`,
+  }
+  return textStyle
 }
 
 function setNodeSize(node: HierarchyNode<TopicData>) {
-  const measure = measureText(node.data)
-  const noWrapTextWidth = measure.width + TopicStyle.padding * 2
-  const lines = Math.ceil(noWrapTextWidth / TopicStyle.maxWidth)
-  const height = Math.max(
-    TopicStyle.minHeight,
-    TopicStyle.fontSize * lines * TopicStyle.lineHeight +
-      TopicStyle.padding * 2,
+  const style = getTopicTextStyle(node.data)
+  const {
+    dimensions: { width, height },
+  } = renderText(node.data.title, { ...TopicTextRenderOptions, style })
+  const finalWidth = Math.min(
+    width + TopicStyle.padding * 2,
+    TopicStyle.maxWidth,
   )
-  node.size = [Math.min(noWrapTextWidth, TopicStyle.maxWidth), height]
+  const finalHeight = Math.max(TopicStyle.minHeight, height)
+  node.size = [finalWidth, finalHeight]
 }
 
 function getCanvasSize(layoutRoot: HierarchyPointNode<TopicData>) {
@@ -71,8 +74,8 @@ function averageNodeSize(hierarchyRoot: HierarchyNode<TopicData>) {
 
 export {
   getTopicFontsize,
-  measureText,
   setNodeSize,
   getCanvasSize,
   averageNodeSize,
+  getTopicTextStyle,
 }

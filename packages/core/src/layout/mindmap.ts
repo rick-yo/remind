@@ -22,11 +22,14 @@ function mindmap(root: TopicData) {
 
   layoutRoot.each((node) => {
     // Rotate entire tree
-    const { x, y, depth } = node
+    const { x, y, parent } = node
     node.x = y
     node.y = x
     // Add horizontal margin
-    node.x += depth * TopicStyle.margin
+    if (parent) {
+      node.x -= node.x - (parent.x + parent.size[0])
+      node.x += TopicStyle.margin
+    }
   })
 
   const nodes = layoutRoot.descendants()
