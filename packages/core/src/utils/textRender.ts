@@ -13,13 +13,18 @@ interface TextBBox {
   height: number
 }
 
-interface LayoutLine {
+interface TextRect {
   width: number
   height: number
   text: string
 }
 
-interface Option {
+interface TextLine extends TextRect {
+  x: number
+  y: number
+}
+
+interface TextOption {
   /**
    * bounding box that text rendered
    */
@@ -27,16 +32,21 @@ interface Option {
   /**
    * style to be applied to the text
    */
-  style: Pick<CSSStyleDeclaration, 'lineHeight' | 'fontSize' | 'fontFamily'>
+  style: Partial<CSSStyleDeclaration>
   /**
-   * how to align in the bounding box. Any of { 'center-middle', 'center-top' }, defaults to 'center-top'.
+   * how to align in the bounding box. defaults to 'left-top'.
    */
-  align?: string
+  align?:
+    | 'left-top'
+    | 'center-top'
+    | 'right-top'
+    | 'center-top'
+    | 'center-middle'
   /**
    * indicates if box will be recalculated to fit text
    */
   fitBox?: boolean
-  padding?: number
+  padding?: number | Partial<Padding>
 }
 
 const hasOwnProperty = Object.prototype.hasOwnProperty
@@ -61,20 +71,17 @@ function svgAttr(el: SVGElement, attrs: Record<string, any>) {
   }
 }
 
-const DEFAULT_BOX_PADDING = 0
-
 function parseAlign(align: string) {
   const parts = align.split('-')
 
   return {
-    horizontal: parts[0] || 'center',
+    horizontal: parts[0] || 'left',
     vertical: parts[1] || 'top',
   }
 }
 
-function parsePadding(padding: Padding | number) {
+function parsePadding(padding: number | Partial<Padding>): Padding {
   if (isObject(padding)) {
-    // @ts-expect-error suppress ts error
     return { top: 0, left: 0, right: 0, bottom: 0, ...padding }
   }
 
@@ -130,7 +137,7 @@ function layoutNext(
   lines: string[],
   maxWidth: number,
   fakeText: SVGTextElement,
-): LayoutLine {
+): TextRect {
   const originalLine = lines.shift()
   assert(originalLine)
   let fitLine = originalLine
@@ -251,10 +258,9 @@ function getHelperSvg() {
   return helperSvg
 }
 
-const defaultConfig = {
-  padding: DEFAULT_BOX_PADDING,
-  style: {},
-  align: 'center-top',
+const defaultOptions = {
+  padding: 0,
+  align: 'left-top',
 }
 
 /**
@@ -264,19 +270,17 @@ const defaultConfig = {
  * @param options
  *
  */
-function createText(text: string, options: Option) {
-  const { box } = options
-  const style = { ...defaultConfig.style, ...options.style }
-  const align = parseAlign(options.align ?? defaultConfig.align)
-  const padding = parsePadding(options.padding ?? defaultConfig.padding)
-  const fitBox = options.fitBox ?? false
+function createText(text: string, options: TextOption) {
+  const { box, style, fitBox = false } = options
+  const align = parseAlign(options.align ?? defaultOptions.align)
+  const padding = parsePadding(options.padding ?? defaultOptions.padding)
 
   const lineHeight = getLineHeight(style)
 
   // we split text by lines and normalize
   // {soft break} + {line break} => { line break }
   const lines = text.split(/\u00AD?\r?\n/)
-  const layouted: LayoutLine[] = []
+  const textRects: TextRect[] = []
 
   const maxWidth = box.width - padding.left - padding.right
 
@@ -289,7 +293,7 @@ function createText(text: string, options: Option) {
   helperSvg.append(helperText)
 
   while (lines.length > 0) {
-    layouted.push(layoutNext(lines, maxWidth, helperText))
+    textRects.push(layoutNext(lines, maxWidth, helperText))
   }
 
   if (align.vertical === 'middle') {
@@ -297,13 +301,13 @@ function createText(text: string, options: Option) {
   }
 
   const totalHeight =
-    layouted.reduce(function (sum, line) {
+    textRects.reduce(function (sum, line) {
       return sum + (lineHeight ?? line.height)
     }, 0) +
     padding.top +
     padding.bottom
 
-  const maxLineWidth = layouted.reduce(function (sum, line) {
+  const maxLineWidth = textRects.reduce(function (sum, line) {
     return line.width > sum ? line.width : sum
   }, 0)
 
@@ -315,17 +319,12 @@ function createText(text: string, options: Option) {
   }
 
   // magic number initial offset
-  y -= (lineHeight ?? layouted[0].height) / 4
+  y -= (lineHeight ?? textRects[0].height) / 4
 
-  const layoutLines: Array<
-    LayoutLine & {
-      x: number
-      y: number
-    }
-  > = []
+  const textLines: TextLine[] = []
   // layout each line taking into account that parent
   // shape might resize to fit text size
-  layouted.forEach(function (line) {
+  textRects.forEach(function (line) {
     let x
 
     y += lineHeight ?? line.height
@@ -347,7 +346,7 @@ function createText(text: string, options: Option) {
         )
     }
 
-    layoutLines.push({
+    textLines.push({
       ...line,
       x,
       y,
@@ -363,14 +362,16 @@ function createText(text: string, options: Option) {
 
   return {
     dimensions,
-    lines: layoutLines,
+    lines: textLines,
   }
 }
 
-function getLineHeight(style: Option['style']) {
-  return (
-    Number.parseFloat(style.lineHeight) * Number.parseInt(style.fontSize, 10)
-  )
+function getLineHeight(style: TextOption['style']) {
+  if (style.fontSize && style.lineHeight) {
+    return (
+      Number.parseInt(style.fontSize, 10) * Number.parseFloat(style.lineHeight)
+    )
+  }
 }
 
 export { createText }
