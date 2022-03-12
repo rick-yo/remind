@@ -1,6 +1,11 @@
 import { useContext } from 'preact/hooks'
 import { ThemeContext } from '../context/theme'
-import { EDITOR_MODE, TopicTextRenderOptions, ViewType } from '../constant'
+import {
+  EDITOR_MODE,
+  TopicStyle,
+  TopicTextRenderOptions,
+  ViewType,
+} from '../constant'
 import { getTopicTextStyle } from '../layout/shared'
 import { ViewModel } from '../viewModel'
 import { LayoutNode } from '../interface/topic'
@@ -31,7 +36,7 @@ const Topic = (props: TopicProps) => {
   const outline = isSelected
     ? {
         stroke: $theme.mainColor,
-        strokeWidth: 1.5,
+        strokeWidth: TopicStyle.borderWidth,
       }
     : {}
   const background = isMainTopic || isEditing ? '#fff' : 'transparent'
@@ -42,6 +47,7 @@ const Topic = (props: TopicProps) => {
     style: textStyle,
   })
 
+  if (isEditing) return null
   return (
     <g
       className={styles.topic}
@@ -57,7 +63,6 @@ const Topic = (props: TopicProps) => {
         {...outline}
       ></rect>
       <text
-        // contentEditable={isEditing}
         // draggable
         style={textStyle}
       >

@@ -8,13 +8,14 @@ import {
   UseContributionProps,
 } from '../interface/contribute'
 import { ViewType } from '../constant'
+import { isHTMLElement, isSVGElement } from '../utils/is'
 
 function useContributionAPI(props: UseContributionProps) {
   const model = Model.useContainer()
   const viewModel = ViewModel.useContainer()
   const locale = useLocale()
-  const { view, layout } = props
-  return { model, viewModel, view, locale, layout }
+  const { view, layout, textEditor } = props
+  return { model, viewModel, view, locale, layout, textEditor }
 }
 
 function useContributions(api: ContributionAPI, contributions: Contribution[]) {
@@ -32,26 +33,25 @@ function useContributions(api: ContributionAPI, contributions: Contribution[]) {
 }
 
 const types = {
-  isTopic(target: EventTarget | null): target is HTMLDivElement {
-    return Boolean(
-      target instanceof HTMLDivElement &&
-        target.closest(`[data-type="${ViewType.topic}"]`),
-    )
+  getTopicElementByChild(target: SVGElement) {
+    return target.closest<SVGElement>(`[data-type="${ViewType.topic}"]`)
   },
 
-  isMindmap(target: EventTarget | null): target is HTMLDivElement {
+  isTopic(target: EventTarget | null): target is SVGElement {
+    return Boolean(isSVGElement(target) && this.getTopicElementByChild(target))
+  },
+
+  isMindmap(target: EventTarget | null): target is HTMLElement {
     return Boolean(
-      target instanceof HTMLDivElement &&
+      isHTMLElement(target) &&
         target.closest(`[data-type="${ViewType.mindmap}"]`),
     )
   },
 
   getTopicId(target: EventTarget | null) {
-    if (target instanceof HTMLDivElement) {
-      return target.dataset.id
+    if (isSVGElement(target)) {
+      return this.getTopicElementByChild(target)?.dataset.id
     }
-
-    return ''
   },
 
   getTopicElementById(id: string) {

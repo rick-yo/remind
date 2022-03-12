@@ -13,3 +13,10 @@
   cursor: default;
   user-select: none;
 }
+
+.textEditor {
+  position: relative;
+  background: #fff;
+  box-sizing: border-box;
+  outline: none;
+}

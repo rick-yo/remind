@@ -1,5 +1,14 @@
 function isObject(obj: unknown): obj is object {
-  return typeof obj === 'object'
+  return obj !== null && typeof obj === 'object'
 }
 
-export { isObject }
+function isString(obj: unknown): obj is string {
+  return typeof obj === 'string'
+}
+
+const isSVGElement = (el: unknown): el is SVGElement => el instanceof SVGElement
+
+const isHTMLElement = (el: unknown): el is HTMLElement =>
+  el instanceof HTMLElement
+
+export { isObject, isHTMLElement, isSVGElement, isString }

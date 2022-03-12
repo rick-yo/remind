@@ -3,6 +3,7 @@ import { ViewType } from '../constant'
 import { IntlContent } from './intl'
 import { LayoutType } from './layout'
 import { IModelStructure, IModelTrait } from './model'
+import { TextEditor } from './textEditor'
 import { IViewModelStructure, IViewModelTrait } from './viewModel'
 
 type Slot = JSX.Element & {
@@ -12,12 +13,19 @@ type Slot = JSX.Element & {
   viewType?: ViewType
 }
 
+interface UseContributionProps {
+  view: RefObject<HTMLDivElement>
+  layout: LayoutType
+  textEditor: TextEditor
+}
+
 interface ContributionAPI {
   model: IModelStructure & IModelTrait
   viewModel: IViewModelStructure & IViewModelTrait
-  view: RefObject<HTMLDivElement>
   locale: IntlContent
+  view: RefObject<HTMLDivElement>
   layout: LayoutType
+  textEditor: TextEditor
 }
 
 interface ContributionResult {
@@ -33,10 +41,5 @@ interface ContributionResult {
  * @param api expose editor's core api
  */
 type Contribution = (api: ContributionAPI) => ContributionResult | void
-
-interface UseContributionProps {
-  view: RefObject<HTMLDivElement>
-  layout: LayoutType
-}
 
 export type { UseContributionProps, Contribution, Slot, ContributionAPI }

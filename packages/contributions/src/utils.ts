@@ -91,22 +91,6 @@ export class LayoutTreeWalker {
   }
 }
 
-function selectText(element?: HTMLElement) {
-  if (!element) return
-  if (window.getSelection && document.createRange) {
-    const selection = window.getSelection()
-    if (selection?.toString() === '') {
-      // No text selection
-      setTimeout(function () {
-        const range = document.createRange() // Range object
-        range.selectNodeContents(element) // Sets Range
-        selection.removeAllRanges() // Remove all ranges from selection
-        selection.addRange(range) // Add Range to a Selection.
-      }, 1)
-    }
-  }
-}
-
 const KEY_MAPS: Record<string, string> = {
   Backspace: 'Backspace',
   Tab: 'Tab',
@@ -146,4 +130,4 @@ function createElement(tag: string, attrs?: Record<string, string>) {
   return el
 }
 
-export { selectText, KEY_MAPS, HOTKEYS, createElement }
+export { KEY_MAPS, HOTKEYS, createElement }

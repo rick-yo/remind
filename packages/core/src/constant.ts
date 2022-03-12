@@ -7,6 +7,7 @@ const TopicStyle = {
   },
   padding: 8,
   margin: 80,
+  borderWidth: 2,
   rootTopicFontSize: 18,
   fontFamily: `"Microsoft Yahei", "PingFang SC"`,
   lineHeight: 1.2,

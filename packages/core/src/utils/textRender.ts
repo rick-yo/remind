@@ -2,7 +2,7 @@
  * fork from https://github.com/bpmn-io/diagram-js
  */
 import { assert } from './assert'
-import { isObject } from './is'
+import { isObject, isString } from './is'
 
 interface Padding {
   top: number
@@ -142,7 +142,7 @@ function layoutNext(
   fakeText: SVGTextElement,
 ): TextRect {
   const originalLine = lines.shift()
-  assert(originalLine)
+  assert(isString(originalLine))
   let fitLine = originalLine
 
   let textBBox

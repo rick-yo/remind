@@ -5,7 +5,6 @@ import { Model } from '../model'
 import { ViewModel } from '../viewModel'
 import { useContributions, useContributionAPI } from '../contribute'
 import { toPX } from '../utils/common'
-import { normalizeTopic } from '../utils/tree'
 import { Theme } from '../interface/theme'
 import { IntlLanguage } from '../interface/intl'
 import { LayoutNode, TopicData } from '../interface/topic'
@@ -14,6 +13,7 @@ import { ViewType } from '../constant'
 import { debug } from '../utils/debug'
 import { doLayout } from '../layout'
 import { LayoutType } from '../interface/layout'
+import { useTextEditor } from '../utils/useTextEditor'
 import { Links } from './Links'
 import Topic from './Topic'
 import styles from './index.module.css'
@@ -34,9 +34,11 @@ const Mindmap = forwardRef(
     const viewModel = ViewModel.useContainer()
     const editorRef = useRef<HTMLDivElement>(null)
     const { root } = model
+    const textEditor = useTextEditor()
     const contributionAPI = useContributionAPI({
       view: editorRef,
       layout,
+      textEditor,
     })
     const { slots } = useContributions(contributionAPI, contributions)
     const mindmapSlots = slots.filter(
@@ -44,7 +46,7 @@ const Mindmap = forwardRef(
     )
 
     const { layoutRoot, canvasWidth, canvasHeight } = useMemo(() => {
-      return doLayout(normalizeTopic(root), layout)
+      return doLayout(root, layout)
     }, [root])
 
     debug('layoutRoot', layoutRoot)
@@ -78,6 +80,7 @@ const Mindmap = forwardRef(
           <Links layoutRoot={layoutRoot} layout={layout} />
           <Topics layoutRoot={layoutRoot} />
         </svg>
+        {textEditor.editor}
         {mindmapSlots}
       </div>
     )
