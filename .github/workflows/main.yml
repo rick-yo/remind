@@ -21,7 +21,5 @@ jobs:
     - name: Install dependencies
       run: pnpm install
     
-    - name: Build
-      run: pnpm run lint:fix && pnpm run build:all
-    - name: Test
-      run: pnpm run test:run --dir packages/core
+    - name: Build and run test
+      run: pnpm pre-commit
