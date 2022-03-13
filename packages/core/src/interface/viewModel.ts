@@ -31,6 +31,11 @@ interface IViewModelTrait {
    */
   setMode(mode: EDITOR_MODE): void
   /**
+   * Get `LayoutNode` by coordination
+   * @param mode
+   */
+  hitTest(x: number, y: number): LayoutNode | undefined
+  /**
    * Set current selected node
    * @param ids
    */

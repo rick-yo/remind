@@ -15,4 +15,12 @@ function average(nums: number[]) {
   return nums.reduce((p, c) => p + c, 0) / nums.length
 }
 
-export { noop, deepClone, classNames, toPX, average }
+function inRange(
+  num: number,
+  start: number,
+  end: number = Number.MAX_SAFE_INTEGER,
+) {
+  return num >= start && num < end
+}
+
+export { noop, deepClone, classNames, toPX, average, inRange }

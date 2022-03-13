@@ -1,4 +1,4 @@
-import { LayoutNode } from 'remind-core'
+import { assert, LayoutNode } from 'remind-core'
 
 function getDistance(a: LayoutNode, b: LayoutNode) {
   const xDiff = Math.abs(a.x - b.x)
@@ -119,7 +119,10 @@ function hasOwn(obj: Object, key: PropertyKey) {
   return Object.prototype.hasOwnProperty.call(obj, key)
 }
 
-function createElement(tag: string, attrs?: Record<string, string>) {
+function createElement<K extends keyof HTMLElementTagNameMap>(
+  tag: K,
+  attrs?: Record<string, string>,
+): HTMLElementTagNameMap[K] {
   const el = document.createElement(tag)
   for (const name in attrs) {
     if (hasOwn(attrs, name)) {
@@ -130,4 +133,35 @@ function createElement(tag: string, attrs?: Record<string, string>) {
   return el
 }
 
-export { KEY_MAPS, HOTKEYS, createElement }
+const rect = {
+  width: 200,
+  height: 50,
+}
+
+function getRectAsImageUrl() {
+  const canvas: HTMLCanvasElement = createElement('canvas', {
+    width: rect.width.toString(),
+    height: rect.height.toString(),
+  })
+  const ctx = canvas.getContext('2d')
+  assert(ctx)
+  ctx.fillStyle = '#4dc4ff'
+  ctx.globalAlpha = 0.5
+  ctx.fillRect(0, 0, rect.width, rect.height)
+  return canvas.toDataURL()
+}
+
+function getRectImage() {
+  const img = new Image()
+  img.src = getRectAsImageUrl()
+  img.id = 'test'
+  return img
+}
+
+enum CursorStyle {
+  notAllowed = 'not-allowed',
+  copy = 'copy',
+  default = 'default',
+}
+
+export { KEY_MAPS, HOTKEYS, createElement, getRectImage, CursorStyle }

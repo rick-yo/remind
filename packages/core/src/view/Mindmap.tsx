@@ -70,6 +70,7 @@ const Mindmap = forwardRef(
           width: toPX(canvasWidth),
           height: toPX(canvasHeight),
         }}
+        draggable
       >
         <svg
           width={canvasWidth}

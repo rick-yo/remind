@@ -62,10 +62,7 @@ const Topic = (props: TopicProps) => {
         radius={5}
         {...outline}
       ></rect>
-      <text
-        // draggable
-        style={textStyle}
-      >
+      <text style={textStyle}>
         {lines.map((line) => (
           <tspan x={line.x} y={line.y}>
             {line.text}

@@ -3,6 +3,7 @@ import { createContainer } from '../unstated'
 import { EDITOR_MODE } from '../constant'
 import { IViewModelStructure, IViewModelTrait } from '../interface/viewModel'
 import { LayoutNode } from '../interface/topic'
+import { inRange } from '../utils/common'
 
 export const defaultViewModel: IViewModelStructure = {
   mode: EDITOR_MODE.none,
@@ -49,12 +50,22 @@ function useViewModel(
     })
   }
 
+  function hitTest(x: number, y: number): LayoutNode | undefined {
+    return state.layoutRoot?.descendants().find((node) => {
+      return (
+        inRange(x, node.x, node.x + node.size[0]) &&
+        inRange(y, node.y, node.y + node.size[1])
+      )
+    })
+  }
+
   return {
     ...state,
     setMode,
     select,
     setLayoutRoot,
     setGlobalState,
+    hitTest,
   }
 }
 
