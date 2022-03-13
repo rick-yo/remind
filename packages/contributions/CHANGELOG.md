@@ -1,5 +1,16 @@
 # remind-contributions
 
+## 0.5.0
+
+### Minor Changes
+
+- Add structure layout and Refactor render
+
+### Patch Changes
+
+- Updated dependencies
+  - remind-core@0.5.0
+
 ## 0.4.0
 
 ### Minor Changes
