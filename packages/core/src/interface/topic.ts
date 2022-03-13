@@ -1,12 +1,10 @@
-import { HierarchyPointNode } from 'd3-hierarchy'
+import { HierarchyPointNode, HierarchyNode } from 'd3-hierarchy'
 
-interface TopicData {
+export interface TopicData {
   id: string
   title: string
   children?: TopicData[]
-  depth?: number
 }
 
-type LayoutNode = HierarchyPointNode<TopicData>
-
-export type { TopicData, LayoutNode }
+export type LayoutTopic = HierarchyPointNode<TopicData>
+export type HierarchyTopic = HierarchyNode<TopicData>

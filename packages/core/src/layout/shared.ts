@@ -1,25 +1,15 @@
 import { HierarchyNode, HierarchyPointNode } from 'd3-hierarchy'
 import { TopicStyle, TopicTextRenderOptions } from '../constant'
-import { TopicData } from '../interface/topic'
+import { HierarchyTopic, TopicData } from '../interface/topic'
 import { average, toPX } from '../utils/common'
 import { renderText } from '../utils/textRender'
 
-declare module 'd3-hierarchy' {
-  export interface HierarchyNode<Datum> {
-    /**
-     * The associated data, as specified to the constructor.
-     */
-    data: Datum
-    size: [number, number]
-  }
-}
-
-function getTopicFontsize(node: TopicData) {
+function getTopicFontsize(node: HierarchyTopic) {
   const offset = (node.depth ?? 0) * 2
   return Math.max(14, TopicStyle.rootTopicFontSize - offset)
 }
 
-function getTopicTextStyle(node: TopicData) {
+function getTopicTextStyle(node: HierarchyTopic) {
   const fontSize = toPX(getTopicFontsize(node))
   const textStyle = {
     fontSize,
@@ -29,8 +19,8 @@ function getTopicTextStyle(node: TopicData) {
   return textStyle
 }
 
-function setNodeSize(node: HierarchyNode<TopicData>) {
-  const style = getTopicTextStyle(node.data)
+function setNodeSize(node: HierarchyTopic) {
+  const style = getTopicTextStyle(node)
   const {
     dimensions: { width, height },
   } = renderText(node.data.title, { ...TopicTextRenderOptions, style })

@@ -1,26 +1,26 @@
 import hotkeys from 'hotkeys-js'
-import { Contribution, useEffect, EDITOR_MODE, LayoutNode } from 'remind-core'
+import { Contribution, useEffect, EDITOR_MODE, LayoutTopic } from 'remind-core'
 import { HOTKEYS, LayoutTreeWalker } from './utils'
 
 const navigatorStrategy = {
   mindmap: {
-    left: (root: LayoutNode, id: string) =>
+    left: (root: LayoutTopic, id: string) =>
       LayoutTreeWalker.from(root).getParentNode(id),
-    right: (root: LayoutNode, id: string) =>
+    right: (root: LayoutTopic, id: string) =>
       LayoutTreeWalker.from(root).getNearestChildNode(id),
-    top: (root: LayoutNode, id: string) =>
+    top: (root: LayoutTopic, id: string) =>
       LayoutTreeWalker.from(root).getNearestTopNode(id),
-    bottom: (root: LayoutNode, id: string) =>
+    bottom: (root: LayoutTopic, id: string) =>
       LayoutTreeWalker.from(root).getNearestBottomNode(id),
   },
   structure: {
-    left: (root: LayoutNode, id: string) =>
+    left: (root: LayoutTopic, id: string) =>
       LayoutTreeWalker.from(root).getLeftNeighborNode(id),
-    right: (root: LayoutNode, id: string) =>
+    right: (root: LayoutTopic, id: string) =>
       LayoutTreeWalker.from(root).getRightNeighborNode(id),
-    top: (root: LayoutNode, id: string) =>
+    top: (root: LayoutTopic, id: string) =>
       LayoutTreeWalker.from(root).getParentNode(id),
-    bottom: (root: LayoutNode, id: string) =>
+    bottom: (root: LayoutTopic, id: string) =>
       LayoutTreeWalker.from(root).getNearestChildNode(id),
   },
 }

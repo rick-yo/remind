@@ -1,5 +1,5 @@
-import { hierarchy, HierarchyNode } from 'd3-hierarchy'
-import { TopicData } from '../interface/topic'
+import { hierarchy } from 'd3-hierarchy'
+import { HierarchyTopic, TopicData } from '../interface/topic'
 import { uuid } from './uuid'
 
 export class TopicWalker {
@@ -7,7 +7,7 @@ export class TopicWalker {
     return new TopicWalker(root)
   }
 
-  root: HierarchyNode<TopicData>
+  root: HierarchyTopic
   constructor(root: TopicData) {
     this.root = hierarchy<TopicData>(root)
   }
@@ -46,22 +46,4 @@ export function createTopic(title: string, options: Partial<TopicData> = {}) {
     ...options,
   }
   return topic
-}
-
-export function normalizeTopic(root: TopicData): TopicData {
-  return normalizeTopicDepth(root)
-}
-
-/**
- * Add depth to TopicData, this is used for local state, should not affect TopicData
- */
-function normalizeTopicDepth(root: TopicData, depth = 0): TopicData {
-  if (!root) return root
-  return {
-    ...root,
-    depth,
-    children: root.children?.map((node) =>
-      normalizeTopicDepth(node, depth + 1),
-    ),
-  }
 }

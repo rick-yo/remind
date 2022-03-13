@@ -1,18 +1,18 @@
-import { assert, LayoutNode } from 'remind-core'
+import { assert, LayoutTopic } from 'remind-core'
 
-function getDistance(a: LayoutNode, b: LayoutNode) {
+function getDistance(a: LayoutTopic, b: LayoutTopic) {
   const xDiff = Math.abs(a.x - b.x)
   const yDiff = Math.abs(a.y - b.y)
   return Math.sqrt(xDiff ** 2 + yDiff ** 2)
 }
 
 export class LayoutTreeWalker {
-  static from(root: LayoutNode) {
+  static from(root: LayoutTopic) {
     return new LayoutTreeWalker(root)
   }
 
-  root: LayoutNode
-  constructor(root: LayoutNode) {
+  root: LayoutTopic
+  constructor(root: LayoutTopic) {
     this.root = root
   }
 
@@ -26,9 +26,9 @@ export class LayoutTreeWalker {
     return currentNode?.parent
   }
 
-  getNearestNode(nodes: LayoutNode[], id: string): LayoutNode | undefined {
+  getNearestNode(nodes: LayoutTopic[], id: string): LayoutTopic | undefined {
     const target = this.getNodeById(id)
-    let closed: LayoutNode = nodes[0]
+    let closed: LayoutTopic = nodes[0]
     if (!target) return closed
     nodes.forEach((node) => {
       if (getDistance(target, node) < getDistance(target, closed)) {

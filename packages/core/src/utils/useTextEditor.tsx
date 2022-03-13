@@ -55,7 +55,7 @@ export function useTextEditor(): TextEditor {
       .find((node) => node.data.id === selection)
     if (isEditing && layoutNode) {
       const { x, y, size } = layoutNode
-      const textStyle = getTopicTextStyle(layoutNode.data)
+      const textStyle = getTopicTextStyle(layoutNode)
       return (
         <div
           ref={editorRef}

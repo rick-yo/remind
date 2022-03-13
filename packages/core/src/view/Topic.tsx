@@ -8,12 +8,12 @@ import {
 } from '../constant'
 import { getTopicTextStyle } from '../layout/shared'
 import { ViewModel } from '../viewModel'
-import { LayoutNode } from '../interface/topic'
+import { LayoutTopic } from '../interface/topic'
 import { renderText } from '../utils/textRender'
 import styles from './index.module.css'
 
 type TopicProps = {
-  node: LayoutNode
+  node: LayoutTopic
 }
 
 const Topic = (props: TopicProps) => {
@@ -41,7 +41,7 @@ const Topic = (props: TopicProps) => {
     : {}
   const background = isMainTopic || isEditing ? '#fff' : 'transparent'
 
-  const textStyle = getTopicTextStyle(node.data)
+  const textStyle = getTopicTextStyle(node)
   const { lines } = renderText(title, {
     ...TopicTextRenderOptions,
     style: textStyle,

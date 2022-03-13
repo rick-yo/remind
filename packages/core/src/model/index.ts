@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { createContainer } from '../unstated'
-import { createTopic, normalizeTopic, TopicWalker } from '../utils/tree'
+import { createTopic, TopicWalker } from '../utils/tree'
 import { History } from '../utils/history'
 import { deepClone } from '../utils/common'
 import { TopicData } from '../interface/topic'
@@ -22,9 +22,7 @@ const defaultModel: IModelStructure = {
 function useModel(
   initialState: IModelStructure = defaultModel,
 ): IModelStructure & IModelTrait {
-  const [state, __internalSetState] = useState({
-    root: normalizeTopic(initialState.root),
-  })
+  const [state, __internalSetState] = useState(initialState)
   const history = useMemo(() => {
     return new History<IModelStructure>()
   }, [])
@@ -54,16 +52,11 @@ function useModel(
     )
     nextStateRef.current = deepClone(state)
     updater(nextStateRef.current)
-    // normalizeTopic after update root
-    nextStateRef.current.root = normalizeTopic(nextStateRef.current.root)
     history.pushSync(nextStateRef.current)
     nextStateRef.current = null
   }
 
-  function appendChild(
-    parentId: string,
-    node: Omit<TopicData, 'id' | 'depth'>,
-  ) {
+  function appendChild(parentId: string, node: Omit<TopicData, 'id'>) {
     assert(nextStateRef.current, updateTip)
     const parentNode = getNodeById(parentId)
     if (!parentNode) return

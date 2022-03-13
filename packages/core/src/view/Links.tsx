@@ -1,13 +1,13 @@
 import { useContext } from 'preact/hooks'
 import { ThemeContext } from '../context/theme'
 import { LayoutType } from '../interface/layout'
-import { LayoutNode } from '../interface/topic'
+import { LayoutTopic } from '../interface/topic'
 
 interface LinksProps {
-  layoutRoot: LayoutNode
+  layoutRoot: LayoutTopic
   layout: LayoutType
 }
-type LinkGenerator = (parent: LayoutNode, child: LayoutNode) => string
+type LinkGenerator = (parent: LayoutTopic, child: LayoutTopic) => string
 
 const generateHorizontalLink: LinkGenerator = (parent, child) => {
   const [parentWidth, parentHeight] = parent.size

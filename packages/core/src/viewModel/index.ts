@@ -2,7 +2,7 @@ import { useState } from 'preact/hooks'
 import { createContainer } from '../unstated'
 import { EDITOR_MODE } from '../constant'
 import { IViewModelStructure, IViewModelTrait } from '../interface/viewModel'
-import { LayoutNode } from '../interface/topic'
+import { LayoutTopic } from '../interface/topic'
 import { inRange } from '../utils/common'
 
 export const defaultViewModel: IViewModelStructure = {
@@ -39,7 +39,7 @@ function useViewModel(
     }
   }
 
-  function setLayoutRoot(layoutRoot: LayoutNode) {
+  function setLayoutRoot(layoutRoot: LayoutTopic) {
     setState((previousState) => ({ ...previousState, layoutRoot }))
   }
 
@@ -50,7 +50,7 @@ function useViewModel(
     })
   }
 
-  function hitTest(x: number, y: number): LayoutNode | undefined {
+  function hitTest(x: number, y: number): LayoutTopic | undefined {
     return state.layoutRoot?.descendants().find((node) => {
       return (
         inRange(x, node.x, node.x + node.size[0]) &&

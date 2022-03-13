@@ -1,5 +1,5 @@
 import { EDITOR_MODE } from '../constant'
-import { LayoutNode } from './topic'
+import { LayoutTopic } from './topic'
 
 interface IViewModelStructure {
   /**
@@ -17,7 +17,7 @@ interface IViewModelStructure {
   /**
    * Positioned tree data compute from model.root, used for render
    */
-  layoutRoot?: LayoutNode
+  layoutRoot?: LayoutTopic
   /**
    * Store user defined state, often used to add `contributions` to editor
    */
@@ -31,10 +31,10 @@ interface IViewModelTrait {
    */
   setMode(mode: EDITOR_MODE): void
   /**
-   * Get `LayoutNode` by coordination
+   * Get `LayoutTopic` by coordination
    * @param mode
    */
-  hitTest(x: number, y: number): LayoutNode | undefined
+  hitTest(x: number, y: number): LayoutTopic | undefined
   /**
    * Set current selected node
    * @param ids
@@ -45,7 +45,7 @@ interface IViewModelTrait {
    * @param layoutRoot
    * @protected
    */
-  setLayoutRoot(layoutRoot: LayoutNode): void
+  setLayoutRoot(layoutRoot: LayoutTopic): void
   /**
    * Update globalState
    * @param key

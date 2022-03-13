@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import { createTopic, LayoutNode, TopicData } from '../src'
+import { createTopic, LayoutTopic, TopicData } from '../src'
 import { mindmap } from '../src/layout/mindmap'
 
 const simpleRoot: TopicData = {
@@ -51,10 +51,10 @@ test('complex data', () => {
 })
 
 // Layout node should flow to right direction
-function expectTreeFlowToRight(layoutRoot: LayoutNode) {
+function expectTreeFlowToRight(layoutRoot: LayoutTopic) {
   let maxParentX = -1
   let currentDepth = -1
-  let currentNodes: LayoutNode[] = []
+  let currentNodes: LayoutTopic[] = []
   while (currentNodes.length > 0) {
     currentDepth++
     currentNodes = layoutRoot.descendants().filter((node) => {
@@ -69,7 +69,7 @@ function expectTreeFlowToRight(layoutRoot: LayoutNode) {
 }
 
 // Layout node should not intersects with each other
-function expectNodesNotIntersect(layoutRoot: LayoutNode) {
+function expectNodesNotIntersect(layoutRoot: LayoutTopic) {
   layoutRoot.descendants().forEach((a) => {
     layoutRoot.descendants().forEach((b) => {
       if (a.data.id !== b.data.id) {
@@ -79,7 +79,7 @@ function expectNodesNotIntersect(layoutRoot: LayoutNode) {
   })
 }
 
-function intersects(a: LayoutNode, b: LayoutNode) {
+function intersects(a: LayoutTopic, b: LayoutTopic) {
   const min_a_x = a.x
   const max_a_x = a.x + a.size[0]
   const min_a_y = a.y

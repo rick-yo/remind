@@ -7,7 +7,7 @@ import { useContributions, useContributionAPI } from '../contribute'
 import { toPX } from '../utils/common'
 import { Theme } from '../interface/theme'
 import { IntlLanguage } from '../interface/intl'
-import { LayoutNode, TopicData } from '../interface/topic'
+import { LayoutTopic, TopicData } from '../interface/topic'
 import { Contribution, ContributionAPI } from '../interface/contribute'
 import { ViewType } from '../constant'
 import { debug } from '../utils/debug'
@@ -88,7 +88,7 @@ const Mindmap = forwardRef(
   },
 )
 
-function Topics({ layoutRoot }: { layoutRoot: LayoutNode }) {
+function Topics({ layoutRoot }: { layoutRoot: LayoutTopic }) {
   return (
     <g className="topics">
       {layoutRoot.descendants().map((node) => {

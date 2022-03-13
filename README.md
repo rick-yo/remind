@@ -95,7 +95,6 @@ interface TopicData {
   id: string
   title: string
   children?: TopicData[]
-  depth?: number
 }
 ```
 
