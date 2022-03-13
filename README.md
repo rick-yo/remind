@@ -79,6 +79,10 @@ Render mindmap into containerNode, and return a instance.
 Contribution let you extend editor's functionality, custom editor's behavior or add custom render content.
 For more information, see `packages/contributions/src` 
 
+### Export mindmap as svg/image
+
+See `/packages/core/src/utils/to`, how to use it
+
 ### types
 
 ```typescript

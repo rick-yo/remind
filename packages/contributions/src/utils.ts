@@ -154,7 +154,6 @@ function getRectAsImageUrl() {
 function getRectImage() {
   const img = new Image()
   img.src = getRectAsImageUrl()
-  img.id = 'test'
   return img
 }
 
