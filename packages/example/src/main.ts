@@ -32,7 +32,7 @@ const customData: TopicData = {
       ],
     },
     {
-      ...createTopic('Draggable 🏑'),
+      ...createTopic('Draggable 🏑', { justify: 'start' }),
       children: [createTopic('Drag a node to target one and append to it')],
     },
   ],

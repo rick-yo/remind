@@ -37,6 +37,13 @@ export class TopicWalker {
       return children[index + 1]
     }
   }
+
+  getNodeJustify(id: string): TopicData['justify'] {
+    const justifyStart = this.getNodeById(id)
+      ?.ancestors()
+      .some((node) => node.data.justify === 'start')
+    return justifyStart ? 'start' : 'end'
+  }
 }
 
 export function createTopic(title: string, options: Partial<TopicData> = {}) {

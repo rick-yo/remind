@@ -1,9 +1,9 @@
 import { hierarchy, tree } from 'd3-hierarchy'
 import { TopicStyle } from '../constant'
 import { TopicData } from '../interface/topic'
-import { averageNodeSize, setNodeSize } from './shared'
+import { averageNodeSize, separateTree, setNodeSize } from './shared'
 
-function mindmap(root: TopicData) {
+function layout(root: TopicData) {
   const hierarchyRoot = hierarchy(root)
 
   // Compute node size
@@ -31,16 +31,33 @@ function mindmap(root: TopicData) {
       node.x += TopicStyle.margin
     }
   })
+  return layoutRoot
+}
 
-  const nodes = layoutRoot.descendants()
-  const minY = Math.min(...nodes.map((node) => node.y))
-  // Move layoutRoot to canvas center
-  layoutRoot.each((node) => {
-    node.x += TopicStyle.padding
-    node.y -= minY - TopicStyle.padding
+function mindmap(root: TopicData) {
+  const [start, end] = separateTree(root)
+  const layoutStart = layout(start)
+  const layoutEnd = layout(end)
+
+  layoutStart.descendants().forEach((node) => {
+    node.x += node.size[0]
+    node.x = -node.x + layoutStart.size[0]
   })
 
-  return layoutRoot
+  layoutStart.children?.forEach((mainNode) => {
+    layoutEnd.children?.push(mainNode)
+  })
+
+  // adjust layout to canvas center
+  const nodes = layoutEnd.descendants()
+  const minX = Math.min(...nodes.map((node) => node.x))
+  const minY = Math.min(...nodes.map((node) => node.y))
+  layoutEnd.each((node) => {
+    node.x -= minX
+    node.y -= minY
+  })
+
+  return layoutEnd
 }
 
 export { mindmap }
