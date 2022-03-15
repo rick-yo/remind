@@ -66,7 +66,6 @@ function useModel(
 
   function deleteNode(id: string) {
     assert(nextStateRef.current, updateTip)
-    if (!id) return
     const parentNode = getParentNodeById(id)
     if (parentNode?.children) {
       parentNode.children = parentNode.children.filter((item) => item.id !== id)
@@ -75,7 +74,6 @@ function useModel(
 
   function updateNode(id: string, node: Partial<TopicData>) {
     assert(nextStateRef.current, updateTip)
-    if (!id) return
     const currentNode = getNodeById(id)
     if (currentNode) {
       Object.assign(currentNode, node)
@@ -89,25 +87,21 @@ function useModel(
   }
 
   function getParentNodeById(id: string) {
-    if (!id) return
     const rootTopic = TopicWalker.from(getRoot())
     return rootTopic.getNodeById(id)?.parent?.data
   }
 
   function getNodeById(id: string) {
-    if (!id) return
     const rootTopic = TopicWalker.from(getRoot())
     return rootTopic.getNodeById(id)?.data
   }
 
   function getNextSibling(id: string) {
-    if (!id) return
     const rootTopic = TopicWalker.from(getRoot())
     return rootTopic.getNextSibling(id)
   }
 
   function getPreviousSibling(id: string) {
-    if (!id) return
     const rootTopic = TopicWalker.from(getRoot())
     return rootTopic.getPreviousSibling(id)
   }
@@ -122,6 +116,11 @@ function useModel(
     history.redo()
   }
 
+  function getNodeJustify(id: string) {
+    const rootTopic = TopicWalker.from(getRoot())
+    return rootTopic.getNodeJustify(id)
+  }
+
   return {
     ...state,
     appendChild,
@@ -131,6 +130,7 @@ function useModel(
     getParentNodeById,
     getNextSibling,
     getPreviousSibling,
+    getNodeJustify,
     undo,
     redo,
     update,

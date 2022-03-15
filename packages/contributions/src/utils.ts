@@ -39,6 +39,24 @@ export class LayoutTreeWalker {
     return closed
   }
 
+  getNearestLeftNode(id: string) {
+    const currentNode = this.getNodeById(id)
+    if (!currentNode) return
+    const array = this.root
+      .descendants()
+      .filter((node) => node.x < currentNode.x)
+    return this.getNearestNode(array, id)
+  }
+
+  getNearestRightNode(id: string) {
+    const currentNode = this.getNodeById(id)
+    if (!currentNode) return
+    const array = this.root
+      .descendants()
+      .filter((node) => node.x > currentNode.x)
+    return this.getNearestNode(array, id)
+  }
+
   getNearestChildNode(id: string) {
     const currentNode = this.getNodeById(id)
     if (!currentNode) return
@@ -154,7 +172,6 @@ function getRectAsImageUrl() {
 function getRectImage() {
   const img = new Image()
   img.src = getRectAsImageUrl()
-  img.id = 'test'
   return img
 }
 

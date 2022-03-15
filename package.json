@@ -1,10 +1,11 @@
 {
   "license": "MIT",
   "scripts": {
-    "build:all": "pnpm -r run build",
     "dev": "pnpm --parallel run dev",
+    "build:all": "pnpm -r run build",
     "lint:fix": "xo --fix",
-    "pre-commit": "pnpm run lint:fix && pnpm run test:run --dir packages/core",
+    "test:run": "pnpm test:run --dir packages/core",
+    "pre-commit": "pnpm build:all && pnpm lint:fix && pnpm test:run",
     "prepare": "husky install"
   },
   "devDependencies": {

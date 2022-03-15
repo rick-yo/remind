@@ -1,12 +1,12 @@
 .editor {
   position: relative;
-  transition: all 0.2s;
+  padding: 10px;
 }
 
 .svgCanvas {
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 0px;
+  top: 0px;
 }
 
 .topic {

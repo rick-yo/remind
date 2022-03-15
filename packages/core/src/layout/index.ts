@@ -17,6 +17,11 @@ function doLayout(root: TopicData, layout: LayoutType) {
       throw new Error('invalid layout')
   }
 
+  layoutRoot.descendants().forEach((node) => {
+    // add canvas padding
+    node.x += 10
+  })
+
   const [canvasWidth, canvasHeight] = getCanvasSize(layoutRoot)
   return {
     layoutRoot,

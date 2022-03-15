@@ -27,7 +27,7 @@ const useDndTopic: Contribution = (api) => {
 
     assert(e.dataTransfer)
     fromRef.current = node.data
-    e.dataTransfer.setDragImage(dragImageRef.current!, 10, 10)
+    e.dataTransfer.setDragImage(dragImageRef.current, 10, 10)
     e.dataTransfer.effectAllowed = 'move'
     e.dataTransfer.dropEffect = 'none'
     // setData dataTransfer to make drag and drop work in firefox

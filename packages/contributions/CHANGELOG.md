@@ -1,5 +1,16 @@
 # remind-contributions
 
+## 0.6.0
+
+### Minor Changes
+
+- feat: justify support for mindmap layout, Export mindmap as svg/image
+
+### Patch Changes
+
+- Updated dependencies
+  - remind-core@0.6.0
+
 ## 0.5.0
 
 ### Minor Changes

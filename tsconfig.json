@@ -19,6 +19,7 @@
     "jsxFragmentFactory": "Fragment",
     // user define part
     "suppressImplicitAnyIndexErrors": true,
+    "strictNullChecks": false
   },
   "include": ["**/src/**/*", "**/test/**/*"],
 }

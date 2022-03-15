@@ -21,6 +21,7 @@ function useContributionAPI(props: UseContributionProps) {
 function useContributions(api: ContributionAPI, contributions: Contribution[]) {
   const results = contributions.map((contribution) => contribution(api))
   const slots = results.reduce<Slot[]>((p, c) => {
+    // @ts-expect-error void
     if (c?.slots) {
       p.push(...c.slots)
     }

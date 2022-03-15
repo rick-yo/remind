@@ -62,10 +62,27 @@ function averageNodeSize(hierarchyRoot: HierarchyNode<TopicData>) {
   return [aw, ah]
 }
 
+function separateTree(root: TopicData): [TopicData, TopicData] {
+  const start = root.children?.filter((node) => node.justify === 'start')
+  const end = root.children?.filter((node) => !start?.includes(node))
+
+  return [
+    {
+      ...root,
+      children: start,
+    },
+    {
+      ...root,
+      children: end,
+    },
+  ]
+}
+
 export {
   getTopicFontsize,
   setNodeSize,
   getCanvasSize,
   averageNodeSize,
   getTopicTextStyle,
+  separateTree,
 }

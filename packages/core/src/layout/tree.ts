@@ -24,12 +24,11 @@ function structure(root: TopicData) {
     node.y += node.depth * TopicStyle.margin
   })
 
+  // adjust layout to canvas center
   const nodes = layoutRoot.descendants()
   const minX = Math.min(...nodes.map((node) => node.x))
-  // Move layoutRoot to canvas center
   layoutRoot.each((node) => {
-    node.x -= minX - TopicStyle.padding
-    node.y += TopicStyle.padding
+    node.x -= minX
   })
 
   return layoutRoot

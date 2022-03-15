@@ -44,6 +44,7 @@ interface IModelTrait {
   getParentNodeById(id: string): TopicData | undefined
   getPreviousSibling(id: string): TopicData | undefined
   getNextSibling(id: string): TopicData | undefined
+  getNodeJustify(id: string): TopicData['justify']
   /**
    * Undo history
    */
