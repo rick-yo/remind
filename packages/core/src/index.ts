@@ -8,6 +8,7 @@ export * from './utils/to'
 
 export * from './interface/topic'
 export * from './interface/contribute'
+export * from './interface/layout'
 
 export * from 'preact'
 export {

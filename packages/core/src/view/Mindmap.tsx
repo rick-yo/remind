@@ -74,7 +74,8 @@ const Mindmap = forwardRef(
       >
         <svg
           className={styles.svgCanvas}
-          viewBox={`-10 -10 ${canvasWidth} ${canvasHeight}`}
+          width={canvasWidth}
+          height={canvasHeight}
           xmlns="http://www.w3.org/2000/svg"
         >
           <Links layoutRoot={layoutRoot} layout={layout} />

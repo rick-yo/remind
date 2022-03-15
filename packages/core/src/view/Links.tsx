@@ -24,13 +24,13 @@ const generateHorizontalLink: LinkGenerator = (parent, child, justify) => {
   return `${x1},${y1} ${x2},${y2}`
 }
 
-const generateVerticalLink: LinkGenerator = (parent, child, justify) => {
+const generateVerticalLink: LinkGenerator = (parent, child) => {
   const [parentWidth, parentHeight] = parent.size
-  const [childWidth, childHeight] = child.size
+  const [childWidth] = child.size
   const x1 = parent.x + parentWidth / 2
-  const y1 = justify === 'start' ? parent.y : parent.y + parentHeight
+  const y1 = parent.y + parentHeight
   const x2 = child.x + childWidth / 2
-  const y2 = justify === 'start' ? child.y + childHeight : child.y
+  const y2 = child.y
   return `${x1},${y1} ${x2},${y2}`
 }
 

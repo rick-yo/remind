@@ -1,13 +1,41 @@
 import hotkeys from 'hotkeys-js'
-import { Contribution, useEffect, EDITOR_MODE, LayoutTopic } from 'remind-core'
+import {
+  Contribution,
+  useEffect,
+  EDITOR_MODE,
+  LayoutTopic,
+  TopicData,
+  LayoutType,
+} from 'remind-core'
 import { HOTKEYS, LayoutTreeWalker } from './utils'
 
-const navigatorStrategy = {
+type Navigator = (
+  root: LayoutTopic,
+  id: string,
+  justify: TopicData['justify'],
+) => LayoutTopic | undefined
+
+interface Navigators {
+  left: Navigator
+  right: Navigator
+  top: Navigator
+  bottom: Navigator
+}
+
+const navigatorStrategy: Record<LayoutType, Navigators> = {
   mindmap: {
-    left: (root: LayoutTopic, id: string) =>
-      LayoutTreeWalker.from(root).getParentNode(id),
-    right: (root: LayoutTopic, id: string) =>
-      LayoutTreeWalker.from(root).getNearestChildNode(id),
+    left(root: LayoutTopic, id: string, justify: TopicData['justify']) {
+      const layoutRoot = LayoutTreeWalker.from(root)
+      if (id === root.data.id) return layoutRoot.getNearestLeftNode(id)
+      if (justify === 'start') return layoutRoot.getNearestChildNode(id)
+      return layoutRoot.getParentNode(id)
+    },
+    right(root: LayoutTopic, id: string, justify: TopicData['justify']) {
+      const layoutRoot = LayoutTreeWalker.from(root)
+      if (id === root.data.id) return layoutRoot.getNearestRightNode(id)
+      if (justify === 'start') return layoutRoot.getParentNode(id)
+      return layoutRoot.getNearestChildNode(id)
+    },
     top: (root: LayoutTopic, id: string) =>
       LayoutTreeWalker.from(root).getNearestTopNode(id),
     bottom: (root: LayoutTopic, id: string) =>
@@ -26,7 +54,7 @@ const navigatorStrategy = {
 }
 
 const useNavigate: Contribution = (api) => {
-  const { viewModel, view, layout } = api
+  const { model, viewModel, view, layout } = api
   const { selection, mode, layoutRoot } = viewModel
   const hotkeyOptions = {
     element: view.current,
@@ -36,7 +64,11 @@ const useNavigate: Contribution = (api) => {
   function moveTop(e: KeyboardEvent) {
     e.preventDefault()
     if (!layoutRoot) return
-    const target = navigate.top(layoutRoot, selection)
+    const target = navigate.top(
+      layoutRoot,
+      selection,
+      model.getNodeJustify(selection),
+    )
     if (target) {
       viewModel.select(target.data.id)
     }
@@ -45,7 +77,11 @@ const useNavigate: Contribution = (api) => {
   function moveDown(e: KeyboardEvent) {
     e.preventDefault()
     if (!layoutRoot) return
-    const target = navigate.bottom(layoutRoot, selection)
+    const target = navigate.bottom(
+      layoutRoot,
+      selection,
+      model.getNodeJustify(selection),
+    )
     if (target) {
       viewModel.select(target.data.id)
     }
@@ -54,7 +90,11 @@ const useNavigate: Contribution = (api) => {
   function moveLeft(e: KeyboardEvent) {
     e.preventDefault()
     if (!layoutRoot) return
-    const target = navigate.left(layoutRoot, selection)
+    const target = navigate.left(
+      layoutRoot,
+      selection,
+      model.getNodeJustify(selection),
+    )
     if (target) {
       viewModel.select(target.data.id)
     }
@@ -63,7 +103,11 @@ const useNavigate: Contribution = (api) => {
   function moveRight(e: KeyboardEvent) {
     e.preventDefault()
     if (!layoutRoot) return
-    const target = navigate.right(layoutRoot, selection)
+    const target = navigate.right(
+      layoutRoot,
+      selection,
+      model.getNodeJustify(selection),
+    )
     if (target) {
       viewModel.select(target.data.id)
     }

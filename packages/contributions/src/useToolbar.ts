@@ -52,7 +52,7 @@ const useToolbar: Contribution = (api) => {
   }, [])
 
   useEffect(() => {
-    view.current!.style.transform = `scale(${scale}, ${scale})`
+    view.current.style.transform = `scale(${scale}, ${scale})`
   }, [scale])
 
   const toolbar: Slot = h('div', {
