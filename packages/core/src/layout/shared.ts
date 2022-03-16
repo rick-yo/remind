@@ -6,28 +6,39 @@ import { renderText, TextRenderOption } from '../utils/textRender'
 
 const createTopicTextRenderBox = (
   theme: Theme,
+  node: HierarchyTopic,
 ): Omit<TextRenderOption, 'style'> => {
   const {
     topic: { maxWidth, padding },
   } = theme
+  const [vp, hp] = padding(node)
 
   return {
     box: {
       width: maxWidth,
       height: 10_000,
     },
-    padding,
+    padding: {
+      top: vp,
+      bottom: vp,
+      left: hp,
+      right: hp,
+    },
   }
 }
 
 function getTopicTextStyle(theme: Theme, node: HierarchyTopic) {
   const {
-    topic: { fontSize, fontFamily, lineHeight },
+    topic: { fontSize, fontFamily, lineHeight, color, background, fontWeight },
   } = theme
   const textStyle = {
     fontSize: toPX(fontSize(node)),
     fontFamily,
     lineHeight: `${lineHeight}`,
+    color: color(node),
+    background: background(node),
+    borderRadius: toPX(6),
+    fontWeight: fontWeight(node),
   }
   return textStyle
 }
@@ -39,8 +50,11 @@ function setNodeSize(theme: Theme, node: HierarchyTopic) {
   } = theme
   const {
     dimensions: { width, height },
-  } = renderText(node.data.title, { ...createTopicTextRenderBox(theme), style })
-  const finalWidth = Math.min(width + padding * 2, maxWidth)
+  } = renderText(node.data.title, {
+    ...createTopicTextRenderBox(theme, node),
+    style,
+  })
+  const finalWidth = Math.min(width + padding(node)[1] * 2, maxWidth)
   const finalHeight = Math.max(minHeight(node), height)
   node.size = [finalWidth, finalHeight]
 }

@@ -59,6 +59,7 @@ export function useTextEditor(): TextEditor {
     if (isEditing && layoutNode) {
       const { x, y, size } = layoutNode
       const textStyle = getTopicTextStyle(theme, layoutNode)
+      const [vp, hp] = padding(layoutNode)
       return (
         <div
           ref={editorRef}
@@ -66,7 +67,7 @@ export function useTextEditor(): TextEditor {
           style={{
             transform: `translate(${toPX(x)}, ${toPX(y)})`,
             width: toPX(size[0] + borderWidth * 2),
-            padding: toPX(padding),
+            padding: `${toPX(vp)} ${toPX(hp)}`,
             border: `${toPX(borderWidth)} solid ${theme.mainColor}`,
             ...textStyle,
           }}

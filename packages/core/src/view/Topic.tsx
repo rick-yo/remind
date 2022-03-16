@@ -14,32 +14,31 @@ type TopicProps = {
 const Topic = (props: TopicProps) => {
   const viewModel = ViewModel.useContainer()
   const theme = useContext(ThemeContext)
-  const { topic } = theme
+  const {
+    topic: { borderWidth },
+  } = theme
   const { node } = props
   const {
     data: { title, id },
     x,
     y,
-    depth,
     size,
   } = node
   const { mode, selection } = viewModel
   const isSelected = id === selection
   const isEditing = isSelected && mode === EDITOR_MODE.edit
-  const isMainTopic = depth <= 1
   const [width, height] = size
 
   const outline = isSelected
     ? {
         stroke: theme.mainColor,
-        strokeWidth: topic.borderWidth,
+        strokeWidth: borderWidth,
       }
     : {}
-  const background = isMainTopic || isEditing ? '#fff' : 'transparent'
 
   const textStyle = getTopicTextStyle(theme, node)
   const { lines } = renderText(title, {
-    ...createTopicTextRenderBox(theme),
+    ...createTopicTextRenderBox(theme, node),
     style: textStyle,
   })
 
@@ -54,11 +53,12 @@ const Topic = (props: TopicProps) => {
       <rect
         width={width}
         height={height}
-        fill={background}
-        radius={5}
+        fill={textStyle.background}
+        rx={textStyle.borderRadius}
+        ry={textStyle.borderRadius}
         {...outline}
       ></rect>
-      <text style={textStyle}>
+      <text style={textStyle} fill={textStyle.color}>
         {lines.map((line) => (
           <tspan x={line.x} y={line.y}>
             {line.text}

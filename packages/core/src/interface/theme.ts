@@ -7,13 +7,16 @@ interface Theme {
   }
   topic: {
     maxWidth: number
+    minHeight: (node: HierarchyTopic) => number
+    padding: (node: HierarchyTopic) => [number, number]
     margin: number
-    padding: number
+    borderWidth: number
     fontFamily: string
     lineHeight: number
-    borderWidth: number
     fontSize: (node: HierarchyTopic) => number
-    minHeight: (node: HierarchyTopic) => number
+    color: (node: HierarchyTopic) => string
+    fontWeight: (node: HierarchyTopic) => string
+    background: (node: HierarchyTopic) => string
   }
   mainColor: string
 }

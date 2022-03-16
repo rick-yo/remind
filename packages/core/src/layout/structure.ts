@@ -20,12 +20,17 @@ function structure(root: TopicData, options: LayoutOption) {
   const layoutRoot = tree<TopicData>()
     .nodeSize([aw, ah])
     .separation((a, b) => {
-      const sep = (a.size[0] + b.size[0]) / aw / 2 + 0.2
+      const sep = a.size[0] / aw + 0.2
       return a.parent === b.parent ? sep : sep + 0.2
     })(hierarchyRoot)
 
   layoutRoot.each((node) => {
-    node.y += node.depth * margin
+    const { parent } = node
+    // Add vertical margin
+    if (parent) {
+      node.y -= node.y - (parent.y + parent.size[1])
+      node.y += margin
+    }
   })
 
   // adjust layout to canvas center
