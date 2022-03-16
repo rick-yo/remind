@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useContext } from 'preact/hooks'
-import { EDITOR_MODE, TopicStyle } from '../constant'
+import { EDITOR_MODE } from '../constant'
 import { ThemeContext } from '../context/theme'
 import { TextEditor } from '../interface/textEditor'
 import { getTopicTextStyle } from '../layout/shared'
@@ -12,8 +12,11 @@ export function useTextEditor(): TextEditor {
   const model = Model.useContainer()
   const viewModel = ViewModel.useContainer()
   const editorRef = useRef<HTMLDivElement>(null)
-  const $theme = useContext(ThemeContext)
+  const theme = useContext(ThemeContext)
   const { selection, mode } = viewModel
+  const {
+    topic: { borderWidth, padding },
+  } = theme
   const isEditing = selection && mode === EDITOR_MODE.edit
 
   function editTopic(id: string) {
@@ -55,16 +58,16 @@ export function useTextEditor(): TextEditor {
       .find((node) => node.data.id === selection)
     if (isEditing && layoutNode) {
       const { x, y, size } = layoutNode
-      const textStyle = getTopicTextStyle(layoutNode)
+      const textStyle = getTopicTextStyle(theme, layoutNode)
       return (
         <div
           ref={editorRef}
           className={styles.textEditor}
           style={{
             transform: `translate(${toPX(x)}, ${toPX(y)})`,
-            width: toPX(size[0] + TopicStyle.borderWidth * 2),
-            padding: toPX(TopicStyle.padding),
-            border: `${toPX(TopicStyle.borderWidth)} solid ${$theme.mainColor}`,
+            width: toPX(size[0] + borderWidth * 2),
+            padding: toPX(padding),
+            border: `${toPX(borderWidth)} solid ${theme.mainColor}`,
             ...textStyle,
           }}
           contentEditable
@@ -76,7 +79,7 @@ export function useTextEditor(): TextEditor {
     }
 
     return null
-  }, [viewModel, handleKeyDown, $theme, styles.textEditor])
+  }, [viewModel, handleKeyDown, theme, styles.textEditor])
 
   return {
     editor,

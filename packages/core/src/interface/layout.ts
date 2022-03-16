@@ -1,3 +1,5 @@
+import { Theme } from './theme'
+
 declare module 'd3-hierarchy' {
   export interface HierarchyNode<Datum> {
     /**
@@ -16,4 +18,9 @@ declare module 'd3-hierarchy' {
 
 type LayoutType = 'mindmap' | 'structure'
 
-export type { LayoutType }
+interface LayoutOption {
+  layout: LayoutType
+  theme: Theme
+}
+
+export type { LayoutType, LayoutOption }

@@ -61,7 +61,9 @@ createMindmap(document.querySelector('#app')!, {
 
 ## API
 
-### instance: ContributionAPI = createMindmap(containerNode, options)
+### Create mindmap
+
+`instance: RefObject<ContributionAPI> = createMindmap(containerNode, options)` 
 
 Render mindmap into containerNode, and return a instance.
 
@@ -74,7 +76,7 @@ Render mindmap into containerNode, and return a instance.
 | layout        | 'mindmap' &#124; 'structure' | set mindmap layout            | mindmap | true     |
 | locale        | 'en' &#124; 'cn' &#124; 'ja' | language localization         | en      | true     |
 | theme         | Theme                        | custom theme                  | -       | true     |
-| contributions | Function                     | extend editor's functionality | []      | true     |
+| contributions | Contribution[]               | extend editor's functionality | []      | true     |
 
 Contribution let you extend editor's functionality, custom editor's behavior or add custom render content.
 For more information, see `packages/contributions/src` 

@@ -1,5 +1,6 @@
 import { test, expect } from 'vitest'
-import { createTopic, LayoutTopic, TopicData } from '../src'
+import { createTopic, LayoutOption, LayoutTopic, TopicData } from '../src'
+import { defaultTheme } from '../src/context/theme'
 import { mindmap } from '../src/layout/mindmap'
 
 const simpleRoot: TopicData = {
@@ -38,14 +39,19 @@ const complexRoot: TopicData = {
   ],
 }
 
+const options: LayoutOption = {
+  theme: defaultTheme,
+  layout: 'mindmap',
+}
+
 test('simple data', () => {
-  const layoutRoot = mindmap(simpleRoot)
+  const layoutRoot = mindmap(simpleRoot, options)
   expectTreeFlowToRight(layoutRoot)
   expectNodesNotIntersect(layoutRoot)
 })
 
 test('complex data', () => {
-  const layoutRoot = mindmap(complexRoot)
+  const layoutRoot = mindmap(complexRoot, options)
   expectTreeFlowToRight(layoutRoot)
   expectNodesNotIntersect(layoutRoot)
 })

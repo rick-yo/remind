@@ -19,17 +19,17 @@ import Topic from './Topic'
 import styles from './index.module.css'
 
 interface MindmapProps {
-  theme?: Partial<Theme>
-  locale?: IntlLanguage
-  value?: TopicData
-  onChange?: (value: TopicData) => void
-  contributions?: Contribution[]
-  layout?: LayoutType
+  theme: Theme
+  locale: IntlLanguage
+  value: TopicData
+  onChange: (value: TopicData) => void
+  contributions: Contribution[]
+  layout: LayoutType
 }
 
 const Mindmap = forwardRef(
   (props: MindmapProps, ref: RefObject<ContributionAPI>) => {
-    const { onChange, contributions = [], layout = 'mindmap' } = props
+    const { onChange, contributions, layout, theme } = props
     const model = Model.useContainer()
     const viewModel = ViewModel.useContainer()
     const editorRef = useRef<HTMLDivElement>(null)
@@ -46,8 +46,8 @@ const Mindmap = forwardRef(
     )
 
     const { layoutRoot, canvasWidth, canvasHeight } = useMemo(() => {
-      return doLayout(root, layout)
-    }, [root])
+      return doLayout(root, { layout, theme })
+    }, [root, layout, theme])
 
     debug('layoutRoot', layoutRoot)
 

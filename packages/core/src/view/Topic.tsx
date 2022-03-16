@@ -1,12 +1,7 @@
 import { useContext } from 'preact/hooks'
 import { ThemeContext } from '../context/theme'
-import {
-  EDITOR_MODE,
-  TopicStyle,
-  TopicTextRenderOptions,
-  ViewType,
-} from '../constant'
-import { getTopicTextStyle } from '../layout/shared'
+import { EDITOR_MODE, ViewType } from '../constant'
+import { createTopicTextRenderBox, getTopicTextStyle } from '../layout/shared'
 import { ViewModel } from '../viewModel'
 import { LayoutTopic } from '../interface/topic'
 import { renderText } from '../utils/textRender'
@@ -18,7 +13,8 @@ type TopicProps = {
 
 const Topic = (props: TopicProps) => {
   const viewModel = ViewModel.useContainer()
-  const $theme = useContext(ThemeContext)
+  const theme = useContext(ThemeContext)
+  const { topic } = theme
   const { node } = props
   const {
     data: { title, id },
@@ -35,15 +31,15 @@ const Topic = (props: TopicProps) => {
 
   const outline = isSelected
     ? {
-        stroke: $theme.mainColor,
-        strokeWidth: TopicStyle.borderWidth,
+        stroke: theme.mainColor,
+        strokeWidth: topic.borderWidth,
       }
     : {}
   const background = isMainTopic || isEditing ? '#fff' : 'transparent'
 
-  const textStyle = getTopicTextStyle(node)
+  const textStyle = getTopicTextStyle(theme, node)
   const { lines } = renderText(title, {
-    ...TopicTextRenderOptions,
+    ...createTopicTextRenderBox(theme),
     style: textStyle,
   })
 
