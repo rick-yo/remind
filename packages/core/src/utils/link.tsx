@@ -1,5 +1,6 @@
 import { Color } from '../constant'
 import type { LinkRender } from '../interface/theme'
+import { topicType } from './is'
 
 interface Point {
   x: number
@@ -15,7 +16,6 @@ const pathCommand = {
 
 const horizontalLinkRender: LinkRender = (parent, child, options) => {
   const parentOffset = 20
-  const controlPointOffset = 60
   const { justify } = options
   const [parentWidth, parentHeight] = parent.size
   const [childWidth, childHeight] = child.size
@@ -23,30 +23,77 @@ const horizontalLinkRender: LinkRender = (parent, child, options) => {
   const parentCenterY = parent.y + parentHeight / 2
   const childRight = child.x + childWidth
   const childCenterY = child.y + childHeight / 2
-
-  const startPoint = {
-    x:
-      justify === 'start'
-        ? parent.x + parentOffset
-        : parentRight - parentOffset,
-    y: parentCenterY,
-  }
   const endPoint = {
     x: justify === 'start' ? childRight : child.x,
     y: childCenterY,
   }
-  const controlPoint = {
+  if (topicType.isRoot(parent)) {
+    const controlPointOffset = 60
+    const startPoint = {
+      x:
+        justify === 'start'
+          ? parent.x + parentOffset
+          : parentRight - parentOffset,
+      y: parentCenterY,
+    }
+
+    const controlPoint = {
+      x:
+        justify === 'start'
+          ? endPoint.x + controlPointOffset
+          : endPoint.x - controlPointOffset,
+      y: endPoint.y,
+    }
+    return renderPath(
+      pathCommand.join(
+        pathCommand.m(startPoint),
+        pathCommand.q(controlPoint, endPoint),
+      ),
+    )
+  }
+
+  const point1 = {
     x:
       justify === 'start'
-        ? endPoint.x + controlPointOffset
-        : endPoint.x - controlPointOffset,
+        ? parent.x - parentOffset
+        : parentRight + parentOffset,
+    y: parentCenterY,
+  }
+  const point2 = {
+    x: point1.x,
     y: endPoint.y,
   }
-  return renderPath(
-    pathCommand.join(
-      pathCommand.m(startPoint),
-      pathCommand.q(controlPoint, endPoint),
-    ),
+  if (parent.children.length === 1) {
+    return renderPath(
+      pathCommand.join(
+        pathCommand.m({
+          x: justify === 'start' ? parent.x : parentRight,
+          y: parentCenterY,
+        }),
+        pathCommand.l(endPoint),
+      ),
+    )
+  }
+
+  return (
+    <g>
+      {renderPath(
+        pathCommand.join(
+          pathCommand.m({
+            x: parentRight,
+            y: parentCenterY,
+          }),
+          pathCommand.l(point1),
+        ),
+      )}
+      {renderPath(
+        pathCommand.join(
+          pathCommand.m(point1),
+          pathCommand.l(point2),
+          pathCommand.l(endPoint),
+        ),
+      )}
+    </g>
   )
 }
 
