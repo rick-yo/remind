@@ -32,7 +32,7 @@ function layout(root: TopicData, options: LayoutOption) {
     // Add horizontal margin
     if (parent) {
       node.x -= node.x - (parent.x + parent.size[0])
-      node.x += margin
+      node.x += margin[1]
     }
   })
   return layoutRoot

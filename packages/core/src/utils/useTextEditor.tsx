@@ -15,7 +15,7 @@ export function useTextEditor(): TextEditor {
   const theme = useContext(ThemeContext)
   const { selection, mode } = viewModel
   const {
-    topic: { borderWidth, padding },
+    topic: { padding, borderWidth, borderColor },
   } = theme
   const isEditing = selection && mode === EDITOR_MODE.edit
 
@@ -68,7 +68,7 @@ export function useTextEditor(): TextEditor {
             transform: `translate(${toPX(x)}, ${toPX(y)})`,
             width: toPX(size[0] + borderWidth * 2),
             padding: `${toPX(vp)} ${toPX(hp)}`,
-            border: `${toPX(borderWidth)} solid ${theme.mainColor}`,
+            border: `${toPX(borderWidth)} solid ${borderColor}`,
             ...textStyle,
           }}
           contentEditable

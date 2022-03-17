@@ -1,17 +1,9 @@
 import { createContext } from 'preact'
-import { Theme } from '../interface/theme'
+import { Color, FontWeight } from '../constant'
+import type { Theme } from '../interface/theme'
 import { HierarchyTopic } from '../interface/topic'
-
-enum Color {
-  white = '#fff',
-  black = '#141414',
-  red = '#F44336',
-}
-
-enum FontWeight {
-  Regular = '400',
-  Medium = '500',
-}
+import { topicType } from '../utils/is'
+import { horizontalLinkRender, verticalLinkRender } from '../utils/link'
 
 const topic: Theme['topic'] = {
   maxWidth: 240,
@@ -19,40 +11,43 @@ const topic: Theme['topic'] = {
     const [vPadding] = topic.padding(node)
     return topic.fontSize(node) * topic.lineHeight + vPadding * 2
   },
-  margin: 50,
+  margin: [100, 50],
   padding(node: HierarchyTopic) {
     const fontSize = topic.fontSize(node)
     return [fontSize / 2 + 2, fontSize]
   },
   borderWidth: 2,
+  borderColor: '#4dc4ff',
   fontFamily: `"Microsoft Yahei", "PingFang SC"`,
   lineHeight: 1.2,
   fontSize(node: HierarchyTopic) {
-    if (node.depth === 0) return 24
-    if (node.depth === 1) return 18
+    if (topicType.isRoot(node)) return 24
+    if (topicType.isMain(node)) return 18
     return 14
   },
   fontWeight(node: HierarchyTopic) {
-    if (node.depth === 0) return FontWeight.Medium
+    if (topicType.isRoot(node)) return FontWeight.Medium
     return FontWeight.Regular
   },
   color(node: HierarchyTopic) {
-    if (node.depth === 0) return Color.white
+    if (topicType.isRoot(node)) return Color.white
     return Color.black
   },
   background(node: HierarchyTopic) {
-    if (node.depth === 0) return Color.red
+    if (topicType.isRoot(node)) return Color.red
     return Color.white
   },
 }
 
 const defaultTheme: Theme = {
   link: {
-    stroke: Color.white,
-    strokeWidth: 3,
+    render(parent, child, options) {
+      if (options.layout === 'mindmap')
+        return horizontalLinkRender(parent, child, options)
+      return verticalLinkRender(parent, child, options)
+    },
   },
   topic,
-  mainColor: '#4dc4ff',
 }
 
 const ThemeContext = createContext(defaultTheme)

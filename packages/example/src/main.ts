@@ -23,7 +23,7 @@ const customData: TopicData = {
       ],
     },
     {
-      ...createTopic('Bottom menu 🥙'),
+      ...createTopic('Bottom menu 🥙', { justify: 'start' }),
       children: [
         createTopic('Full screen'),
         createTopic('Return to Center'),
@@ -41,5 +41,5 @@ const customData: TopicData = {
 createMindmap(document.querySelector('#app')!, {
   value: customData,
   contributions,
-  // layout: 'structure',
+  layout: 'structure',
 })

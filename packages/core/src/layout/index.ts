@@ -4,6 +4,8 @@ import { mindmap } from './mindmap'
 import { getCanvasSize } from './shared'
 import { structure } from './structure'
 
+const canvasPadding = 10
+
 function doLayout(root: TopicData, options: LayoutOption) {
   const { layout, theme } = options
   let layoutRoot: LayoutTopic
@@ -20,8 +22,8 @@ function doLayout(root: TopicData, options: LayoutOption) {
 
   layoutRoot.descendants().forEach((node) => {
     // add canvas padding
-    node.x += 10
-    node.y += 10
+    node.x += canvasPadding
+    node.y += canvasPadding
   })
 
   const [canvasWidth, canvasHeight] = getCanvasSize(theme, layoutRoot)

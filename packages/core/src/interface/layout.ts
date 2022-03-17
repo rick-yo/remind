@@ -1,4 +1,4 @@
-import { Theme } from './theme'
+import type { Theme } from './theme'
 
 declare module 'd3-hierarchy' {
   export interface HierarchyNode<Datum> {

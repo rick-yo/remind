@@ -15,7 +15,7 @@ const Topic = (props: TopicProps) => {
   const viewModel = ViewModel.useContainer()
   const theme = useContext(ThemeContext)
   const {
-    topic: { borderWidth },
+    topic: { borderWidth, borderColor },
   } = theme
   const { node } = props
   const {
@@ -31,7 +31,7 @@ const Topic = (props: TopicProps) => {
 
   const outline = isSelected
     ? {
-        stroke: theme.mainColor,
+        stroke: borderColor,
         strokeWidth: borderWidth,
       }
     : {}
