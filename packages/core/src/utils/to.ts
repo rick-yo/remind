@@ -67,9 +67,6 @@ function download(href: string, download: string) {
   a.href = href
   a.download = download
   a.click()
-  setTimeout(() => {
-    a.remove()
-  }, 1000)
 }
 
 export { toSVG, toPNG, download }

@@ -20,7 +20,7 @@ function structure(root: TopicData, options: LayoutOption) {
   const layoutRoot = tree<TopicData>()
     .nodeSize([aw, ah])
     .separation((a, b) => {
-      const sep = (a.size[0] + b.size[0]) / aw / 2 + 0.5
+      const sep = (a.size[0] + b.size[0]) / aw / 2 + 0.4
       return a.parent === b.parent ? sep : sep + 0.2
     })(hierarchyRoot)
 
