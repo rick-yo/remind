@@ -6,26 +6,26 @@
 
 A headless, framework-agnostic and extendable mindmap editor.
 
-<img src="./demo.jpg" alt="drawing" width="600"/>
+<img src="./demo.png" alt="drawing" width="600"/>
 
 - [Try remind](https://remind.applet.ink)
 - [Play online](https://stackblitz.com/edit/typescript-nwp9sk?file=index.ts)
 - [See roadmap](https://github.com/luvsic3/remind/projects/1)
 
-## Feature
+# Feature
 
  * Highly extendable, take full control over styling and behavior
  * With default undo, redo, navigation, drag, CRUD, shortcut implementation (but can be replaced)
  * Framework-agnostic, remind can work with vanilla javascript, vue, react or any other framework
- * TypeScript, remind is written is typescript and has great typescript support
+ * TypeScript, remind is written in typescript and has great typescript support
 
-## Installation
+# Installation
 
 ```shell
 npm i remind-core remind-contributions
 ```
 
-## Quick Start
+# Quick Start
 
 ```JavaScript
 import { createMindmap, TopicData } from 'remind-core'
@@ -59,68 +59,39 @@ createMindmap(document.querySelector('#app')!, {
 })
 ```
 
-## API
+# API
 
-### instance: ContributionAPI = createMindmap(containerNode, options)
+## Create mindmap
 
-Render mindmap into containerNode, and return a instance.
+`instance: RefObject<ContributionAPI> = createMindmap(containerNode, options)` 
+
+Render mindmap into containerNode, return an `instance`.
+
+`instance.current` holds `ContributionAPI`, which let you change editor's content, undo redo history, change selected topic... 
+
+see `packages/core/src/interface/contribute.ts` for more.
 
 ### options
 
-| option        | type                         | description                   | default | optional |
-| ------------- | ---------------------------- | ----------------------------- | ------- | -------- |
-| value         | TopicData                    | set mindmap value             | -       | true     |
-| onChange      | (value: TopicData) => void   | listen to value change        | -       | true     |
-| layout        | 'mindmap' &#124; 'structure' | set mindmap layout            | mindmap | true     |
-| locale        | 'en' &#124; 'cn' &#124; 'ja' | language localization         | en      | true     |
-| theme         | Theme                        | custom theme                  | -       | true     |
-| contributions | Function                     | extend editor's functionality | []      | true     |
+| option        | type                         | description            | default |
+| ------------- | ---------------------------- | ---------------------- | ------- |
+| value         | TopicData                    | set mindmap data       | -       |
+| onChange      | (value: TopicData) => void   | listen to value change | -       |
+| layout        | 'mindmap' &#124; 'structure' | -                      | mindmap |
+| locale        | 'en' &#124; 'cn' &#124; 'ja' | language localization  | en      |
+| theme         | Theme                        | -                      | -       |
+| contributions | Contribution[]               | -                      | []      |
 
-Contribution let you extend editor's functionality, custom editor's behavior or add custom render content.
-For more information, see `packages/contributions/src` 
+`options.layout` can changed layout algorithm
 
-### Export mindmap as svg/image
+`options.theme` let you customize mindmap style, see `packages/core/src/interface/theme.ts` for more documentation 
+
+`options.contributions` can extend editor's functionality, custom editor's behavior or add custom render content. see `packages/contributions/src` how to use it.
+
+## Export mindmap as svg/image
 
 See `/packages/core/src/utils/to`, how to use it
 
-### types
-
-```typescript
-interface ContributionAPI {
-  model: IModelStructure & IModelTrait
-  viewModel: IViewModelStructure & IViewModelTrait
-  view: RefObject<HTMLDivElement>
-  locale: IntlContent
-}
-```
-
-```typescript
-interface TopicData {
-  id: string
-  /**
-   * topic text content
-   */
-  title: string
-  children?: TopicData[]
-  /**
-   * control layout direction, should only set on root node's child node
-   * for horizontal layout tree, `start` place node to left side of parent node, `end` place node to right.
-   * `justify` is only supported in `mindmap` layout
-   */
-  justify?: 'start' | 'end'
-}
-```
-
-```typescript
-interface Theme {
-  link: {
-    stroke: string
-    strokeWidth: number
-  }
-  topic: Record<string, unknown>
-  mainColor: string
-}
-```
 
 ## License
 

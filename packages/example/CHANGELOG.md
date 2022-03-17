@@ -1,5 +1,17 @@
 # remind-example
 
+## 0.7.0
+
+### Minor Changes
+
+- New design and theme api
+
+### Patch Changes
+
+- Updated dependencies
+  - remind-contributions@0.7.0
+  - remind-core@0.7.0
+
 ## 0.6.0
 
 ### Minor Changes

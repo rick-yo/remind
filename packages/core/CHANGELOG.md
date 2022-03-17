@@ -1,5 +1,11 @@
 # remind-core
 
+## 0.7.0
+
+### Minor Changes
+
+- New design and theme api
+
 ## 0.6.0
 
 ### Minor Changes

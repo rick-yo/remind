@@ -6,13 +6,23 @@ import { ViewModel } from './viewModel'
 import { ThemeContext, defaultTheme } from './context/theme'
 import { defaultLocale, LocaleContext } from './context/locale'
 import { ContributionAPI } from './interface/contribute'
+import { noop } from './utils/common'
+
+const defaultProps: MindmapProps = {
+  value: defaultRoot,
+  theme: defaultTheme,
+  locale: defaultLocale.locale,
+  onChange: noop,
+  contributions: [],
+  layout: 'mindmap',
+}
 
 const MindmapApp = forwardRef(
-  (props: MindmapProps, ref: RefObject<ContributionAPI>) => {
+  (props: Partial<MindmapProps>, ref: RefObject<ContributionAPI>) => {
     const {
-      value = defaultRoot,
+      value = defaultProps.value,
       theme = defaultTheme,
-      locale = defaultLocale.locale,
+      locale = defaultProps.locale,
     } = props
     return (
       <ViewModel.Provider>
@@ -21,14 +31,9 @@ const MindmapApp = forwardRef(
             root: value,
           }}
         >
-          <ThemeContext.Provider
-            value={{
-              ...defaultTheme,
-              ...theme,
-            }}
-          >
+          <ThemeContext.Provider value={theme}>
             <LocaleContext.Provider value={{ locale }}>
-              <Mindmap {...props} ref={ref} />
+              <Mindmap {...defaultProps} {...props} ref={ref} />
             </LocaleContext.Provider>
           </ThemeContext.Provider>
         </Model.Provider>
@@ -37,7 +42,7 @@ const MindmapApp = forwardRef(
   },
 )
 
-function createMindmap(el: HTMLElement, options?: MindmapProps) {
+function createMindmap(el: HTMLElement, options?: Partial<MindmapProps>) {
   const ref = createRef<ContributionAPI>()
   render(<MindmapApp ref={ref} {...options} />, el)
   return ref

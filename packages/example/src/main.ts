@@ -23,7 +23,7 @@ const customData: TopicData = {
       ],
     },
     {
-      ...createTopic('Bottom menu 🥙'),
+      ...createTopic('Bottom menu 🥙', { justify: 'start' }),
       children: [
         createTopic('Full screen'),
         createTopic('Return to Center'),

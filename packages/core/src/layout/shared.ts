@@ -1,38 +1,68 @@
 import { HierarchyNode, HierarchyPointNode } from 'd3-hierarchy'
-import { TopicStyle, TopicTextRenderOptions } from '../constant'
+import { Theme } from '../interface/theme'
 import { HierarchyTopic, TopicData } from '../interface/topic'
 import { average, toPX } from '../utils/common'
-import { renderText } from '../utils/textRender'
+import { renderText, TextRenderOption } from '../utils/textRender'
 
-function getTopicFontsize(node: HierarchyTopic) {
-  const offset = (node.depth ?? 0) * 2
-  return Math.max(14, TopicStyle.rootTopicFontSize - offset)
+const createTopicTextRenderBox = (
+  theme: Theme,
+  node: HierarchyTopic,
+): Omit<TextRenderOption, 'style'> => {
+  const {
+    topic: { maxWidth, padding },
+  } = theme
+  const [vp, hp] = padding(node)
+
+  return {
+    box: {
+      width: maxWidth,
+      height: 10_000,
+    },
+    padding: {
+      top: vp,
+      bottom: vp,
+      left: hp,
+      right: hp,
+    },
+  }
 }
 
-function getTopicTextStyle(node: HierarchyTopic) {
-  const fontSize = toPX(getTopicFontsize(node))
+function getTopicTextStyle(theme: Theme, node: HierarchyTopic) {
+  const {
+    topic: { fontSize, fontFamily, lineHeight, color, background, fontWeight },
+  } = theme
   const textStyle = {
-    fontSize,
-    fontFamily: TopicStyle.fontFamily,
-    lineHeight: `${TopicStyle.lineHeight}`,
+    fontSize: toPX(fontSize(node)),
+    fontFamily,
+    lineHeight: `${lineHeight}`,
+    color: color(node),
+    background: background(node),
+    borderRadius: toPX(6),
+    fontWeight: fontWeight(node),
   }
   return textStyle
 }
 
-function setNodeSize(node: HierarchyTopic) {
-  const style = getTopicTextStyle(node)
+function setNodeSize(theme: Theme, node: HierarchyTopic) {
+  const style = getTopicTextStyle(theme, node)
+  const {
+    topic: { maxWidth, padding, minHeight },
+  } = theme
   const {
     dimensions: { width, height },
-  } = renderText(node.data.title, { ...TopicTextRenderOptions, style })
-  const finalWidth = Math.min(
-    width + TopicStyle.padding * 2,
-    TopicStyle.maxWidth,
-  )
-  const finalHeight = Math.max(TopicStyle.minHeight, height)
+  } = renderText(node.data.title, {
+    ...createTopicTextRenderBox(theme, node),
+    style,
+  })
+  const finalWidth = Math.min(width + padding(node)[1] * 2, maxWidth)
+  const finalHeight = Math.max(minHeight(node), height)
   node.size = [finalWidth, finalHeight]
 }
 
-function getCanvasSize(layoutRoot: HierarchyPointNode<TopicData>) {
+function getCanvasSize(
+  theme: Theme,
+  layoutRoot: HierarchyPointNode<TopicData>,
+) {
   // Compute canvas size
   const nodes = layoutRoot.descendants()
   const xs = nodes.map((node) => node.x)
@@ -42,7 +72,7 @@ function getCanvasSize(layoutRoot: HierarchyPointNode<TopicData>) {
   const y0 = Math.min(...ys)
   const y1 = Math.max(...ys)
   const maxHeight = Math.max(...nodes.map((node) => node.size[1]))
-  const canvasWidth = x1 - x0 + TopicStyle.maxWidth
+  const canvasWidth = x1 - x0 + theme.topic.maxWidth
   const canvasHeight = y1 - y0 + maxHeight * 2
   return [canvasWidth, canvasHeight]
 }
@@ -79,10 +109,10 @@ function separateTree(root: TopicData): [TopicData, TopicData] {
 }
 
 export {
-  getTopicFontsize,
   setNodeSize,
   getCanvasSize,
   averageNodeSize,
   getTopicTextStyle,
   separateTree,
+  createTopicTextRenderBox,
 }

@@ -1,14 +1,18 @@
 import { hierarchy, tree } from 'd3-hierarchy'
-import { TopicStyle } from '../constant'
+import { LayoutOption } from '../interface/layout'
 import { TopicData } from '../interface/topic'
 import { averageNodeSize, setNodeSize } from './shared'
 
-function structure(root: TopicData) {
+function structure(root: TopicData, options: LayoutOption) {
+  const { theme } = options
+  const {
+    topic: { margin },
+  } = theme
   const hierarchyRoot = hierarchy(root)
 
   // Compute node size
   hierarchyRoot.descendants().forEach((node) => {
-    setNodeSize(node)
+    setNodeSize(theme, node)
   })
 
   const [aw, ah] = averageNodeSize(hierarchyRoot)
@@ -16,12 +20,17 @@ function structure(root: TopicData) {
   const layoutRoot = tree<TopicData>()
     .nodeSize([aw, ah])
     .separation((a, b) => {
-      const sep = (a.size[0] + b.size[0]) / aw / 2 + 0.2
+      const sep = (a.size[0] + b.size[0]) / aw / 2 + 0.5
       return a.parent === b.parent ? sep : sep + 0.2
     })(hierarchyRoot)
 
   layoutRoot.each((node) => {
-    node.y += node.depth * TopicStyle.margin
+    const { parent } = node
+    // Add vertical margin
+    if (parent) {
+      node.y -= node.y - (parent.y + parent.size[1])
+      node.y += margin[0]
+    }
   })
 
   // adjust layout to canvas center
