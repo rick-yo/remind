@@ -1,13 +1,13 @@
 import { LayoutOption } from '../interface/layout'
 import { LayoutTopic, TopicData } from '../interface/topic'
 import { mindmap } from './mindmap'
-import { getCanvasSize } from './shared'
+import { getNodeDimension } from './shared'
 import { structure } from './structure'
 
 const canvasPadding = 10
 
 function doLayout(root: TopicData, options: LayoutOption) {
-  const { layout, theme } = options
+  const { layout } = options
   let layoutRoot: LayoutTopic
   switch (layout) {
     case 'mindmap':
@@ -26,11 +26,11 @@ function doLayout(root: TopicData, options: LayoutOption) {
     node.y += canvasPadding
   })
 
-  const [canvasWidth, canvasHeight] = getCanvasSize(theme, layoutRoot)
+  const [rootWidth, rootHeight] = getNodeDimension(layoutRoot)
   return {
     layoutRoot,
-    canvasWidth,
-    canvasHeight,
+    canvasWidth: rootWidth + canvasPadding * 2,
+    canvasHeight: rootHeight + canvasPadding * 2,
   }
 }
 

@@ -1,7 +1,7 @@
-import { HierarchyNode, HierarchyPointNode } from 'd3-hierarchy'
+import { HierarchyNode } from 'd3-hierarchy'
 import { Theme } from '../interface/theme'
-import { HierarchyTopic, TopicData } from '../interface/topic'
-import { average, toPX } from '../utils/common'
+import { HierarchyTopic, LayoutTopic, TopicData } from '../interface/topic'
+import { average, maxBy, minBy, toPX } from '../utils/common'
 import { renderText, TextRenderOption } from '../utils/textRender'
 
 const createTopicTextRenderBox = (
@@ -59,22 +59,24 @@ function setNodeSize(theme: Theme, node: HierarchyTopic) {
   node.size = [finalWidth, finalHeight]
 }
 
-function getCanvasSize(
-  theme: Theme,
-  layoutRoot: HierarchyPointNode<TopicData>,
-) {
-  // Compute canvas size
-  const nodes = layoutRoot.descendants()
-  const xs = nodes.map((node) => node.x)
-  const ys = nodes.map((node) => node.y)
-  const x0 = Math.min(...xs)
-  const x1 = Math.max(...xs)
-  const y0 = Math.min(...ys)
-  const y1 = Math.max(...ys)
-  const maxHeight = Math.max(...nodes.map((node) => node.size[1]))
-  const canvasWidth = x1 - x0 + theme.topic.maxWidth
-  const canvasHeight = y1 - y0 + maxHeight * 2
-  return [canvasWidth, canvasHeight]
+const byLeft = (node: LayoutTopic) => node.x
+const byRight = (node: LayoutTopic) => node.x + node.size[0]
+const byTop = (node: LayoutTopic) => node.y
+const byBottom = (node: LayoutTopic) => node.y + node.size[1]
+
+/**
+ * get dimension of node, include it's child node
+ */
+export function getNodeDimension(node: LayoutTopic) {
+  // Compute node size
+  const nodes = node.descendants()
+  const x0 = minBy(nodes, byLeft)
+  const x1 = maxBy(nodes, byRight)
+  const y0 = minBy(nodes, byTop)
+  const y1 = maxBy(nodes, byBottom)
+  const width = x1.x + x1.size[0] - x0.x
+  const height = y1.y + y1.size[1] - y0.y
+  return [width, height]
 }
 
 function averageNodeSize(hierarchyRoot: HierarchyNode<TopicData>) {
@@ -110,7 +112,6 @@ function separateTree(root: TopicData): [TopicData, TopicData] {
 
 export {
   setNodeSize,
-  getCanvasSize,
   averageNodeSize,
   getTopicTextStyle,
   separateTree,
