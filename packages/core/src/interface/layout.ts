@@ -13,6 +13,14 @@ declare module 'd3-hierarchy' {
      * @private
      */
     readonly id?: string | undefined
+    /**
+     * Used for mindmap layout algorithm
+     * @private
+     */
+    x: number
+    y: number
+    startY: number
+    totalHeight: number
   }
 }
 
