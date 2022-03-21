@@ -1,5 +1,14 @@
 # remind-example
 
+## 0.7.1
+
+### Patch Changes
+
+- Fix mindmap layout
+- Updated dependencies
+  - remind-contributions@0.7.1
+  - remind-core@0.7.1
+
 ## 0.7.0
 
 ### Minor Changes
