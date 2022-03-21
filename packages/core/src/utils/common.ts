@@ -23,4 +23,24 @@ function inRange(
   return num >= start && num < end
 }
 
-export { noop, deepClone, classNames, toPX, average, inRange }
+function minBy<T>(array: T[], iteratee: (item: T) => number): T {
+  let min = array[0]
+  array.forEach((item) => {
+    if (iteratee(item) < iteratee(min)) {
+      min = item
+    }
+  })
+  return min
+}
+
+function maxBy<T>(array: T[], iteratee: (item: T) => number): T {
+  let max = array[0]
+  array.forEach((item) => {
+    if (iteratee(item) > iteratee(max)) {
+      max = item
+    }
+  })
+  return max
+}
+
+export { noop, deepClone, classNames, toPX, average, inRange, minBy, maxBy }
