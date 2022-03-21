@@ -54,3 +54,16 @@ export function createTopic(title: string, options: Partial<TopicData> = {}) {
   }
   return topic
 }
+
+export function eachDF(
+  root: HierarchyTopic,
+  callback: (node: HierarchyTopic) => void,
+) {
+  let nodes = [root]
+  let current
+  while ((current = nodes.shift())) {
+    callback(current)
+    const children = current.children ?? []
+    nodes = [...children, ...nodes]
+  }
+}

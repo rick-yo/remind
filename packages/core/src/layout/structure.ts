@@ -3,11 +3,10 @@ import { LayoutOption } from '../interface/layout'
 import { TopicData } from '../interface/topic'
 import { averageNodeSize, setNodeSize } from './shared'
 
+const margin = 100
+
 function structure(root: TopicData, options: LayoutOption) {
   const { theme } = options
-  const {
-    topic: { margin },
-  } = theme
   const hierarchyRoot = hierarchy(root)
 
   // Compute node size
@@ -20,7 +19,7 @@ function structure(root: TopicData, options: LayoutOption) {
   const layoutRoot = tree<TopicData>()
     .nodeSize([aw, ah])
     .separation((a, b) => {
-      const sep = (a.size[0] + b.size[0]) / aw / 2 + 0.5
+      const sep = (a.size[0] + b.size[0]) / aw / 2 + 0.4
       return a.parent === b.parent ? sep : sep + 0.2
     })(hierarchyRoot)
 
@@ -29,7 +28,7 @@ function structure(root: TopicData, options: LayoutOption) {
     // Add vertical margin
     if (parent) {
       node.y -= node.y - (parent.y + parent.size[1])
-      node.y += margin[0]
+      node.y += margin
     }
   })
 

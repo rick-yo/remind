@@ -11,7 +11,6 @@ const topic: Theme['topic'] = {
     const [vPadding] = topic.padding(node)
     return topic.fontSize(node) * topic.lineHeight + vPadding * 2
   },
-  margin: [100, 50],
   padding(node: HierarchyTopic) {
     const fontSize = topic.fontSize(node)
     return [fontSize / 2 + 2, fontSize]

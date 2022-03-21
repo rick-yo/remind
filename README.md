@@ -6,7 +6,7 @@
 
 A headless, framework-agnostic and extendable mindmap editor.
 
-<img src="./demo.png" alt="drawing" width="600"/>
+<img src="./demo.png" alt="drawing" width="800"/>
 
 - [Try remind](https://remind.applet.ink)
 - [Play online](https://stackblitz.com/edit/typescript-nwp9sk?file=index.ts)

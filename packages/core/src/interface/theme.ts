@@ -24,7 +24,6 @@ interface Theme {
     maxWidth: number
     minHeight: (node: HierarchyTopic) => number
     padding: (node: HierarchyTopic) => [number, number]
-    margin: [number, number]
     borderWidth: number
     borderColor: string
     background: (node: HierarchyTopic) => string
