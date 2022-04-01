@@ -1,5 +1,11 @@
 # remind-core
 
+## 0.7.2
+
+### Patch Changes
+
+- feat: infinite scrollable canvas
+
 ## 0.7.1
 
 ### Patch Changes

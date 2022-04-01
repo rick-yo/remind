@@ -1,5 +1,14 @@
 # remind-example
 
+## 0.7.2
+
+### Patch Changes
+
+- feat: infinite scrollable canvas
+- Updated dependencies
+  - remind-contributions@0.7.2
+  - remind-core@0.7.2
+
 ## 0.7.1
 
 ### Patch Changes
