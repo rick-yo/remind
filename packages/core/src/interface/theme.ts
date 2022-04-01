@@ -33,6 +33,9 @@ interface Theme {
     color: (node: HierarchyTopic) => string
     fontWeight: (node: HierarchyTopic) => string
   }
+  mindmap: {
+    background: string
+  }
 }
 
 export type { Theme, LinkRender }

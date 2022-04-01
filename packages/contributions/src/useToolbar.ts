@@ -12,8 +12,8 @@ const href = 'https://at.alicdn.com/t/font_1924427_4b37bvd5e4o.css'
 const toolbarCss = `
 .toolbar {
   position: absolute;
-  bottom: 10px;
-  right: 15px;
+  bottom: -50px;
+  right: -50px;
   background: #fff;
   padding: 5px;
   border-radius: 5px;

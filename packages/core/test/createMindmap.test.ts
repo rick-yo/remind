@@ -21,8 +21,8 @@ afterEach(() => {
 })
 
 test('should render mindmap', async () => {
-  createMindmap(container)
-  expect(types.isMindmap(container.children[0])).toBe(true)
+  const editorInstance: RefObject<ContributionAPI> = createMindmap(container)
+  expect(types.isMindmap(editorInstance.current?.view.current)).toBe(true)
 })
 
 test('should render value', async () => {

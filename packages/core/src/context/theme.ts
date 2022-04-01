@@ -47,6 +47,9 @@ const defaultTheme: Theme = {
     },
   },
   topic,
+  mindmap: {
+    background: '#D8EFEE',
+  },
 }
 
 const ThemeContext = createContext(defaultTheme)

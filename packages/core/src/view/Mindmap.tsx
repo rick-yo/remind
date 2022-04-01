@@ -44,6 +44,7 @@ const Mindmap = forwardRef(
     const mindmapSlots = slots.filter(
       (slot) => slot?.viewType === ViewType.mindmap,
     )
+    const { mindmap: mindmapTheme } = theme
 
     const { layoutRoot, canvasWidth, canvasHeight } = useMemo(() => {
       return doLayout(root, { layout, theme })
@@ -61,28 +62,43 @@ const Mindmap = forwardRef(
 
     useImperativeHandle(ref, () => contributionAPI, [contributionAPI])
 
+    useEffect(() => {
+      try {
+        editorRef.current.scrollIntoView({ block: 'center', inline: 'center' })
+      } catch {}
+    }, [])
+
     return (
-      <div
-        ref={editorRef}
-        data-type={ViewType.mindmap}
-        className={styles.editor}
-        style={{
-          width: toPX(canvasWidth),
-          height: toPX(canvasHeight),
-        }}
-        draggable
-      >
-        <svg
-          className={styles.svgCanvas}
-          width={canvasWidth}
-          height={canvasHeight}
-          xmlns="http://www.w3.org/2000/svg"
+      <div className={styles.container}>
+        <div
+          className={styles.scrollContainer}
+          style={{ background: mindmapTheme.background }}
         >
-          <Links layoutRoot={layoutRoot} layout={layout} />
-          <Topics layoutRoot={layoutRoot} />
-        </svg>
-        {textEditor.editor}
-        {mindmapSlots}
+          <div
+            ref={editorRef}
+            data-type={ViewType.mindmap}
+            className={styles.editor}
+            style={{
+              width: toPX(canvasWidth),
+              height: toPX(canvasHeight),
+            }}
+            draggable
+          >
+            <svg
+              className={styles.svgCanvas}
+              width={canvasWidth}
+              height={canvasHeight}
+              xmlns="http://www.w3.org/2000/svg"
+              // to make generated svg has background color
+              style={{ background: mindmapTheme.background }}
+            >
+              <Links layoutRoot={layoutRoot} layout={layout} />
+              <Topics layoutRoot={layoutRoot} />
+            </svg>
+            {textEditor.editor}
+            {mindmapSlots}
+          </div>
+        </div>
       </div>
     )
   },

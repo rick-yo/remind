@@ -1,7 +1,6 @@
 import { createMindmap, createTopic, TopicData } from 'remind-core'
 import 'remind-core/dist/style.css'
 import { contributions } from 'remind-contributions'
-import { subTopic } from './data'
 
 const customData: TopicData = {
   ...createTopic('How to use Remind 🤔'),
@@ -19,7 +18,6 @@ const customData: TopicData = {
       ...createTopic('Advanced shortcut 🏂'),
       children: [
         createTopic('command+z - Undo'),
-        subTopic,
         createTopic('command+shift+z - Redo'),
         createTopic('up, down, left, right - navigate between topics'),
       ],
