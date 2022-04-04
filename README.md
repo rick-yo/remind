@@ -1,7 +1,6 @@
 # Remind
 
 [![Build packages](https://github.com/luvsic3/remind/actions/workflows/main.yml/badge.svg)](https://github.com/luvsic3/remind/actions/workflows/main.yml)
-![Azure Static Web Apps CI/CD](https://github.com/luvsic3/remind/workflows/Azure%20Static%20Web%20Apps%20CI/CD/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=unhandledrejection_mindx&metric=alert_status)](https://sonarcloud.io/dashboard?id=unhandledrejection_mindx) 
 
 A headless, framework-agnostic and extendable mindmap editor.
