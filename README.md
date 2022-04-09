@@ -3,6 +3,8 @@
 [![Build packages](https://github.com/luvsic3/remind/actions/workflows/main.yml/badge.svg)](https://github.com/luvsic3/remind/actions/workflows/main.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=unhandledrejection_mindx&metric=alert_status)](https://sonarcloud.io/dashboard?id=unhandledrejection_mindx) 
 
+<a href="https://www.producthunt.com/posts/remind-4d197821-90f7-4d85-b461-f46342666c0f?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-remind&#0045;4d197821&#0045;90f7&#0045;4d85&#0045;b461&#0045;f46342666c0f" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=335719&theme=light" alt="remind - Headless&#0044;&#0032;framework&#0045;agnostic&#0044;&#0032;extendable&#0032;mindmap&#0032;editor&#0046; | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+
 A headless, framework-agnostic and extendable mindmap editor.
 
 <img src="./demo.png" alt="drawing" width="800"/>
